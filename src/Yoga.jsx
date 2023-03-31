@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-function Yoga() {
-  const [poses, setPoses] = useState([]);
+const Yoga = () => {
   const [flows, setFlows] = useState([]);
-  const [toggleShow, setToggleShow] = useState(false);
   const [filteredFlows, setFilteredFlows] = useState([]);
   const [difficultyFilter, setDifficultyFilter] = useState("");
+  const [bodyPartsFilter, setBodyPartsFilter] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,13 +40,28 @@ function Yoga() {
     fetchData();
   }, []);
 
+  //   useEffect(() => {
+  //     // Filter flows based on both difficulty and bodyParts filters
+  //     const filtered = flows.filter(
+  //       (flow) =>
+  //         flow.level.split(",").includes(difficultyFilter) &&
+  //         (bodyPartsFilter === "" ||
+  //           flow.targets.split(",").includes(bodyPartsFilter))
+  //     );
+  //     setFilteredFlows(filtered);
+  //   }, [difficultyFilter, bodyPartsFilter, flows]);
+
   useEffect(() => {
-    // Filter flows based on difficulty filter
-    const filtered = flows.filter((flow) =>
-      flow.level.split(",").includes(difficultyFilter)
+    // Filter flows based on bodyParts filter and difficulty filter
+    const filtered = flows.filter(
+      (flow) =>
+        (difficultyFilter === "" ||
+          flow.level.split(",").includes(difficultyFilter)) &&
+        (bodyPartsFilter === "" ||
+          flow.targets.split(",").includes(bodyPartsFilter))
     );
     setFilteredFlows(filtered);
-  }, [difficultyFilter, flows]);
+  }, [bodyPartsFilter, difficultyFilter, flows]);
 
   const handleShow = (flowId) => {
     setFlows((prevFlows) => {
@@ -63,6 +77,10 @@ function Yoga() {
 
   const handleSelectDifficulty = (event) => {
     setDifficultyFilter(event.target.value);
+  };
+
+  const handleSelectBodyParts = (event) => {
+    setBodyPartsFilter(event.target.value);
   };
 
   const renderCards = (
@@ -98,6 +116,24 @@ function Yoga() {
     );
   });
 
+  const bodyParts = [
+    "Lower body",
+    "Spine",
+    "Arms",
+    "Lower torso",
+    "Legs",
+    "Core",
+    "Abdominals",
+    "Obliques",
+    "Hamstrings",
+    "Lower back",
+    "Hips",
+    "Upper Body",
+    "Upper Legs",
+    "Back",
+    "Shoulders",
+  ];
+
   return (
     <div className="yoga-app-container">
       <h1>Yoga App</h1>
@@ -113,10 +149,26 @@ function Yoga() {
           <option value="intermediate">Intermediate</option>
           <option value="advanced">Advanced</option>
         </select>
+
+        <label htmlFor="bodyParts">Body parts:</label>
+        <select
+          id="bodyParts"
+          value={bodyPartsFilter}
+          onChange={handleSelectBodyParts}
+        >
+          <option value="">All</option>
+          {bodyParts.map((parts) => (
+            <option value={parts} key={parts}>
+              {parts}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="flow-container">{renderCards}</div>
     </div>
   );
-}
+};
 
 export default Yoga;
+
+// "Lower body", "Spine", "Arms", "Lower torso", "Legs", "Core", "Abdominals", "Obliques", "Hamstrings", "Lower back", "Hips", "Upper Body", "Upper Legs", "Back", "Shoulders"
