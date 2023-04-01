@@ -28,29 +28,31 @@
   color: #61dafb;
 }
 
-/* .grid-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 20px; 
-} */
-
-.flow-card {
+/* .flow-card {
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 5px;
-}
-
-/* .flow-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
 } */
 
-
 .flow-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-gap: 20px;
+  display: flex;
+}
+
+.flow-container-left {
+  width: 30vw;
+  height: 100vh;
+  display: flex;
+  overflow: scroll;
+  flex-direction: column;
+  /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 20px; */
+}
+
+.flow-container-right {
+  width: 70vw;
+  /* min-height: 100vh; */
+  /* height: 100vh; */
+  /* background-color: #61dafb; */
 }
 
 .flow-card {
@@ -86,36 +88,6 @@
   font-size: 1.2rem;
   font-weight: bold;
 }
-
-
-
-/* .flow-card {
-  border: 1px solid #ccc;
-  padding: 10px;
-}
-
-.flow-description {
-  margin-bottom: 10px;
-}
-
-.flow-poses {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.pose-card {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: center;
-}
-
-.pose-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-} */
-
 
 @keyframes App-logo-spin {
   from {
