@@ -38,6 +38,12 @@
   display: flex;
 }
 
+.flow-container-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 20px;
+}
+
 .flow-container-left {
   width: 30vw;
   height: 100vh;

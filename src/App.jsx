@@ -85,7 +85,19 @@ const App = () => {
     <div className="App">
       <Header />
       <Routes>
-        <Route path="/" element={<GridPoses />} />
+        <Route
+          path="/"
+          element={
+            <GridPoses
+              flows={flows}
+              filteredFlows={filteredFlows}
+              difficultyFilter={difficultyFilter}
+              bodyPartsFilter={bodyPartsFilter}
+              handleSelectDifficulty={handleSelectDifficulty}
+              handleSelectBodyParts={handleSelectBodyParts}
+            />
+          }
+        />
         <Route
           path="/yoga"
           element={
