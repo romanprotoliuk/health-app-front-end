@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import PoseCard from "../PoseCard";
 
 const FlowDetails = (props) => {
-  const { flows, filteredFlows } = props;
+  const { flows, filteredFlows, handlePoseClick, poseCompletion } = props;
   const { id } = useParams();
 
   const selected = (
@@ -15,15 +16,16 @@ const FlowDetails = (props) => {
       <Link to={"/"}>Go back</Link>
       <div className="flow-poses">
         {selected.sequence_poses.map((pose, idx) => {
+          const isCompleted = poseCompletion[selected.id]?.[idx];
           return (
-            <div key={idx} className="pose-card">
-              <img
-                className="pose-image"
-                src={pose.image_url}
-                alt={pose.pose_name}
-              />
-              <h3 className="pose-name">{pose.pose_name}</h3>
-            </div>
+            <PoseCard
+              key={idx}
+              pose={pose}
+              poseNum={idx + 1}
+              isCompleted={isCompleted}
+              onClick={() => handlePoseClick(selected.id, idx)}
+              flowId={selected.id} // add flowId prop to pose card
+            />
           );
         })}
       </div>

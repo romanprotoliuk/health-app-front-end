@@ -8,13 +8,25 @@ import FlowDetails from "./components/pages/FlowDetails";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 const App = () => {
   const [flows, setFlows] = useState([]);
   const [filteredFlows, setFilteredFlows] = useState([]);
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [bodyPartsFilter, setBodyPartsFilter] = useState("");
+  const [poseCompletion, setPoseCompletion] = useState({});
+
+  const handlePoseClick = (flowId, poseId) => {
+    setPoseCompletion((prevPoseCompletion) => {
+      const updatedPoseCompletion = { ...prevPoseCompletion };
+      if (!updatedPoseCompletion[flowId]) {
+        updatedPoseCompletion[flowId] = {};
+      }
+      updatedPoseCompletion[flowId][poseId] = true;
+      return updatedPoseCompletion;
+    });
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,27 +39,33 @@ const App = () => {
         return acc;
       }, {});
 
-      // Restructure flows data to include poses data
       const flowsWithPosesData = flowsResponse.data.map((flow) => {
         const poseNames = flow.sequence_poses.split(",");
         const sequencePoses = poseNames.map((poseName) => {
           const pose = posesByPoseName[poseName.trim()];
           return pose
-            ? { pose_name: pose.pose_name, image_url: pose.image_url }
+            ? {
+                id: pose.id, // add id to each pose
+                pose_name: pose.pose_name,
+                image_url: pose.image_url,
+                completed: false,
+                flowId: flow.id, // add flowId to each pose
+              }
             : null;
         });
         return {
           ...flow,
           sequence_poses: sequencePoses.filter((pose) => pose !== null),
           showPoses: false,
+          posesCompleted: 0,
+          flowId: flow.id,
         };
       });
 
       setFlows(flowsWithPosesData);
-      setFilteredFlows(flowsWithPosesData);
     };
     fetchData();
-  }, []);
+  }, [poseCompletion]);
 
   useEffect(() => {
     // Filter flows based on bodyParts filter and difficulty filter
@@ -114,7 +132,15 @@ const App = () => {
         />
         <Route
           path="/flow/:id"
-          element={<FlowDetails flows={flows} filteredFlows={filteredFlows} />}
+          element={
+            <FlowDetails
+              flows={flows}
+              filteredFlows={filteredFlows}
+              handlePoseClick={handlePoseClick}
+              poseCompletion={poseCompletion}
+              setPoseCompletion={setPoseCompletion}
+            />
+          }
         />
       </Routes>
     </div>

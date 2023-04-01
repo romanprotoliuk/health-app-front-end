@@ -37,9 +37,3 @@ const GridPoses = (props) => {
 };
 
 export default GridPoses;
-
-{
-  /* <Link to={`/job/${elem.id}`} className="button-2 w-button">
-Details
-</Link> */
-}
