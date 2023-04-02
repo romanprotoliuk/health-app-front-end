@@ -16,6 +16,7 @@ const App = () => {
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [bodyPartsFilter, setBodyPartsFilter] = useState("");
   const [poseCompletion, setPoseCompletion] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   const handlePoseClick = (flowId, poseId) => {
     setPoseCompletion((prevPoseCompletion) => {
@@ -30,39 +31,48 @@ const App = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const posesResponse = await axios.get("http://localhost:8000/api/poses/");
-      const flowsResponse = await axios.get("http://localhost:8000/api/flows/");
+      try {
+        const posesResponse = await axios.get(
+          "http://localhost:8000/api/poses/"
+        );
+        const flowsResponse = await axios.get(
+          "http://localhost:8000/api/flows/"
+        );
 
-      // Group poses by pose_name for efficient lookup
-      const posesByPoseName = posesResponse.data.reduce((acc, pose) => {
-        acc[pose.pose_name] = pose;
-        return acc;
-      }, {});
+        // Group poses by pose_name for efficient lookup
+        const posesByPoseName = posesResponse.data.reduce((acc, pose) => {
+          acc[pose.pose_name] = pose;
+          return acc;
+        }, {});
 
-      const flowsWithPosesData = flowsResponse.data.map((flow) => {
-        const poseNames = flow.sequence_poses.split(",");
-        const sequencePoses = poseNames.map((poseName) => {
-          const pose = posesByPoseName[poseName.trim()];
-          return pose
-            ? {
-                id: pose.id, // add id to each pose
-                pose_name: pose.pose_name,
-                image_url: pose.image_url,
-                completed: false,
-                flowId: flow.id, // add flowId to each pose
-              }
-            : null;
+        const flowsWithPosesData = flowsResponse.data.map((flow) => {
+          const poseNames = flow.sequence_poses.split(",");
+          const sequencePoses = poseNames.map((poseName) => {
+            const pose = posesByPoseName[poseName.trim()];
+            return pose
+              ? {
+                  id: pose.id, // add id to each pose
+                  pose_name: pose.pose_name,
+                  image_url: pose.image_url,
+                  completed: false,
+                  flowId: flow.id, // add flowId to each pose
+                }
+              : null;
+          });
+          return {
+            ...flow,
+            sequence_poses: sequencePoses.filter((pose) => pose !== null),
+            showPoses: false,
+            posesCompleted: 0,
+            flowId: flow.id,
+          };
         });
-        return {
-          ...flow,
-          sequence_poses: sequencePoses.filter((pose) => pose !== null),
-          showPoses: false,
-          posesCompleted: 0,
-          flowId: flow.id,
-        };
-      });
 
-      setFlows(flowsWithPosesData);
+        setFlows(flowsWithPosesData);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchData();
   }, [poseCompletion]);
@@ -98,6 +108,10 @@ const App = () => {
   const handleSelectBodyParts = (event) => {
     setBodyPartsFilter(event.target.value);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="App">

@@ -1,5 +1,5 @@
 const PoseCard = (props) => {
-  const { pose, poseNum, isCompleted, onClick, flowId } = props;
+  const { pose, poseNum, isCompleted, onClick } = props;
   return (
     <div
       className="pose-card"
