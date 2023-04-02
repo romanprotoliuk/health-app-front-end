@@ -9,6 +9,7 @@ const FlowDetails = (props) => {
     handlePoseClick,
     poseCompletion,
     handleDeleteFlow,
+    handleFavoritedClick,
   } = props;
   const { id } = useParams();
 
@@ -21,6 +22,9 @@ const FlowDetails = (props) => {
       <h3>Flow Details</h3>
       <Link to={"/"}>Go back</Link>
       <button onClick={() => handleDeleteFlow(selected.id)}>Clear all</button>
+      <button onClick={() => handleFavoritedClick(selected.id)}>
+        Favor/Save/Like
+      </button>
       <div className="flow-poses">
         {selected.sequence_poses.map((pose, idx) => {
           const isCompleted = poseCompletion[selected.id]?.[idx];

@@ -5,11 +5,14 @@ import Header from "./components/Header";
 import Yoga from "./components/Yoga";
 import GridPoses from "./components/pages/GridPoses";
 import FlowDetails from "./components/pages/FlowDetails";
+import Favorites from "./components/Favorites";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import LoadingSpinner from "./components/LoadingSpinner";
+
+import { Link } from "react-router-dom";
 
 const App = () => {
   const [flows, setFlows] = useState([]);
@@ -20,6 +23,9 @@ const App = () => {
     JSON.parse(localStorage.getItem("poseCompletion")) || {}
   );
   const [isLoading, setIsLoading] = useState(true);
+  const [favoritedFlows, setFavoritedFlows] = useState(
+    JSON.parse(localStorage.getItem("likedFlows")) || []
+  );
 
   const handlePoseClick = (flowId, poseId) => {
     setPoseCompletion((prevPoseCompletion) => {
@@ -51,12 +57,10 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const posesResponse = await axios.get(
-          "http://localhost:8000/api/poses/"
-        );
-        const flowsResponse = await axios.get(
-          "http://localhost:8000/api/flows/"
-        );
+        const [posesResponse, flowsResponse] = await Promise.all([
+          axios.get("http://localhost:8000/api/poses/"),
+          axios.get("http://localhost:8000/api/flows/"),
+        ]);
 
         // Group poses by pose_name for efficient lookup
         const posesByPoseName = posesResponse.data.reduce((acc, pose) => {
@@ -112,6 +116,17 @@ const App = () => {
     localStorage.setItem("poseCompletion", JSON.stringify(poseCompletion));
   }, [poseCompletion]);
 
+  useEffect(() => {
+    const storedLikedFlows =
+      JSON.parse(localStorage.getItem("likedFlows")) || [];
+    setFavoritedFlows(storedLikedFlows);
+  }, []);
+
+  // Update localStorage whenever favoritedFlows changes
+  useEffect(() => {
+    localStorage.setItem("likedFlows", JSON.stringify(favoritedFlows));
+  }, [favoritedFlows]);
+
   const handleShow = (flowId) => {
     setFlows((prevFlows) => {
       const updatedFlows = prevFlows.map((flow) => {
@@ -122,6 +137,10 @@ const App = () => {
       });
       return updatedFlows;
     });
+  };
+
+  const handleFavoritedClick = (flow) => {
+    setFavoritedFlows((prevLikedFlows) => [...prevLikedFlows, flow]);
   };
 
   const handleSelectDifficulty = (event) => {
@@ -143,6 +162,9 @@ const App = () => {
   return (
     <div className="App">
       <Header />
+      <button>
+        <Link to={"/favorites"}>Go to your favs</Link>
+      </button>
       <Routes>
         <Route
           path="/"
@@ -181,8 +203,14 @@ const App = () => {
               poseCompletion={poseCompletion}
               setPoseCompletion={setPoseCompletion}
               handleDeleteFlow={handleDeleteFlow}
+              handleFavoritedClick={handleFavoritedClick}
             />
           }
+        />
+
+        <Route
+          path="/favorites"
+          element={<Favorites favoritedFlows={favoritedFlows} flows={flows} />}
         />
       </Routes>
     </div>
