@@ -9,13 +9,16 @@ import FlowDetails from "./components/pages/FlowDetails";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 const App = () => {
   const [flows, setFlows] = useState([]);
   const [filteredFlows, setFilteredFlows] = useState([]);
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [bodyPartsFilter, setBodyPartsFilter] = useState("");
-  const [poseCompletion, setPoseCompletion] = useState({});
+  const [poseCompletion, setPoseCompletion] = useState(
+    JSON.parse(localStorage.getItem("poseCompletion")) || {}
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   const handlePoseClick = (flowId, poseId) => {
@@ -25,6 +28,10 @@ const App = () => {
         updatedPoseCompletion[flowId] = {};
       }
       updatedPoseCompletion[flowId][poseId] = true;
+      localStorage.setItem(
+        "poseCompletion",
+        JSON.stringify(updatedPoseCompletion)
+      );
       return updatedPoseCompletion;
     });
   };
@@ -89,6 +96,10 @@ const App = () => {
     setFilteredFlows(filtered);
   }, [bodyPartsFilter, difficultyFilter, flows]);
 
+  useEffect(() => {
+    localStorage.setItem("poseCompletion", JSON.stringify(poseCompletion));
+  }, [poseCompletion]);
+
   const handleShow = (flowId) => {
     setFlows((prevFlows) => {
       const updatedFlows = prevFlows.map((flow) => {
@@ -110,7 +121,11 @@ const App = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <LoadingSpinner text="Loading..." />
+      </>
+    );
   }
 
   return (
