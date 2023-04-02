@@ -36,6 +36,18 @@ const App = () => {
     });
   };
 
+  const handleDeleteFlow = (flowId) => {
+    setPoseCompletion((prevPoseCompletion) => {
+      const updatedPoseCompletion = { ...prevPoseCompletion };
+      delete updatedPoseCompletion[flowId];
+      localStorage.setItem(
+        "poseCompletion",
+        JSON.stringify(updatedPoseCompletion)
+      );
+      return updatedPoseCompletion;
+    });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -168,6 +180,7 @@ const App = () => {
               handlePoseClick={handlePoseClick}
               poseCompletion={poseCompletion}
               setPoseCompletion={setPoseCompletion}
+              handleDeleteFlow={handleDeleteFlow}
             />
           }
         />

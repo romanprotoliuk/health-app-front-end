@@ -3,7 +3,13 @@ import { Link } from "react-router-dom";
 import PoseCard from "../PoseCard";
 
 const FlowDetails = (props) => {
-  const { flows, filteredFlows, handlePoseClick, poseCompletion } = props;
+  const {
+    flows,
+    filteredFlows,
+    handlePoseClick,
+    poseCompletion,
+    handleDeleteFlow,
+  } = props;
   const { id } = useParams();
 
   const selected = (
@@ -14,6 +20,7 @@ const FlowDetails = (props) => {
     <>
       <h3>Flow Details</h3>
       <Link to={"/"}>Go back</Link>
+      <button onClick={() => handleDeleteFlow(selected.id)}>Clear all</button>
       <div className="flow-poses">
         {selected.sequence_poses.map((pose, idx) => {
           const isCompleted = poseCompletion[selected.id]?.[idx];
