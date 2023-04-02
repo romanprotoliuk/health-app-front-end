@@ -143,6 +143,12 @@ const App = () => {
     setFavoritedFlows((prevLikedFlows) => [...prevLikedFlows, flow]);
   };
 
+  const handleUnlikeFlow = (flowId) => {
+    setFavoritedFlows((prevLikedFlows) =>
+      prevLikedFlows.filter((id) => id !== flowId)
+    );
+  };
+
   const handleSelectDifficulty = (event) => {
     setDifficultyFilter(event.target.value);
   };
@@ -204,6 +210,7 @@ const App = () => {
               setPoseCompletion={setPoseCompletion}
               handleDeleteFlow={handleDeleteFlow}
               handleFavoritedClick={handleFavoritedClick}
+              handleUnlikeFlow={handleUnlikeFlow}
             />
           }
         />
