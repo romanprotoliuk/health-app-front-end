@@ -15,11 +15,19 @@ const FlowDetails = (props) => {
   } = props;
   const { id } = useParams();
 
+  // Retrieve flows data from local storage
+  // const storedFlows = localStorage.getItem("customFlows");
+  // const parsedFlows = JSON.parse(storedFlows);
+
+  // console.log({ parsedFlows });
+
   const selected = (
     filteredFlows && filteredFlows.length > 0 ? filteredFlows : flows
   ).find((flow) => flow.id === parseInt(id));
 
   const isSaved = favoritedFlows?.includes(id);
+
+  // console.log({ selected });
 
   return (
     <>

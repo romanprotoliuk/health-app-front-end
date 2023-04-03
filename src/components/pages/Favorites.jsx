@@ -29,7 +29,22 @@ const Favorites = (props) => {
   });
 
   const renderCustomFlows = allCustomFlows.map((flow) => {
-    return <></>;
+    return (
+      <>
+        <Link
+          to={`/flow/${flow.id}`}
+          key={flow.id}
+          className="flow-card"
+          style={{ textDecoration: "none" }}
+        >
+          <h2>{flow.sequence_name}</h2>
+          <p className="flow-description">{flow?.description}</p>
+          <p className="flow-description">{flow?.level}</p>
+          <p className="flow-description">{flow?.targets}</p>
+          <p className="flow-description">{flow?.benefits}</p>
+        </Link>
+      </>
+    );
   });
 
   return (
@@ -37,7 +52,8 @@ const Favorites = (props) => {
       <BackBtn />
       <h1>Favs Flows</h1>
       <div className="flow-container-grid">{renderCards}</div>
-      <h1>My Own Flows</h1>
+      {/* <h1>My Own Flows</h1>
+      <div className="flow-container-grid">{renderCustomFlows}</div> */}
     </>
   );
 };

@@ -11,25 +11,41 @@ const Poses = (props) => {
     allCustomFlows,
   } = props;
   const [customFlowTitle, setCustomFlowTitle] = useState("");
+  const [customFlowDescription, setCustomFlowDescription] = useState("");
   const [poseSearch, setPoseSearch] = useState("");
+  const [generatedId, setGeneratedId] = useState(null);
 
   const handleChange = (e) => {
     setPoseSearch(e.target.value);
   };
 
+  const generateRandomNumbers = () => {
+    const min = 1000;
+    const max = 9999;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
   const handleCustomFlowSubmit = (e) => {
     e.preventDefault();
+
+    const newGeneratedId = generateRandomNumbers();
+    setGeneratedId(newGeneratedId);
+
     const customFlow = {
-      title: customFlowTitle,
-      poses: selectedPoses,
+      sequence_name: customFlowTitle,
+      sequence_poses: selectedPoses,
+      description: customFlowDescription,
+      id: newGeneratedId,
     };
     setAllCustomFlows((prevFlows) => [...prevFlows, customFlow]);
     setSelectedPoses([]);
     setCustomFlowTitle("");
+    setCustomFlowDescription("");
     localStorage.setItem(
       "customFlows",
       JSON.stringify([...allCustomFlows, customFlow])
     );
+    console.log({ customFlow });
   };
 
   const getFilteredPoses = () => {
@@ -56,14 +72,25 @@ const Poses = (props) => {
         <div style={{ flex: 1 }}>
           <h3>Create Custom Flow</h3>
           <form onSubmit={handleCustomFlowSubmit}>
-            <label htmlFor="title">Flow Title:</label>
-            <input
-              type="text"
-              id="title"
-              value={customFlowTitle}
-              onChange={(e) => setCustomFlowTitle(e.target.value)}
-              required
-            />
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <label htmlFor="title">Flow Title:</label>
+              <input
+                type="text"
+                id="title"
+                value={customFlowTitle}
+                onChange={(e) => setCustomFlowTitle(e.target.value)}
+                required
+              />
+
+              <label htmlFor="description">Flow Description:</label>
+              <textarea
+                id="description"
+                value={customFlowDescription}
+                onChange={(e) => setCustomFlowDescription(e.target.value)}
+                required
+                style={{ height: "100px", resize: "none" }}
+              />
+            </div>
             <div>Selected Poses:</div>
             {selectedPoses.map((pose) => (
               <p key={pose.id}>{pose.pose_name}</p>
