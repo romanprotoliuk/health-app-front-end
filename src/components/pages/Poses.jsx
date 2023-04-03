@@ -2,18 +2,10 @@ import { useState } from "react";
 import BackBtn from "../BackBtn";
 
 const Poses = (props) => {
-  const { poses } = props;
-  const [selectedPoses, setSelectedPoses] = useState([]);
+  const { poses, selectedPoses, setSelectedPoses, handlePoseClickNewFlow } =
+    props;
   const [customFlowTitle, setCustomFlowTitle] = useState("");
   const [poseSearch, setPoseSearch] = useState("");
-
-  const handlePoseClick = (pose) => {
-    if (selectedPoses.includes(pose)) {
-      setSelectedPoses(selectedPoses.filter((p) => p !== pose));
-    } else if (selectedPoses.length < 20) {
-      setSelectedPoses([...selectedPoses, pose]);
-    }
-  };
 
   const handleChange = (e) => {
     setPoseSearch(e.target.value);
@@ -39,10 +31,17 @@ const Poses = (props) => {
   };
 
   const limitReached = selectedPoses.length === 20;
+  const filteredPoses = getFilteredPoses();
+
+  const handleClearAllPoses = () => {
+    setSelectedPoses([]);
+    localStorage.removeItem("selectedPoses");
+  };
 
   return (
     <>
       <BackBtn />
+      <button onClick={handleClearAllPoses}>Clear All</button>
       <div style={{ display: "flex" }}>
         <div style={{ flex: 1 }}>
           <h3>Create Custom Flow</h3>
@@ -86,24 +85,28 @@ const Poses = (props) => {
               overflowY: "scroll",
             }}
           >
-            {getFilteredPoses().map((pose) => (
-              <div
-                key={pose.id}
-                style={{
-                  border: selectedPoses.includes(pose)
-                    ? "2px solid green"
-                    : "none",
-                }}
-                onClick={() => handlePoseClick(pose)}
-              >
-                <img
-                  src={pose.image_url}
-                  alt={pose.pose_name}
-                  style={{ height: "100px" }}
-                />
-                <div>{pose.pose_name}</div>
-              </div>
-            ))}
+            {filteredPoses.map((pose) => {
+              const isCompleted = selectedPoses.some(
+                (flow) => flow.id === pose.id
+              );
+
+              return (
+                <div
+                  key={pose.id}
+                  style={{
+                    border: isCompleted ? "2px solid green" : "none",
+                  }}
+                  onClick={() => handlePoseClickNewFlow(pose.id)}
+                >
+                  <img
+                    src={pose.image_url}
+                    alt={pose.pose_name}
+                    style={{ height: "100px" }}
+                  />
+                  <div>{pose.pose_name}</div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

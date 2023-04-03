@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import BackBtn from "../BackBtn";
 import PoseCard from "../PoseCard";
 

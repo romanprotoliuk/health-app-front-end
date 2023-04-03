@@ -26,6 +26,9 @@ const App = () => {
   const [favoritedFlows, setFavoritedFlows] = useState(
     JSON.parse(localStorage.getItem("likedFlows")) || []
   );
+  const [selectedPoses, setSelectedPoses] = useState(
+    JSON.parse(localStorage.getItem("selectedPoses")) || []
+  );
 
   const handlePoseClick = (flowId, poseId) => {
     setPoseCompletion((prevPoseCompletion) => {
@@ -39,6 +42,23 @@ const App = () => {
         JSON.stringify(updatedPoseCompletion)
       );
       return updatedPoseCompletion;
+    });
+  };
+
+  const handlePoseClickNewFlow = (poseId) => {
+    setSelectedPoses((prevSelectedPoses) => {
+      const isPoseAlreadySelected = prevSelectedPoses.some(
+        (p) => p.id === poseId
+      );
+
+      if (isPoseAlreadySelected) {
+        return prevSelectedPoses.filter((p) => p.id !== poseId);
+      } else if (prevSelectedPoses.length < 20) {
+        const newPose = poses.find((p) => p.id === poseId);
+        return [...prevSelectedPoses, newPose];
+      } else {
+        return prevSelectedPoses;
+      }
     });
   };
 
@@ -127,6 +147,10 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem("likedFlows", JSON.stringify(favoritedFlows));
   }, [favoritedFlows]);
+
+  useEffect(() => {
+    localStorage.setItem("selectedPoses", JSON.stringify(selectedPoses));
+  }, [selectedPoses]);
 
   const handleShow = (flowId) => {
     setFlows((prevFlows) => {
@@ -219,7 +243,17 @@ const App = () => {
           element={<Favorites favoritedFlows={favoritedFlows} flows={flows} />}
         />
 
-        <Route path="/poses" element={<Poses poses={poses} />} />
+        <Route
+          path="/poses"
+          element={
+            <Poses
+              poses={poses}
+              selectedPoses={selectedPoses}
+              setSelectedPoses={setSelectedPoses}
+              handlePoseClickNewFlow={handlePoseClickNewFlow}
+            />
+          }
+        />
       </Routes>
     </div>
   );
