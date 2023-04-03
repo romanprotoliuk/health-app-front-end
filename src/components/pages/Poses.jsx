@@ -2,8 +2,14 @@ import { useState } from "react";
 import BackBtn from "../BackBtn";
 
 const Poses = (props) => {
-  const { poses, selectedPoses, setSelectedPoses, handlePoseClickNewFlow } =
-    props;
+  const {
+    poses,
+    selectedPoses,
+    setSelectedPoses,
+    handlePoseClickNewFlow,
+    setAllCustomFlows,
+    allCustomFlows,
+  } = props;
   const [customFlowTitle, setCustomFlowTitle] = useState("");
   const [poseSearch, setPoseSearch] = useState("");
 
@@ -17,9 +23,13 @@ const Poses = (props) => {
       title: customFlowTitle,
       poses: selectedPoses,
     };
-    console.log(customFlow); // do API POST request here
+    setAllCustomFlows((prevFlows) => [...prevFlows, customFlow]);
     setSelectedPoses([]);
     setCustomFlowTitle("");
+    localStorage.setItem(
+      "customFlows",
+      JSON.stringify([...allCustomFlows, customFlow])
+    );
   };
 
   const getFilteredPoses = () => {

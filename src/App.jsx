@@ -19,10 +19,13 @@ const App = () => {
   const [filteredFlows, setFilteredFlows] = useState([]);
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [bodyPartsFilter, setBodyPartsFilter] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [allCustomFlows, setAllCustomFlows] = useState([]);
+
   const [poseCompletion, setPoseCompletion] = useState(
     JSON.parse(localStorage.getItem("poseCompletion")) || {}
   );
-  const [isLoading, setIsLoading] = useState(true);
   const [favoritedFlows, setFavoritedFlows] = useState(
     JSON.parse(localStorage.getItem("likedFlows")) || []
   );
@@ -152,6 +155,11 @@ const App = () => {
     localStorage.setItem("selectedPoses", JSON.stringify(selectedPoses));
   }, [selectedPoses]);
 
+  useEffect(() => {
+    const customFlows = JSON.parse(localStorage.getItem("customFlows")) || [];
+    setAllCustomFlows(customFlows);
+  }, []);
+
   const handleShow = (flowId) => {
     setFlows((prevFlows) => {
       const updatedFlows = prevFlows.map((flow) => {
@@ -240,7 +248,13 @@ const App = () => {
 
         <Route
           path="/favorites"
-          element={<Favorites favoritedFlows={favoritedFlows} flows={flows} />}
+          element={
+            <Favorites
+              favoritedFlows={favoritedFlows}
+              flows={flows}
+              allCustomFlows={allCustomFlows}
+            />
+          }
         />
 
         <Route
@@ -251,6 +265,8 @@ const App = () => {
               selectedPoses={selectedPoses}
               setSelectedPoses={setSelectedPoses}
               handlePoseClickNewFlow={handlePoseClickNewFlow}
+              setAllCustomFlows={setAllCustomFlows}
+              allCustomFlows={allCustomFlows}
             />
           }
         />
