@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import BackBtn from "../BackBtn";
+
 const Favorites = (props) => {
   const { favoritedFlows, flows } = props;
 
@@ -7,11 +9,9 @@ const Favorites = (props) => {
     favoritedFlows.includes(flow.id)
   );
 
-  console.log({ myFavoritedFlows });
-
   return (
     <>
-      <Link to={"/"}>Go back</Link>
+      <BackBtn />
       <h1>My Flows</h1>
       <div>
         {myFavoritedFlows.map((flow) => (

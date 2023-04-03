@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import BackBtn from "../BackBtn";
 import PoseCard from "../PoseCard";
 
 const FlowDetails = (props) => {
@@ -24,14 +25,17 @@ const FlowDetails = (props) => {
   return (
     <>
       <h3>Flow Details</h3>
-      <Link to={"/"}>Go back</Link>
-      <button onClick={() => handleDeleteFlow(selected.id)}>Clear all</button>
-      {!isSaved && (
-        <button onClick={() => handleFavoritedClick(selected.id)}>
-          Favor/Save/Like
-        </button>
-      )}
-      <button onClick={() => handleUnlikeFlow(selected.id)}>Unsave</button>
+      <BackBtn />
+
+      <div style={{ marginBottom: "20px" }}>
+        <button onClick={() => handleDeleteFlow(selected.id)}>Clear all</button>
+        {!isSaved && (
+          <button onClick={() => handleFavoritedClick(selected.id)}>
+            Favor/Save/Like
+          </button>
+        )}
+        <button onClick={() => handleUnlikeFlow(selected.id)}>Unsave</button>
+      </div>
       <div className="flow-poses">
         {selected.sequence_poses.map((pose, idx) => {
           const isCompleted = poseCompletion[selected.id]?.[idx];

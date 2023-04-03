@@ -1,11 +1,10 @@
 import "./App.css";
 
 // Components
-import Header from "./components/Header";
 import Yoga from "./components/Yoga";
 import GridPoses from "./components/pages/GridPoses";
 import FlowDetails from "./components/pages/FlowDetails";
-import Favorites from "./components/Favorites";
+import Favorites from "./components/pages/Favorites";
 import Poses from "./components/pages/Poses";
 import Navbar from "./components/Navbar";
 
@@ -13,8 +12,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import LoadingSpinner from "./components/LoadingSpinner";
-
-import { Link } from "react-router-dom";
 
 const App = () => {
   const [flows, setFlows] = useState([]);

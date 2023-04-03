@@ -34,7 +34,7 @@ const Navbar = () => {
       <NavTitle>Health App</NavTitle>
       <NavLinks>
         <NavLink to="/">Home</NavLink>
-        <NavLink to="/favorites">Favorites</NavLink>
+        <NavLink to="/favorites">My flows</NavLink>
         <NavLink to="/poses">Poses</NavLink>
       </NavLinks>
     </NavbarContainer>
