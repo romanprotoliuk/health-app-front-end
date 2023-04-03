@@ -19,7 +19,7 @@ const Filters = (props) => {
 
   return (
     <>
-      <div className="filter-container">
+      <div className="filter-container" style={{ marginBottom: "20px" }}>
         <label htmlFor="difficulty">Difficulty:</label>
         <select
           id="difficulty"

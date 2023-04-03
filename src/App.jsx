@@ -6,6 +6,8 @@ import Yoga from "./components/Yoga";
 import GridPoses from "./components/pages/GridPoses";
 import FlowDetails from "./components/pages/FlowDetails";
 import Favorites from "./components/Favorites";
+import Poses from "./components/pages/Poses";
+import Navbar from "./components/Navbar";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -16,6 +18,7 @@ import { Link } from "react-router-dom";
 
 const App = () => {
   const [flows, setFlows] = useState([]);
+  const [poses, setPoses] = useState([]);
   const [filteredFlows, setFilteredFlows] = useState([]);
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [bodyPartsFilter, setBodyPartsFilter] = useState("");
@@ -92,6 +95,7 @@ const App = () => {
         });
 
         setFlows(flowsWithPosesData);
+        setPoses(posesResponse.data);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -167,10 +171,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <Header />
-      <button>
-        <Link to={"/favorites"}>Go to your favs</Link>
-      </button>
+      <Navbar />
       <Routes>
         <Route
           path="/"
@@ -211,6 +212,7 @@ const App = () => {
               handleDeleteFlow={handleDeleteFlow}
               handleFavoritedClick={handleFavoritedClick}
               handleUnlikeFlow={handleUnlikeFlow}
+              favoritedFlows={favoritedFlows}
             />
           }
         />
@@ -219,6 +221,8 @@ const App = () => {
           path="/favorites"
           element={<Favorites favoritedFlows={favoritedFlows} flows={flows} />}
         />
+
+        <Route path="/poses" element={<Poses poses={poses} />} />
       </Routes>
     </div>
   );

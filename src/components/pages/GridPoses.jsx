@@ -26,7 +26,7 @@ const GridPoses = (props) => {
   });
   return (
     <>
-      <h3>Grid Poses</h3>
+      <h3>Suggested flows</h3>
       <Filters
         difficultyFilter={props.difficultyFilter}
         handleSelectDifficulty={props.handleSelectDifficulty}
