@@ -28,15 +28,17 @@ const NavLink = styled(Link)`
   }
 `;
 
-const Navbar = () => {
+const Navbar = ({ logout, isRegistered }) => {
   return (
     <NavbarContainer style={{ marginBottom: "20px" }}>
       <NavTitle>Health App</NavTitle>
       <NavLinks>
         <NavLink to="/">Home</NavLink>
-        <NavLink to="/favorites">My flows</NavLink>
+        {isRegistered && <NavLink to="/favorites">My flows</NavLink>}
+
         <NavLink to="/poses">Poses</NavLink>
       </NavLinks>
+      {isRegistered && <button onClick={logout}>Logout</button>}
     </NavbarContainer>
   );
 };

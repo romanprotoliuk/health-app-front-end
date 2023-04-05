@@ -7,11 +7,16 @@ import FlowDetails from "./components/pages/FlowDetails";
 import Favorites from "./components/pages/Favorites";
 import Poses from "./components/pages/Poses";
 import Navbar from "./components/Navbar";
+import Login from "./components/Login";
+import Callback from "./components/Callback";
+import Profile from "./components/pages/Profile";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
-import LoadingSpinner from "./components/LoadingSpinner";
+import { useEffect, useState, useCallback } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+
+import { magic } from "./utils/magic";
 
 const App = () => {
   const [flows, setFlows] = useState([]);
@@ -20,6 +25,12 @@ const App = () => {
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [bodyPartsFilter, setBodyPartsFilter] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
+  const [userMetadata, setUserMetadata] = useState();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const [allCustomFlows, setAllCustomFlows] = useState([]);
 
@@ -32,6 +43,8 @@ const App = () => {
   const [selectedPoses, setSelectedPoses] = useState(
     JSON.parse(localStorage.getItem("selectedPoses")) || []
   );
+
+  const navigate = useNavigate();
 
   const handlePoseClick = (flowId, poseId) => {
     setPoseCompletion((prevPoseCompletion) => {
@@ -160,6 +173,65 @@ const App = () => {
     setAllCustomFlows(customFlows);
   }, []);
 
+  const login = useCallback(async () => {
+    setIsLoggingIn(true);
+    try {
+      const user = await magic.auth.loginWithMagicLink({
+        email,
+        redirectURI: new URL("/callback", window.location.origin).href,
+      });
+      setIsAuthenticated(true);
+      setUserData(user);
+      navigate("/");
+    } catch {
+      setIsLoggingIn(false);
+    }
+  }, [email]);
+
+  useEffect(() => {
+    // On mount, we check if a user is logged in.
+    // If so, we'll retrieve the authenticated user's profile.
+    magic.user.isLoggedIn().then((magicIsLoggedIn) => {
+      if (magicIsLoggedIn) {
+        setIsAuthenticated(magicIsLoggedIn);
+        magic.user.getMetadata().then((userMetadata) => {
+          setUserMetadata(userMetadata);
+          setIsRegistered(Boolean(userMetadata?.email));
+          localStorage.setItem("userMetadata", JSON.stringify(userMetadata));
+        });
+      } else {
+        // If no user is logged in, redirect to `/login`
+        navigate("/login");
+      }
+    });
+  }, [isAuthenticated]);
+
+  // useEffect(() => {
+  //   // On mount, we check if a user is logged in.
+  //   // If so, we'll retrieve the authenticated user's profile.
+  //   magic.user.isLoggedIn().then((magicIsLoggedIn) => {
+  //     if (magicIsLoggedIn) {
+  //       setIsAuthenticated(magicIsLoggedIn);
+  //       magic.user.getMetadata().then(setUserMetadata);
+  //       const userMetadata = magic.user.getMetadata();
+  //       setIsRegistered(Boolean(userMetadata?.email));
+  //     } else {
+  //       // If no user is logged in, redirect to `/login`
+  //       navigate("/login");
+  //     }
+  //   });
+  // }, []);
+
+  // useEffect(() => {
+  //   // Check if the user is authenticated
+  //   const isLoggedIn = magic.user.isLoggedIn();
+  //   setIsAuthenticated(isLoggedIn);
+
+  //   // Check if the user has completed registration
+  //   const userMetadata = JSON.parse(localStorage.getItem("userMetadata"));
+  //   setIsRegistered(Boolean(userMetadata?.email));
+  // }, []);
+
   const handleShow = (flowId) => {
     setFlows((prevFlows) => {
       const updatedFlows = prevFlows.map((flow) => {
@@ -190,6 +262,21 @@ const App = () => {
     setBodyPartsFilter(event.target.value);
   };
 
+  /**
+   * Perform logout action via Magic.
+   */
+  const logout = useCallback(() => {
+    magic.user.logout().then(() => {
+      localStorage.removeItem("userMetadata");
+      setIsAuthenticated(false);
+      navigate("/login");
+    });
+  }, [navigate]);
+
+  console.log(Boolean(userMetadata));
+  console.log({ isAuthenticated });
+  console.log({ isRegistered });
+
   if (isLoading) {
     return (
       <>
@@ -200,8 +287,25 @@ const App = () => {
 
   return (
     <div className="App">
-      <Navbar />
+      <Navbar logout={logout} isRegistered={isRegistered} />
       <Routes>
+        <Route
+          path="/login"
+          element={
+            <Login
+              userData={userData}
+              setUserData={setUserData}
+              setIsAuthenticated={setIsAuthenticated}
+              setIsRegistered={setIsRegistered}
+              setEmail={setEmail}
+              isLoggingIn={isLoggingIn}
+              login={login}
+            />
+          }
+        />
+
+        <Route path="/callback" element={<Callback />} />
+
         <Route
           path="/"
           element={
@@ -267,6 +371,20 @@ const App = () => {
               handlePoseClickNewFlow={handlePoseClickNewFlow}
               setAllCustomFlows={setAllCustomFlows}
               allCustomFlows={allCustomFlows}
+            />
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <Profile
+              userMetadata={userMetadata}
+              setUserMetadata={setUserMetadata}
+              isAuthenticated={isAuthenticated}
+              isRegistered={isRegistered}
+              setIsAuthenticated={setIsAuthenticated}
+              setIsRegistered={setIsRegistered}
             />
           }
         />
