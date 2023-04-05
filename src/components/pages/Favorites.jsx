@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import BackBtn from "../BackBtn";
+import BackBtn from "../buttons/BackBtn";
 
 const Favorites = (props) => {
   const { favoritedFlows, flows } = props;

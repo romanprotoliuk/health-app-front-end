@@ -1,5 +1,5 @@
 import { useState } from "react";
-import BackBtn from "../BackBtn";
+import BackBtn from "../buttons/BackBtn";
 
 const Poses = (props) => {
   const {

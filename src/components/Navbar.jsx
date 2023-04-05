@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import LoginButton from "./buttons/LoginButton";
+import LogoutButton from "./buttons/LogoutButton";
 
 const NavbarContainer = styled.div`
   display: flex;
@@ -28,17 +30,16 @@ const NavLink = styled(Link)`
   }
 `;
 
-const Navbar = ({ logout, isRegistered }) => {
+const Navbar = ({ isAuthenticated }) => {
   return (
     <NavbarContainer style={{ marginBottom: "20px" }}>
       <NavTitle>Health App</NavTitle>
       <NavLinks>
         <NavLink to="/">Home</NavLink>
-        {isRegistered && <NavLink to="/favorites">My flows</NavLink>}
-
+        {isAuthenticated && <NavLink to="/favorites">My flows</NavLink>}
         <NavLink to="/poses">Poses</NavLink>
       </NavLinks>
-      {isRegistered && <button onClick={logout}>Logout</button>}
+      {isAuthenticated ? <LogoutButton /> : <LoginButton />}
     </NavbarContainer>
   );
 };

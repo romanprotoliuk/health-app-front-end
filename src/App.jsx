@@ -1,36 +1,26 @@
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { Routes, Route } from "react-router-dom";
+import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
+import { supabase } from "./utils/supabase";
 import "./App.css";
 
 // Components
-import Yoga from "./components/Yoga";
 import GridPoses from "./components/pages/GridPoses";
 import FlowDetails from "./components/pages/FlowDetails";
 import Favorites from "./components/pages/Favorites";
 import Poses from "./components/pages/Poses";
 import Navbar from "./components/Navbar";
-import Login from "./components/Login";
-import Callback from "./components/Callback";
-import Profile from "./components/pages/Profile";
+import Login from "./components/pages/Login";
 import LoadingSpinner from "./components/LoadingSpinner";
 
-import axios from "axios";
-import { useEffect, useState, useCallback } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
-
-import { magic } from "./utils/magic";
-
 const App = () => {
+  const { isAuthenticated, isLoading, user } = useAuth0();
   const [flows, setFlows] = useState([]);
   const [poses, setPoses] = useState([]);
   const [filteredFlows, setFilteredFlows] = useState([]);
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [bodyPartsFilter, setBodyPartsFilter] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [userData, setUserData] = useState(null);
-  const [userMetadata, setUserMetadata] = useState();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isRegistered, setIsRegistered] = useState(false);
-  const [email, setEmail] = useState("");
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const [allCustomFlows, setAllCustomFlows] = useState([]);
 
@@ -43,8 +33,6 @@ const App = () => {
   const [selectedPoses, setSelectedPoses] = useState(
     JSON.parse(localStorage.getItem("selectedPoses")) || []
   );
-
-  const navigate = useNavigate();
 
   const handlePoseClick = (flowId, poseId) => {
     setPoseCompletion((prevPoseCompletion) => {
@@ -129,13 +117,20 @@ const App = () => {
 
         setFlows(flowsWithPosesData);
         setPoses(posesResponse.data);
-        setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
     };
+
     fetchData();
   }, [poseCompletion]);
+
+  const posesByPoseName = useMemo(() => {
+    return poses.reduce((acc, pose) => {
+      acc[pose.pose_name] = pose;
+      return acc;
+    }, {});
+  }, [poses]);
 
   useEffect(() => {
     // Filter flows based on bodyParts filter and difficulty filter
@@ -173,76 +168,17 @@ const App = () => {
     setAllCustomFlows(customFlows);
   }, []);
 
-  const login = useCallback(async () => {
-    setIsLoggingIn(true);
-    try {
-      const user = await magic.auth.loginWithMagicLink({
-        email,
-        redirectURI: new URL("/callback", window.location.origin).href,
-      });
-      setIsAuthenticated(true);
-      setUserData(user);
-      navigate("/");
-    } catch {
-      setIsLoggingIn(false);
-    }
-  }, [email]);
-
-  useEffect(() => {
-    // On mount, we check if a user is logged in.
-    // If so, we'll retrieve the authenticated user's profile.
-    magic.user.isLoggedIn().then((magicIsLoggedIn) => {
-      if (magicIsLoggedIn) {
-        setIsAuthenticated(magicIsLoggedIn);
-        magic.user.getMetadata().then((userMetadata) => {
-          setUserMetadata(userMetadata);
-          setIsRegistered(Boolean(userMetadata?.email));
-          localStorage.setItem("userMetadata", JSON.stringify(userMetadata));
-        });
-      } else {
-        // If no user is logged in, redirect to `/login`
-        navigate("/login");
-      }
-    });
-  }, [isAuthenticated]);
-
-  // useEffect(() => {
-  //   // On mount, we check if a user is logged in.
-  //   // If so, we'll retrieve the authenticated user's profile.
-  //   magic.user.isLoggedIn().then((magicIsLoggedIn) => {
-  //     if (magicIsLoggedIn) {
-  //       setIsAuthenticated(magicIsLoggedIn);
-  //       magic.user.getMetadata().then(setUserMetadata);
-  //       const userMetadata = magic.user.getMetadata();
-  //       setIsRegistered(Boolean(userMetadata?.email));
-  //     } else {
-  //       // If no user is logged in, redirect to `/login`
-  //       navigate("/login");
-  //     }
+  // const handleShow = (flowId) => {
+  //   setFlows((prevFlows) => {
+  //     const updatedFlows = prevFlows.map((flow) => {
+  //       if (flow.id === flowId) {
+  //         return { ...flow, showPoses: !flow.showPoses };
+  //       }
+  //       return flow;
+  //     });
+  //     return updatedFlows;
   //   });
-  // }, []);
-
-  // useEffect(() => {
-  //   // Check if the user is authenticated
-  //   const isLoggedIn = magic.user.isLoggedIn();
-  //   setIsAuthenticated(isLoggedIn);
-
-  //   // Check if the user has completed registration
-  //   const userMetadata = JSON.parse(localStorage.getItem("userMetadata"));
-  //   setIsRegistered(Boolean(userMetadata?.email));
-  // }, []);
-
-  const handleShow = (flowId) => {
-    setFlows((prevFlows) => {
-      const updatedFlows = prevFlows.map((flow) => {
-        if (flow.id === flowId) {
-          return { ...flow, showPoses: !flow.showPoses };
-        }
-        return flow;
-      });
-      return updatedFlows;
-    });
-  };
+  // };
 
   const handleFavoritedClick = (flow) => {
     setFavoritedFlows((prevLikedFlows) => [...prevLikedFlows, flow]);
@@ -262,20 +198,50 @@ const App = () => {
     setBodyPartsFilter(event.target.value);
   };
 
-  /**
-   * Perform logout action via Magic.
-   */
-  const logout = useCallback(() => {
-    magic.user.logout().then(() => {
-      localStorage.removeItem("userMetadata");
-      setIsAuthenticated(false);
-      navigate("/login");
-    });
-  }, [navigate]);
+  const registerUserInSupabase = useCallback(async () => {
+    if (isAuthenticated && user) {
+      console.log("User is authenticated:", user);
 
-  console.log(Boolean(userMetadata));
-  console.log({ isAuthenticated });
-  console.log({ isRegistered });
+      // Check if the user is already registered in Supabase
+      const { sub, email } = user;
+      const { data: users, error } = await supabase
+        .from("users_yoga")
+        .select("*")
+        .eq("auth0_id", sub);
+
+      if (error) {
+        console.error("Error fetching user from Supabase:", error);
+        return;
+      }
+
+      // If user is not already registered, insert their information into the "users" table
+      if (users.length === 0) {
+        const { error } = await supabase.from("users_yoga").insert([
+          {
+            auth0_id: sub,
+            email,
+            name: user.name,
+            picture: user.picture,
+          },
+        ]);
+
+        if (error) {
+          console.error("Error registering user in Supabase:", error);
+          return;
+        }
+
+        console.log("User successfully registered in Supabase!");
+      } else {
+        console.log("User is already registered in Supabase");
+      }
+    } else {
+      console.log("User is not authenticated");
+    }
+  }, [isAuthenticated, user]);
+
+  useEffect(() => {
+    registerUserInSupabase();
+  }, [registerUserInSupabase]);
 
   if (isLoading) {
     return (
@@ -287,45 +253,14 @@ const App = () => {
 
   return (
     <div className="App">
-      <Navbar logout={logout} isRegistered={isRegistered} />
+      <Navbar isAuthenticated={isAuthenticated} />
       <Routes>
-        <Route
-          path="/login"
-          element={
-            <Login
-              userData={userData}
-              setUserData={setUserData}
-              setIsAuthenticated={setIsAuthenticated}
-              setIsRegistered={setIsRegistered}
-              setEmail={setEmail}
-              isLoggingIn={isLoggingIn}
-              login={login}
-            />
-          }
-        />
-
-        <Route path="/callback" element={<Callback />} />
-
         <Route
           path="/"
           element={
             <GridPoses
               flows={flows}
               filteredFlows={filteredFlows}
-              difficultyFilter={difficultyFilter}
-              bodyPartsFilter={bodyPartsFilter}
-              handleSelectDifficulty={handleSelectDifficulty}
-              handleSelectBodyParts={handleSelectBodyParts}
-            />
-          }
-        />
-        <Route
-          path="/yoga"
-          element={
-            <Yoga
-              flows={flows}
-              filteredFlows={filteredFlows}
-              handleShow={handleShow}
               difficultyFilter={difficultyFilter}
               bodyPartsFilter={bodyPartsFilter}
               handleSelectDifficulty={handleSelectDifficulty}
@@ -349,18 +284,21 @@ const App = () => {
             />
           }
         />
-
         <Route
           path="/favorites"
           element={
-            <Favorites
-              favoritedFlows={favoritedFlows}
-              flows={flows}
-              allCustomFlows={allCustomFlows}
-            />
+            isAuthenticated ? (
+              <Favorites
+                favoritedFlows={favoritedFlows}
+                flows={flows}
+                allCustomFlows={allCustomFlows}
+              />
+            ) : (
+              <Login />
+            )
           }
         />
-
+        <Route path="/login" element={<Login />} />
         <Route
           path="/poses"
           element={
@@ -371,20 +309,6 @@ const App = () => {
               handlePoseClickNewFlow={handlePoseClickNewFlow}
               setAllCustomFlows={setAllCustomFlows}
               allCustomFlows={allCustomFlows}
-            />
-          }
-        />
-
-        <Route
-          path="/profile"
-          element={
-            <Profile
-              userMetadata={userMetadata}
-              setUserMetadata={setUserMetadata}
-              isAuthenticated={isAuthenticated}
-              isRegistered={isRegistered}
-              setIsAuthenticated={setIsAuthenticated}
-              setIsRegistered={setIsRegistered}
             />
           }
         />

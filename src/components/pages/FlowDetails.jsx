@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import BackBtn from "../BackBtn";
+import BackBtn from "../buttons/BackBtn";
 import PoseCard from "../PoseCard";
 
 const FlowDetails = (props) => {
