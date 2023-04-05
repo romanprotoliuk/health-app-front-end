@@ -8,22 +8,21 @@ const GridPoses = (props) => {
       : props.flows
   ).map((flow) => {
     return (
-      <>
-        <Link
-          to={`/flow/${flow.id}`}
-          key={flow.id}
-          className="flow-card"
-          style={{ textDecoration: "none" }}
-        >
-          <h2>{flow.sequence_name}</h2>
-          <p className="flow-description">{flow.description}</p>
-          <p className="flow-description">{flow.level}</p>
-          <p className="flow-description">{flow.targets}</p>
-          <p className="flow-description">{flow.benefits}</p>
-        </Link>
-      </>
+      <Link
+        to={`/flow/${flow.id}`}
+        key={flow.id} // add the "key" prop here
+        className="flow-card"
+        style={{ textDecoration: "none" }}
+      >
+        <h2>{flow.sequence_name}</h2>
+        <p className="flow-description">{flow.description}</p>
+        <p className="flow-description">{flow.level}</p>
+        <p className="flow-description">{flow.targets}</p>
+        <p className="flow-description">{flow.benefits}</p>
+      </Link>
     );
   });
+
   return (
     <>
       <h3>Suggested flows</h3>
