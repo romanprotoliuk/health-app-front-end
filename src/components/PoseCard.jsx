@@ -4,7 +4,9 @@ const PoseCard = (props) => {
     <div
       className="pose-card"
       onClick={onClick}
-      style={isCompleted ? { border: "2px solid green" } : {}}
+      style={
+        isCompleted ? { border: "2px solid green" } : { cursor: "pointer" }
+      }
     >
       <img className="pose-image" src={pose.image_url} alt={pose.pose_name} />
       <p>{poseNum}</p>

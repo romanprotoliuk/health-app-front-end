@@ -130,9 +130,11 @@ const Poses = (props) => {
               return (
                 <div
                   key={pose.id}
-                  style={{
-                    border: isCompleted ? "2px solid green" : "none",
-                  }}
+                  style={
+                    isCompleted
+                      ? { border: "2px solid green", cursor: "pointer" }
+                      : { cursor: "pointer" }
+                  }
                   onClick={() => handlePoseClickNewFlow(pose.id)}
                 >
                   <img
