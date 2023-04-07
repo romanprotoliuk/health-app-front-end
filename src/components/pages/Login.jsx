@@ -1,4 +1,4 @@
-import LoginButton from "../buttons/LoginButton";
+import LoginButton from "../buttons/LoginBtn";
 
 const Login = () => {
   return (

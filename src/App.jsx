@@ -21,7 +21,7 @@ const App = () => {
   const [filteredFlows, setFilteredFlows] = useState([]);
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [bodyPartsFilter, setBodyPartsFilter] = useState("");
-
+  const [isSavedCompleted, setIsSavedCompleted] = useState(false);
   const [allCustomFlows, setAllCustomFlows] = useState([]);
 
   const [poseCompletion, setPoseCompletion] = useState(
@@ -181,6 +181,7 @@ const App = () => {
   // };
 
   const handleFavoritedClick = (flow) => {
+    setIsSavedCompleted(true);
     setFavoritedFlows((prevLikedFlows) => [...prevLikedFlows, flow]);
   };
 
@@ -281,6 +282,8 @@ const App = () => {
               handleFavoritedClick={handleFavoritedClick}
               handleUnlikeFlow={handleUnlikeFlow}
               favoritedFlows={favoritedFlows}
+              isSavedCompleted={isSavedCompleted}
+              setIsSavedCompleted={setIsSavedCompleted}
             />
           }
         />

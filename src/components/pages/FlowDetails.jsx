@@ -1,6 +1,11 @@
 import { useParams } from "react-router-dom";
 import BackBtn from "../buttons/BackBtn";
+import DeleteFlowBtn from "../buttons/DeleteFlowBtn";
+import SaveBtn from "../buttons/SaveBtn";
+import UnsaveBtn from "../buttons/UnsaveBtn";
 import PoseCard from "../PoseCard";
+
+import { useEffect, useState } from "react";
 
 const FlowDetails = (props) => {
   const {
@@ -12,6 +17,8 @@ const FlowDetails = (props) => {
     handleFavoritedClick,
     handleUnlikeFlow,
     favoritedFlows,
+    isSavedCompleted,
+    setIsSavedCompleted,
   } = props;
   const { id } = useParams();
 
@@ -21,28 +28,43 @@ const FlowDetails = (props) => {
 
   // console.log({ parsedFlows });
 
+  // useEffect(() => {
+  //   if (isSavedCompleted) {
+  //     const timeoutId = setTimeout(() => {
+  //       setIsSavedCompleted(false);
+  //     }, 5000);
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [isSavedCompleted]);
+
   const selected = (
     filteredFlows && filteredFlows.length > 0 ? filteredFlows : flows
   ).find((flow) => flow.id === parseInt(id));
 
-  const isSaved = favoritedFlows?.includes(id);
-
-  // console.log({ selected });
+  const isSaved = favoritedFlows.includes(selected.id);
+  console.log("issaved", isSaved && isSavedCompleted);
+  const isCompleted = poseCompletion[selected.id];
 
   return (
     <>
       <h3>Flow Details</h3>
       <BackBtn />
-
       <div style={{ marginBottom: "20px" }}>
-        <button onClick={() => handleDeleteFlow(selected.id)}>Clear all</button>
-        {!isSaved && (
-          <button onClick={() => handleFavoritedClick(selected.id)}>
-            Favor/Save/Like
-          </button>
+        {isCompleted && (
+          <DeleteFlowBtn handleDeleteFlow={handleDeleteFlow} id={selected.id} />
         )}
-        <button onClick={() => handleUnlikeFlow(selected.id)}>Unsave</button>
+
+        {isSaved ? (
+          <UnsaveBtn handleUnlikeFlow={handleUnlikeFlow} id={selected.id} />
+        ) : (
+          <SaveBtn
+            handleFavoritedClick={handleFavoritedClick}
+            id={selected.id}
+          />
+        )}
       </div>
+      {isSaved && <p>This flow has been added to your flows</p>}
+
       <div className="flow-poses">
         {selected.sequence_poses.map((pose, idx) => {
           const isCompleted = poseCompletion[selected.id]?.[idx];

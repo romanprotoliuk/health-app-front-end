@@ -1,5 +1,6 @@
 import { useState } from "react";
 import BackBtn from "../buttons/BackBtn";
+import ClearAll from "../buttons/ClearAllBtn";
 
 const Poses = (props) => {
   const {
@@ -67,7 +68,7 @@ const Poses = (props) => {
   return (
     <>
       <BackBtn />
-      <button onClick={handleClearAllPoses}>Clear All</button>
+      <ClearAll handleClearAllPoses={handleClearAllPoses} />
       <div style={{ display: "flex" }}>
         <div style={{ flex: 1 }}>
           <h3>Create Custom Flow</h3>

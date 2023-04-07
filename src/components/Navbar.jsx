@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import LoginButton from "./buttons/LoginButton";
-import LogoutButton from "./buttons/LogoutButton";
+import LoginButton from "./buttons/LoginBtn";
+import LogoutButton from "./buttons/LogoutBtn";
 
 const NavbarContainer = styled.div`
   display: flex;
@@ -39,7 +39,11 @@ const Navbar = ({ isAuthenticated }) => {
         {isAuthenticated && <NavLink to="/favorites">My flows</NavLink>}
         <NavLink to="/poses">Poses</NavLink>
       </NavLinks>
-      {isAuthenticated ? <LogoutButton /> : <LoginButton />}
+      {isAuthenticated ? (
+        <LogoutButton />
+      ) : (
+        <LoginButton style={{ cursor: "pointer" }} />
+      )}
     </NavbarContainer>
   );
 };
