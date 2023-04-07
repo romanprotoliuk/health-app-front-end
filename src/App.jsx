@@ -284,6 +284,7 @@ const App = () => {
               favoritedFlows={favoritedFlows}
               isSavedCompleted={isSavedCompleted}
               setIsSavedCompleted={setIsSavedCompleted}
+              isAuthenticated={isAuthenticated}
             />
           }
         />
@@ -305,14 +306,18 @@ const App = () => {
         <Route
           path="/poses"
           element={
-            <Poses
-              poses={poses}
-              selectedPoses={selectedPoses}
-              setSelectedPoses={setSelectedPoses}
-              handlePoseClickNewFlow={handlePoseClickNewFlow}
-              setAllCustomFlows={setAllCustomFlows}
-              allCustomFlows={allCustomFlows}
-            />
+            isAuthenticated ? (
+              <Poses
+                poses={poses}
+                selectedPoses={selectedPoses}
+                setSelectedPoses={setSelectedPoses}
+                handlePoseClickNewFlow={handlePoseClickNewFlow}
+                setAllCustomFlows={setAllCustomFlows}
+                allCustomFlows={allCustomFlows}
+              />
+            ) : (
+              <Login />
+            )
           }
         />
 

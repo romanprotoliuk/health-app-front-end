@@ -30,22 +30,20 @@ const NavLink = styled(Link)`
   }
 `;
 
-const Navbar = ({ isAuthenticated }) => {
-  return (
-    <NavbarContainer style={{ marginBottom: "20px" }}>
-      <NavTitle>Health App</NavTitle>
-      <NavLinks>
-        <NavLink to="/">Home</NavLink>
-        {isAuthenticated && <NavLink to="/favorites">My flows</NavLink>}
-        <NavLink to="/poses">Poses</NavLink>
-      </NavLinks>
-      {isAuthenticated ? (
-        <LogoutButton />
-      ) : (
-        <LoginButton style={{ cursor: "pointer" }} />
-      )}
-    </NavbarContainer>
-  );
-};
+const Navbar = ({ isAuthenticated }) => (
+  <NavbarContainer style={{ marginBottom: "20px" }}>
+    <NavTitle>Health App</NavTitle>
+    <NavLinks>
+      <NavLink to="/">Home</NavLink>
+      {isAuthenticated && <NavLink to="/favorites">My flows</NavLink>}
+      {isAuthenticated && <NavLink to="/poses">Poses</NavLink>}
+    </NavLinks>
+    {isAuthenticated ? (
+      <LogoutButton />
+    ) : (
+      <LoginButton style={{ cursor: "pointer" }} />
+    )}
+  </NavbarContainer>
+);
 
 export default Navbar;

@@ -17,8 +17,7 @@ const FlowDetails = (props) => {
     handleFavoritedClick,
     handleUnlikeFlow,
     favoritedFlows,
-    isSavedCompleted,
-    setIsSavedCompleted,
+    isAuthenticated,
   } = props;
   const { id } = useParams();
 
@@ -42,28 +41,41 @@ const FlowDetails = (props) => {
   ).find((flow) => flow.id === parseInt(id));
 
   const isSaved = favoritedFlows.includes(selected.id);
-  console.log("issaved", isSaved && isSavedCompleted);
   const isCompleted = poseCompletion[selected.id];
 
   return (
     <>
       <h3>Flow Details</h3>
       <BackBtn />
-      <div style={{ marginBottom: "20px" }}>
-        {isCompleted && (
-          <DeleteFlowBtn handleDeleteFlow={handleDeleteFlow} id={selected.id} />
-        )}
 
-        {isSaved ? (
-          <UnsaveBtn handleUnlikeFlow={handleUnlikeFlow} id={selected.id} />
-        ) : (
-          <SaveBtn
-            handleFavoritedClick={handleFavoritedClick}
-            id={selected.id}
-          />
-        )}
-      </div>
-      {isSaved && <p>This flow has been added to your flows</p>}
+      {isAuthenticated ? (
+        <div style={{ marginBottom: "20px" }}>
+          {isCompleted && (
+            <DeleteFlowBtn
+              handleDeleteFlow={handleDeleteFlow}
+              id={selected.id}
+            />
+          )}
+
+          {isSaved ? (
+            <UnsaveBtn handleUnlikeFlow={handleUnlikeFlow} id={selected.id} />
+          ) : (
+            <SaveBtn
+              handleFavoritedClick={handleFavoritedClick}
+              id={selected.id}
+            />
+          )}
+        </div>
+      ) : (
+        <div style={{ marginBottom: "20px" }}>
+          {isCompleted && (
+            <DeleteFlowBtn
+              handleDeleteFlow={handleDeleteFlow}
+              id={selected.id}
+            />
+          )}
+        </div>
+      )}
 
       <div className="flow-poses">
         {selected.sequence_poses.map((pose, idx) => {
