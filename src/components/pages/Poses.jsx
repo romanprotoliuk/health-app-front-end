@@ -1,6 +1,7 @@
 import { useState } from "react";
 import BackBtn from "../buttons/BackBtn";
 import ClearAll from "../buttons/ClearAllBtn";
+import { generateRandomNumbers } from "../../utils/helper";
 
 const Poses = (props) => {
   const {
@@ -18,12 +19,6 @@ const Poses = (props) => {
 
   const handleChange = (e) => {
     setPoseSearch(e.target.value);
-  };
-
-  const generateRandomNumbers = () => {
-    const min = 1000;
-    const max = 9999;
-    return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
   const handleCustomFlowSubmit = (e) => {

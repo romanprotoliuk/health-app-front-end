@@ -30,7 +30,7 @@ const NavLink = styled(Link)`
   }
 `;
 
-const Navbar = ({ isAuthenticated }) => (
+const Navbar = ({ isAuthenticated, setUserSub }) => (
   <NavbarContainer style={{ marginBottom: "20px" }}>
     <NavTitle>Health App</NavTitle>
     <NavLinks>
@@ -39,7 +39,7 @@ const Navbar = ({ isAuthenticated }) => (
       {isAuthenticated && <NavLink to="/poses">Poses</NavLink>}
     </NavLinks>
     {isAuthenticated ? (
-      <LogoutButton />
+      <LogoutButton setUserSub={setUserSub} />
     ) : (
       <LoginButton style={{ cursor: "pointer" }} />
     )}

@@ -23,6 +23,7 @@ const App = () => {
   const [bodyPartsFilter, setBodyPartsFilter] = useState("");
   const [isSavedCompleted, setIsSavedCompleted] = useState(false);
   const [allCustomFlows, setAllCustomFlows] = useState([]);
+  const [userSub, setUserSub] = useState(null);
 
   const [poseCompletion, setPoseCompletion] = useState(
     JSON.parse(localStorage.getItem("poseCompletion")) || {}
@@ -163,50 +164,15 @@ const App = () => {
     localStorage.setItem("selectedPoses", JSON.stringify(selectedPoses));
   }, [selectedPoses]);
 
-  useEffect(() => {
-    const customFlows = JSON.parse(localStorage.getItem("customFlows")) || [];
-    setAllCustomFlows(customFlows);
-  }, []);
-
-  // const handleShow = (flowId) => {
-  //   setFlows((prevFlows) => {
-  //     const updatedFlows = prevFlows.map((flow) => {
-  //       if (flow.id === flowId) {
-  //         return { ...flow, showPoses: !flow.showPoses };
-  //       }
-  //       return flow;
-  //     });
-  //     return updatedFlows;
-  //   });
-  // };
-
-  const handleFavoritedClick = (flow) => {
-    setIsSavedCompleted(true);
-    setFavoritedFlows((prevLikedFlows) => [...prevLikedFlows, flow]);
-  };
-
-  const handleUnlikeFlow = (flowId) => {
-    setFavoritedFlows((prevLikedFlows) =>
-      prevLikedFlows.filter((id) => id !== flowId)
-    );
-  };
-
-  const handleSelectDifficulty = (event) => {
-    setDifficultyFilter(event.target.value);
-  };
-
-  const handleSelectBodyParts = (event) => {
-    setBodyPartsFilter(event.target.value);
-  };
-
   const registerUserInSupabase = useCallback(async () => {
     if (isAuthenticated && user) {
       console.log("User is authenticated:", user);
 
       // Check if the user is already registered in Supabase
       const { sub, email } = user;
+      setUserSub(sub);
       const { data: users, error } = await supabase
-        .from("users_yoga")
+        .from("users")
         .select("*")
         .eq("auth0_id", sub);
 
@@ -217,7 +183,7 @@ const App = () => {
 
       // If user is not already registered, insert their information into the "users" table
       if (users.length === 0) {
-        const { error } = await supabase.from("users_yoga").insert([
+        const { error } = await supabase.from("users").insert([
           {
             auth0_id: sub,
             email,
@@ -243,6 +209,100 @@ const App = () => {
   useEffect(() => {
     registerUserInSupabase();
   }, [registerUserInSupabase]);
+  useEffect(() => {
+    const customFlows = JSON.parse(localStorage.getItem("customFlows")) || [];
+    setAllCustomFlows(customFlows);
+  }, []);
+
+  // const handleShow = (flowId) => {
+  //   setFlows((prevFlows) => {
+  //     const updatedFlows = prevFlows.map((flow) => {
+  //       if (flow.id === flowId) {
+  //         return { ...flow, showPoses: !flow.showPoses };
+  //       }
+  //       return flow;
+  //     });
+  //     return updatedFlows;
+  //   });
+  // };
+
+  // const { sub, email } = user;
+  // console.log({ sub });
+
+  const handleFavoritedClick = async (flow) => {
+    setIsSavedCompleted(true);
+    setFavoritedFlows((prevLikedFlows) => [...prevLikedFlows, flow]);
+
+    try {
+      const { data, error } = await supabase
+        .from("users_flows_new")
+        .insert({ auth0_id: userSub, flow_id: flow });
+
+      if (error) {
+        throw error;
+      }
+
+      console.log("Flow saved successfully");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleUnlikeFlow = async (flowId) => {
+    setFavoritedFlows((prevLikedFlows) =>
+      prevLikedFlows.filter((id) => id !== flowId)
+    );
+
+    try {
+      const { data, error } = await supabase
+        .from("users_flows_new")
+        .delete()
+        .eq("auth0_id", userSub)
+        .eq("flow_id", flowId);
+
+      if (error) {
+        throw error;
+      }
+
+      console.log("Flow removed successfully");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // partially working wip
+  const getUserFlows = async (auth0_id) => {
+    try {
+      const { data: userFlows, error } = await supabase
+        .from("users_flows_new")
+        .select("flow_id")
+        .eq("auth0_id", auth0_id);
+
+      if (error) {
+        throw error;
+      }
+
+      // Map over the userFlows array to extract just the flow IDs
+      const flowIds = userFlows.map((userFlow) => userFlow.flow_id);
+
+      // return flowIds;
+      console.log({ flowIds });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const allFlows = getUserFlows(userSub);
+
+  console.log(allFlows);
+
+  const handleSelectDifficulty = (event) => {
+    setDifficultyFilter(event.target.value);
+  };
+
+  const handleSelectBodyParts = (event) => {
+    setBodyPartsFilter(event.target.value);
+  };
 
   if (isLoading) {
     return (
@@ -254,7 +314,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <Navbar isAuthenticated={isAuthenticated} />
+      <Navbar isAuthenticated={isAuthenticated} setUserSub={setUserSub} />
       <Routes>
         <Route
           path="/"
