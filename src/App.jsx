@@ -180,11 +180,6 @@ const App = () => {
     setAllCustomFlows(customFlows);
   }, []);
 
-  useEffect(() => {
-    // Do something when userFlowIds change
-    console.log("userFlowIds changed:", userFlowIds);
-  }, [userFlowIds]);
-
   // const handleShow = (flowId) => {
   //   setFlows((prevFlows) => {
   //     const updatedFlows = prevFlows.map((flow) => {
@@ -200,32 +195,25 @@ const App = () => {
   // const { sub, email } = user;
   // console.log({ sub });
 
-  const handleFavoritedClick = async (flow) => {
-    setIsSavedCompleted(true);
-    // setFavoritedFlows((prevLikedFlows) => [...prevLikedFlows, flow]);
-
+  const handleFavoritedClick = async (flowId) => {
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("users_flows_new")
-        .insert({ auth0_id: userSub, flow_id: flow });
+        .insert([{ auth0_id: userSub, flow_id: flowId }]);
 
       if (error) {
         throw error;
       }
 
-      console.log("Flow saved successfully");
+      setUserFlowIds([...userFlowIds, flowId]);
     } catch (error) {
       console.error(error);
     }
   };
 
   const handleUnlikeFlow = async (flowId) => {
-    // setFavoritedFlows((prevLikedFlows) =>
-    //   prevLikedFlows.filter((id) => id !== flowId)
-    // );
-
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("users_flows_new")
         .delete()
         .eq("auth0_id", userSub)
@@ -235,7 +223,7 @@ const App = () => {
         throw error;
       }
 
-      console.log("Flow removed successfully");
+      setUserFlowIds(userFlowIds.filter((id) => id !== flowId));
     } catch (error) {
       console.error(error);
     }

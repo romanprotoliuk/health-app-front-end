@@ -35,6 +35,10 @@ const FlowDetails = (props) => {
     filteredFlows && filteredFlows.length > 0 ? filteredFlows : flows
   ).find((flow) => flow.id === parseInt(id));
 
+  if (!selected) {
+    return <div>Error: Flow not found</div>;
+  }
+
   const isSaved = userFlowIds.includes(selected.id);
   const isCompleted = poseCompletion[selected.id];
 

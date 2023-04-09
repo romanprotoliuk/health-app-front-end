@@ -69,6 +69,7 @@ const Favorites = (props) => {
     <>
       <BackBtn />
       <h1>Favs Flows</h1>
+      {favoritedFlows < 1 && <p>you have no fave flows</p>}
       <div className="flow-container-grid">{renderCards}</div>
       {/* <h1>My Own Flows</h1>
       <div className="flow-container-grid">{renderCustomFlows}</div> */}
