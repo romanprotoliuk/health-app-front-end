@@ -14,6 +14,10 @@ import Navbar from "./components/Navbar";
 import Login from "./components/pages/Login";
 import LoadingSpinner from "./components/LoadingSpinner";
 
+import { getUserFlows } from "./utils/helper";
+import { fetchData } from "./utils/helper";
+import { getMatchingFlows } from "./utils/helper";
+
 const App = () => {
   const { isAuthenticated, isLoading, user } = useAuth0();
   const [flows, setFlows] = useState([]);
@@ -24,13 +28,13 @@ const App = () => {
   const [isSavedCompleted, setIsSavedCompleted] = useState(false);
   const [allCustomFlows, setAllCustomFlows] = useState([]);
   const [userSub, setUserSub] = useState(null);
+  const [userFlowIds, setUserFlowIds] = useState([]);
+  const [favoritedFlows, setFavoritedFlows] = useState([]);
 
   const [poseCompletion, setPoseCompletion] = useState(
     JSON.parse(localStorage.getItem("poseCompletion")) || {}
   );
-  const [favoritedFlows, setFavoritedFlows] = useState(
-    JSON.parse(localStorage.getItem("likedFlows")) || []
-  );
+
   const [selectedPoses, setSelectedPoses] = useState(
     JSON.parse(localStorage.getItem("selectedPoses")) || []
   );
@@ -80,50 +84,12 @@ const App = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [posesResponse, flowsResponse] = await Promise.all([
-          axios.get("http://localhost:8000/api/poses/"),
-          axios.get("http://localhost:8000/api/flows/"),
-        ]);
+    fetchData(setFlows, setPoses, userSub);
 
-        // Group poses by pose_name for efficient lookup
-        const posesByPoseName = posesResponse.data.reduce((acc, pose) => {
-          acc[pose.pose_name] = pose;
-          return acc;
-        }, {});
-
-        const flowsWithPosesData = flowsResponse.data.map((flow) => {
-          const poseNames = flow.sequence_poses.split(",");
-          const sequencePoses = poseNames.map((poseName) => {
-            const pose = posesByPoseName[poseName.trim()];
-            return pose
-              ? {
-                  id: pose.id, // add id to each pose
-                  pose_name: pose.pose_name,
-                  image_url: pose.image_url,
-                  completed: false,
-                  flowId: flow.id, // add flowId to each pose
-                }
-              : null;
-          });
-          return {
-            ...flow,
-            sequence_poses: sequencePoses.filter((pose) => pose !== null),
-            showPoses: false,
-            posesCompleted: 0,
-            flowId: flow.id,
-          };
-        });
-
-        setFlows(flowsWithPosesData);
-        setPoses(posesResponse.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
+    // const allFlows = getUserFlows(userSub);
+    // console.log({ allFlows });
+    // const matchingFlows = getMatchingFlows(allFlows, flows);
+    // console.log({ matchingFlows });
   }, [poseCompletion]);
 
   const posesByPoseName = useMemo(() => {
@@ -149,16 +115,16 @@ const App = () => {
     localStorage.setItem("poseCompletion", JSON.stringify(poseCompletion));
   }, [poseCompletion]);
 
-  useEffect(() => {
-    const storedLikedFlows =
-      JSON.parse(localStorage.getItem("likedFlows")) || [];
-    setFavoritedFlows(storedLikedFlows);
-  }, []);
+  // useEffect(() => {
+  //   const storedLikedFlows =
+  //     JSON.parse(localStorage.getItem("likedFlows")) || [];
+  //   setFavoritedFlows(storedLikedFlows);
+  // }, []);
 
   // Update localStorage whenever favoritedFlows changes
-  useEffect(() => {
-    localStorage.setItem("likedFlows", JSON.stringify(favoritedFlows));
-  }, [favoritedFlows]);
+  // useEffect(() => {
+  //   localStorage.setItem("likedFlows", JSON.stringify(favoritedFlows));
+  // }, [favoritedFlows]);
 
   useEffect(() => {
     localStorage.setItem("selectedPoses", JSON.stringify(selectedPoses));
@@ -214,6 +180,11 @@ const App = () => {
     setAllCustomFlows(customFlows);
   }, []);
 
+  useEffect(() => {
+    // Do something when userFlowIds change
+    console.log("userFlowIds changed:", userFlowIds);
+  }, [userFlowIds]);
+
   // const handleShow = (flowId) => {
   //   setFlows((prevFlows) => {
   //     const updatedFlows = prevFlows.map((flow) => {
@@ -231,7 +202,7 @@ const App = () => {
 
   const handleFavoritedClick = async (flow) => {
     setIsSavedCompleted(true);
-    setFavoritedFlows((prevLikedFlows) => [...prevLikedFlows, flow]);
+    // setFavoritedFlows((prevLikedFlows) => [...prevLikedFlows, flow]);
 
     try {
       const { data, error } = await supabase
@@ -249,9 +220,9 @@ const App = () => {
   };
 
   const handleUnlikeFlow = async (flowId) => {
-    setFavoritedFlows((prevLikedFlows) =>
-      prevLikedFlows.filter((id) => id !== flowId)
-    );
+    // setFavoritedFlows((prevLikedFlows) =>
+    //   prevLikedFlows.filter((id) => id !== flowId)
+    // );
 
     try {
       const { data, error } = await supabase
@@ -269,32 +240,6 @@ const App = () => {
       console.error(error);
     }
   };
-
-  // partially working wip
-  const getUserFlows = async (auth0_id) => {
-    try {
-      const { data: userFlows, error } = await supabase
-        .from("users_flows_new")
-        .select("flow_id")
-        .eq("auth0_id", auth0_id);
-
-      if (error) {
-        throw error;
-      }
-
-      // Map over the userFlows array to extract just the flow IDs
-      const flowIds = userFlows.map((userFlow) => userFlow.flow_id);
-
-      // return flowIds;
-      console.log({ flowIds });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const allFlows = getUserFlows(userSub);
-
-  console.log(allFlows);
 
   const handleSelectDifficulty = (event) => {
     setDifficultyFilter(event.target.value);
@@ -345,6 +290,7 @@ const App = () => {
               isSavedCompleted={isSavedCompleted}
               setIsSavedCompleted={setIsSavedCompleted}
               isAuthenticated={isAuthenticated}
+              userFlowIds={userFlowIds}
             />
           }
         />
@@ -356,6 +302,10 @@ const App = () => {
                 favoritedFlows={favoritedFlows}
                 flows={flows}
                 allCustomFlows={allCustomFlows}
+                userSub={userSub}
+                setFavoritedFlows={setFavoritedFlows}
+                userFlowIds={userFlowIds}
+                setUserFlowIds={setUserFlowIds}
               />
             ) : (
               <Login />

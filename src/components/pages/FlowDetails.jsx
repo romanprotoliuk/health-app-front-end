@@ -18,29 +18,24 @@ const FlowDetails = (props) => {
     handleUnlikeFlow,
     favoritedFlows,
     isAuthenticated,
+    userFlowIds,
   } = props;
   const { id } = useParams();
+
+  useEffect(() => {
+    // Do something when userFlowIds change
+    console.log("userFlowIds changed:", userFlowIds);
+  }, [userFlowIds]);
 
   // Retrieve flows data from local storage
   // const storedFlows = localStorage.getItem("customFlows");
   // const parsedFlows = JSON.parse(storedFlows);
 
-  // console.log({ parsedFlows });
-
-  // useEffect(() => {
-  //   if (isSavedCompleted) {
-  //     const timeoutId = setTimeout(() => {
-  //       setIsSavedCompleted(false);
-  //     }, 5000);
-  //     return () => clearTimeout(timeoutId);
-  //   }
-  // }, [isSavedCompleted]);
-
   const selected = (
     filteredFlows && filteredFlows.length > 0 ? filteredFlows : flows
   ).find((flow) => flow.id === parseInt(id));
 
-  const isSaved = favoritedFlows.includes(selected.id);
+  const isSaved = userFlowIds.includes(selected.id);
   const isCompleted = poseCompletion[selected.id];
 
   return (
