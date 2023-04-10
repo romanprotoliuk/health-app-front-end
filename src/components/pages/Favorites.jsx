@@ -6,14 +6,29 @@ import { getMatchingFlows } from "../../utils/helper";
 import BackBtn from "../buttons/BackBtn";
 
 const Favorites = (props) => {
-  const { favoritedFlows, flows, userSub, setFavoritedFlows, setUserFlowIds } =
-    props;
+  const {
+    poses,
+    favoritedFlows,
+    flows,
+    userSub,
+    setFavoritedFlows,
+    setUserFlowIds,
+    customUserFlows,
+    setCustomUserFlows,
+  } = props;
 
   const updateFavoritedFlows = useCallback(
     (matchingFlows) => {
       setFavoritedFlows(matchingFlows);
     },
     [setFavoritedFlows]
+  );
+
+  const updatedCustomUserFlows = useCallback(
+    (matchingCustomFlows) => {
+      setCustomUserFlows(matchingCustomFlows);
+    },
+    [setCustomUserFlows]
   );
 
   useEffect(() => {
@@ -27,22 +42,39 @@ const Favorites = (props) => {
         if (error) {
           throw error;
         }
-
-        // console.log({ userFlowsData });
-
         const userFlowIds = userFlowsData.map((userFlow) => userFlow.flow_id);
         setUserFlowIds(userFlowIds);
-
-        // console.log({ userFlowIds });
-
         const matchingFlows = getMatchingFlows(userFlowIds, flows);
-        // console.log({ matchingFlows });
         updateFavoritedFlows(matchingFlows);
       } catch (error) {
         console.error(error);
       }
     };
 
+    const fetchCustomUserFlows = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("sequences")
+          .select("*")
+          .eq("auth0_id", userSub);
+        const customFlowsWithPoses = data.map((flow) => {
+          const posesNew = flow.sequence_poses.map((poseId) => {
+            return poses.find((pose) => pose.id === poseId);
+          });
+          return { ...flow, sequence_poses: posesNew };
+        });
+
+        setCustomUserFlows(customFlowsWithPoses);
+
+        if (error) {
+          throw error;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCustomUserFlows();
     fetchUserFlows();
   }, [flows, userSub, updateFavoritedFlows]);
 
@@ -64,6 +96,24 @@ const Favorites = (props) => {
       </>
     );
   });
+  const renderCustomFlows = customUserFlows.map((flow) => {
+    return (
+      <>
+        <Link
+          to={`/flows/${flow.id}`}
+          key={flow.id}
+          className="flow-card"
+          style={{ textDecoration: "none" }}
+        >
+          <h2>{flow.sequence_name}</h2>
+          <p className="flow-description">{flow?.description}</p>
+          <p className="flow-description">{flow?.level}</p>
+          <p className="flow-description">{flow?.targets}</p>
+          <p className="flow-description">{flow?.benefits}</p>
+        </Link>
+      </>
+    );
+  });
 
   return (
     <>
@@ -71,29 +121,10 @@ const Favorites = (props) => {
       <h1>Favs Flows</h1>
       {favoritedFlows < 1 && <p>you have no fave flows</p>}
       <div className="flow-container-grid">{renderCards}</div>
-      {/* <h1>My Own Flows</h1>
-      <div className="flow-container-grid">{renderCustomFlows}</div> */}
+      <h1>My Own Flows</h1>
+      <div className="flow-container-grid">{renderCustomFlows}</div>
     </>
   );
 };
 
 export default Favorites;
-
-// const renderCustomFlows = allCustomFlows.map((flow) => {
-//   return (
-//     <>
-//       <Link
-//         to={`/flow/${flow.id}`}
-//         key={flow.id}
-//         className="flow-card"
-//         style={{ textDecoration: "none" }}
-//       >
-//         <h2>{flow.sequence_name}</h2>
-//         <p className="flow-description">{flow?.description}</p>
-//         <p className="flow-description">{flow?.level}</p>
-//         <p className="flow-description">{flow?.targets}</p>
-//         <p className="flow-description">{flow?.benefits}</p>
-//       </Link>
-//     </>
-//   );
-// });

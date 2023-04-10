@@ -13,10 +13,12 @@ import Poses from "./components/pages/Poses";
 import Navbar from "./components/Navbar";
 import Login from "./components/pages/Login";
 import LoadingSpinner from "./components/LoadingSpinner";
+import FlowDetailsCustom from "./components/pages/FlowDetailsCustom";
 
 import { getUserFlows } from "./utils/helper";
 import { fetchData } from "./utils/helper";
 import { getMatchingFlows } from "./utils/helper";
+import { convertPosesToIds } from "./utils/helper";
 
 const App = () => {
   const { isAuthenticated, isLoading, user } = useAuth0();
@@ -30,14 +32,12 @@ const App = () => {
   const [userSub, setUserSub] = useState(null);
   const [userFlowIds, setUserFlowIds] = useState([]);
   const [favoritedFlows, setFavoritedFlows] = useState([]);
-
+  const [idsForAll, setIdsForAll] = useState([]);
+  const [customUserFlows, setCustomUserFlows] = useState([]);
   const [poseCompletion, setPoseCompletion] = useState(
     JSON.parse(localStorage.getItem("poseCompletion")) || {}
   );
-
-  const [selectedPoses, setSelectedPoses] = useState(
-    JSON.parse(localStorage.getItem("selectedPoses")) || []
-  );
+  const [selectedPoses, setSelectedPoses] = useState([]);
 
   const handlePoseClick = (flowId, poseId) => {
     setPoseCompletion((prevPoseCompletion) => {
@@ -69,6 +69,8 @@ const App = () => {
         return prevSelectedPoses;
       }
     });
+    const idsForAllPoses = selectedPoses.map((pose) => pose.id);
+    setIdsForAll(idsForAllPoses);
   };
 
   const handleDeleteFlow = (flowId) => {
@@ -85,11 +87,6 @@ const App = () => {
 
   useEffect(() => {
     fetchData(setFlows, setPoses, userSub);
-
-    // const allFlows = getUserFlows(userSub);
-    // console.log({ allFlows });
-    // const matchingFlows = getMatchingFlows(allFlows, flows);
-    // console.log({ matchingFlows });
   }, [poseCompletion]);
 
   const posesByPoseName = useMemo(() => {
@@ -114,17 +111,6 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem("poseCompletion", JSON.stringify(poseCompletion));
   }, [poseCompletion]);
-
-  // useEffect(() => {
-  //   const storedLikedFlows =
-  //     JSON.parse(localStorage.getItem("likedFlows")) || [];
-  //   setFavoritedFlows(storedLikedFlows);
-  // }, []);
-
-  // Update localStorage whenever favoritedFlows changes
-  // useEffect(() => {
-  //   localStorage.setItem("likedFlows", JSON.stringify(favoritedFlows));
-  // }, [favoritedFlows]);
 
   useEffect(() => {
     localStorage.setItem("selectedPoses", JSON.stringify(selectedPoses));
@@ -179,21 +165,6 @@ const App = () => {
     const customFlows = JSON.parse(localStorage.getItem("customFlows")) || [];
     setAllCustomFlows(customFlows);
   }, []);
-
-  // const handleShow = (flowId) => {
-  //   setFlows((prevFlows) => {
-  //     const updatedFlows = prevFlows.map((flow) => {
-  //       if (flow.id === flowId) {
-  //         return { ...flow, showPoses: !flow.showPoses };
-  //       }
-  //       return flow;
-  //     });
-  //     return updatedFlows;
-  //   });
-  // };
-
-  // const { sub, email } = user;
-  // console.log({ sub });
 
   const handleFavoritedClick = async (flowId) => {
     try {
@@ -265,21 +236,41 @@ const App = () => {
         <Route
           path="/flow/:id"
           element={
-            <FlowDetails
-              flows={flows}
-              filteredFlows={filteredFlows}
-              handlePoseClick={handlePoseClick}
-              poseCompletion={poseCompletion}
-              setPoseCompletion={setPoseCompletion}
-              handleDeleteFlow={handleDeleteFlow}
-              handleFavoritedClick={handleFavoritedClick}
-              handleUnlikeFlow={handleUnlikeFlow}
-              favoritedFlows={favoritedFlows}
-              isSavedCompleted={isSavedCompleted}
-              setIsSavedCompleted={setIsSavedCompleted}
-              isAuthenticated={isAuthenticated}
-              userFlowIds={userFlowIds}
-            />
+            isAuthenticated ? (
+              <FlowDetails
+                flows={flows}
+                filteredFlows={filteredFlows}
+                handlePoseClick={handlePoseClick}
+                poseCompletion={poseCompletion}
+                setPoseCompletion={setPoseCompletion}
+                handleDeleteFlow={handleDeleteFlow}
+                handleFavoritedClick={handleFavoritedClick}
+                handleUnlikeFlow={handleUnlikeFlow}
+                favoritedFlows={favoritedFlows}
+                isSavedCompleted={isSavedCompleted}
+                setIsSavedCompleted={setIsSavedCompleted}
+                isAuthenticated={isAuthenticated}
+                userFlowIds={userFlowIds}
+              />
+            ) : (
+              <Login />
+            )
+          }
+        />
+        <Route
+          path="/flows/:id"
+          element={
+            isAuthenticated ? (
+              <FlowDetailsCustom
+                handlePoseClick={handlePoseClick}
+                poseCompletion={poseCompletion}
+                handleDeleteFlow={handleDeleteFlow}
+                isAuthenticated={isAuthenticated}
+                customUserFlows={customUserFlows}
+              />
+            ) : (
+              <Login />
+            )
           }
         />
         <Route
@@ -287,6 +278,7 @@ const App = () => {
           element={
             isAuthenticated ? (
               <Favorites
+                poses={poses}
                 favoritedFlows={favoritedFlows}
                 flows={flows}
                 allCustomFlows={allCustomFlows}
@@ -294,6 +286,8 @@ const App = () => {
                 setFavoritedFlows={setFavoritedFlows}
                 userFlowIds={userFlowIds}
                 setUserFlowIds={setUserFlowIds}
+                customUserFlows={customUserFlows}
+                setCustomUserFlows={setCustomUserFlows}
               />
             ) : (
               <Login />
@@ -312,6 +306,7 @@ const App = () => {
                 handlePoseClickNewFlow={handlePoseClickNewFlow}
                 setAllCustomFlows={setAllCustomFlows}
                 allCustomFlows={allCustomFlows}
+                userSub={userSub}
               />
             ) : (
               <Login />

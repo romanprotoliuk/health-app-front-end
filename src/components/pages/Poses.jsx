@@ -2,6 +2,7 @@ import { useState } from "react";
 import BackBtn from "../buttons/BackBtn";
 import ClearAll from "../buttons/ClearAllBtn";
 import { generateRandomNumbers } from "../../utils/helper";
+import { supabase } from "../../utils/supabase";
 
 const Poses = (props) => {
   const {
@@ -11,6 +12,7 @@ const Poses = (props) => {
     handlePoseClickNewFlow,
     setAllCustomFlows,
     allCustomFlows,
+    userSub,
   } = props;
   const [customFlowTitle, setCustomFlowTitle] = useState("");
   const [customFlowDescription, setCustomFlowDescription] = useState("");
@@ -21,7 +23,7 @@ const Poses = (props) => {
     setPoseSearch(e.target.value);
   };
 
-  const handleCustomFlowSubmit = (e) => {
+  const handleCustomFlowSubmit = async (e) => {
     e.preventDefault();
 
     const newGeneratedId = generateRandomNumbers();
@@ -29,10 +31,20 @@ const Poses = (props) => {
 
     const customFlow = {
       sequence_name: customFlowTitle,
-      sequence_poses: selectedPoses,
+      sequence_poses: selectedPoses.map((pose) => pose.id),
       description: customFlowDescription,
       id: newGeneratedId,
+      auth0_id: userSub,
     };
+
+    const { data, error } = await supabase
+      .from("sequences")
+      .insert([customFlow]);
+    if (error) {
+      console.log(error);
+      return;
+    }
+
     setAllCustomFlows((prevFlows) => [...prevFlows, customFlow]);
     setSelectedPoses([]);
     setCustomFlowTitle("");
@@ -41,7 +53,6 @@ const Poses = (props) => {
       "customFlows",
       JSON.stringify([...allCustomFlows, customFlow])
     );
-    console.log({ customFlow });
   };
 
   const getFilteredPoses = () => {
@@ -95,7 +106,6 @@ const Poses = (props) => {
           </form>
         </div>
         <div style={{ flex: 1 }}>
-          {/* <h3>Poses</h3> */}
           {limitReached && (
             <p style={{ color: "darkred" }}>
               You have reached the limit of 20 poses

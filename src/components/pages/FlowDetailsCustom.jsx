@@ -6,23 +6,19 @@ import UnsaveBtn from "../buttons/UnsaveBtn";
 import PoseCard from "../PoseCard";
 import LoadingSpinner from "../LoadingSpinner";
 
-const FlowDetails = (props) => {
+// import { useEffect } from "react";
+
+const FlowDetailsCustom = (props) => {
   const {
-    flows,
-    filteredFlows,
     handlePoseClick,
     poseCompletion,
     handleDeleteFlow,
-    handleFavoritedClick,
-    handleUnlikeFlow,
     isAuthenticated,
-    userFlowIds,
+    customUserFlows,
   } = props;
   const { id } = useParams();
 
-  const selected = (
-    filteredFlows && filteredFlows.length > 0 ? filteredFlows : flows
-  ).find((flow) => flow.id === parseInt(id));
+  const selected = customUserFlows.find((flow) => flow.id === parseInt(id));
 
   if (!selected) {
     return (
@@ -31,8 +27,6 @@ const FlowDetails = (props) => {
       </>
     );
   }
-
-  const isSaved = userFlowIds.includes(selected.id);
   const isCompleted = poseCompletion[selected.id];
 
   return (
@@ -45,15 +39,6 @@ const FlowDetails = (props) => {
           {isCompleted && (
             <DeleteFlowBtn
               handleDeleteFlow={handleDeleteFlow}
-              id={selected.id}
-            />
-          )}
-
-          {isSaved ? (
-            <UnsaveBtn handleUnlikeFlow={handleUnlikeFlow} id={selected.id} />
-          ) : (
-            <SaveBtn
-              handleFavoritedClick={handleFavoritedClick}
               id={selected.id}
             />
           )}
@@ -88,4 +73,4 @@ const FlowDetails = (props) => {
   );
 };
 
-export default FlowDetails;
+export default FlowDetailsCustom;
