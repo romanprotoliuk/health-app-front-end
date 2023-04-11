@@ -14,16 +14,16 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
       <div className="menu-wrapper">
         <div className="menu-icon" onClick={handleMenuIcon}>
           <div
-            className={menuIconSetting ? "menu-dots-oneP" : "menu-dots-one"}
+            className={menuIconSetting ? "menu-dots-oneF" : "menu-dots-one"}
           ></div>
           <div
-            className={menuIconSetting ? "menu-dots-twoP" : "menu-dots-two"}
+            className={menuIconSetting ? "menu-dots-twoF" : "menu-dots-two"}
           ></div>
           <div
-            className={menuIconSetting ? "menu-dots-threeP" : "menu-dots-three"}
+            className={menuIconSetting ? "menu-dots-threeF" : "menu-dots-three"}
           ></div>
           <div
-            className={menuIconSetting ? "menu-dots-fourP" : "menu-dots-four"}
+            className={menuIconSetting ? "menu-dots-fourF" : "menu-dots-four"}
           ></div>
         </div>
 
@@ -79,7 +79,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                 )}
               </div>
 
-              <div style={{ marginTop: "10px" }}>
+              <div style={{ marginTop: "30px" }}>
                 {isAuthenticated && <LogoutButton setUserSub={setUserSub} />}
               </div>
             </div>

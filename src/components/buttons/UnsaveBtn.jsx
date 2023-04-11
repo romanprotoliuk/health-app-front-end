@@ -1,7 +1,13 @@
+import "./buttons.css";
+
 const UnsaveBtn = ({ handleUnlikeFlow, id }) => {
   return (
-    <button onClick={() => handleUnlikeFlow(id)} style={{ cursor: "pointer" }}>
-      Unsave
+    <button
+      className="custom-btn btn-13"
+      onClick={() => handleUnlikeFlow(id)}
+      style={{ cursor: "pointer" }}
+    >
+      <span>Unsave</span>
     </button>
   );
 };

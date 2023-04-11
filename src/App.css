@@ -62,6 +62,7 @@ a:visited {
 
 
 .flow-poses {
+  margin-top: 40px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   grid-gap: 10px;

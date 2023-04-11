@@ -5,6 +5,7 @@ import SaveBtn from "../buttons/SaveBtn";
 import UnsaveBtn from "../buttons/UnsaveBtn";
 import PoseCard from "../PoseCard";
 import LoadingSpinner from "../LoadingSpinner";
+import "./pageStyles.css";
 
 const FlowDetails = (props) => {
   const {
@@ -35,28 +36,141 @@ const FlowDetails = (props) => {
   const isSaved = userFlowIds.includes(selected.id);
   const isCompleted = poseCompletion[selected.id];
 
+  // Render benefits array
+  const benefitsArray = selected.benefits.split(",");
+  const renderBenefits = benefitsArray.map((benefit, index) => {
+    return (
+      <div
+        key={index}
+        className="flow-description"
+        style={{
+          padding: "1px 6px",
+          border: "1px solid #2870A3",
+          borderRadius: "50px",
+          margin: "2px",
+        }}
+      >
+        <div>
+          <p
+            style={{
+              marginBlockEnd: "0",
+              marginBlockStart: "0",
+            }}
+          >
+            {benefit}
+          </p>
+        </div>
+      </div>
+    );
+  });
+
+  // Render levels array
+  const levelsArray = selected.level.split(",");
+  const renderLevels = levelsArray.map((level, index) => {
+    let difLevel;
+    difLevel =
+      level === "beginner"
+        ? "linear-gradient(to bottom, #43E44B, #0AE0A7)"
+        : level === "intermediate"
+        ? "linear-gradient(to bottom, #FEA700, #FFD400)"
+        : level === "advanced"
+        ? "linear-gradient(to bottom, #f83600, #FE6D10)"
+        : "";
+    return (
+      <div
+        key={index}
+        className="flow-description"
+        style={{
+          padding: "1px 6px",
+          backgroundImage: difLevel,
+          borderRadius: "50px",
+          margin: "2px",
+        }}
+      >
+        <div>
+          <p
+            style={{
+              marginBlockEnd: "0",
+              marginBlockStart: "0",
+            }}
+          >
+            {level}
+          </p>
+        </div>
+      </div>
+    );
+  });
+
   return (
     <>
-      <h3>Flow Details</h3>
       <BackBtn />
+      <div className="details-main-container">
+        <h3
+          style={{
+            fontWeight: "600",
+            textTransform: "uppercase",
+            color: "#333333",
+          }}
+        >
+          {selected.sequence_name}
+        </h3>
+        <p className="flow-description" style={{ color: "#484848" }}>
+          {selected.description}
+        </p>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            margin: "0 auto",
+            justifyContent: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          {renderBenefits}
+        </div>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            margin: "20px auto 20px auto",
+            justifyContent: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          {renderLevels}
+        </div>
+      </div>
 
       {isAuthenticated ? (
-        <div style={{ marginBottom: "20px" }}>
-          {isCompleted && (
-            <DeleteFlowBtn
-              handleDeleteFlow={handleDeleteFlow}
-              id={selected.id}
-            />
-          )}
+        <div>
+          <div
+            style={{
+              marginBottom: "20px",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <div style={{ marginBottom: "10px" }}>
+              {isSaved ? (
+                <UnsaveBtn
+                  handleUnlikeFlow={handleUnlikeFlow}
+                  id={selected.id}
+                />
+              ) : (
+                <SaveBtn
+                  handleFavoritedClick={handleFavoritedClick}
+                  id={selected.id}
+                />
+              )}
+            </div>
 
-          {isSaved ? (
-            <UnsaveBtn handleUnlikeFlow={handleUnlikeFlow} id={selected.id} />
-          ) : (
-            <SaveBtn
-              handleFavoritedClick={handleFavoritedClick}
-              id={selected.id}
-            />
-          )}
+            {isCompleted && (
+              <DeleteFlowBtn
+                handleDeleteFlow={handleDeleteFlow}
+                id={selected.id}
+              />
+            )}
+          </div>
         </div>
       ) : (
         <div style={{ marginBottom: "20px" }}>

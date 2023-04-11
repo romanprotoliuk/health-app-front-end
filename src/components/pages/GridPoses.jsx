@@ -61,9 +61,9 @@ const GridPoses = (props) => {
           )}
           {beginner && intermediate && (
             <>
-              <LevelDot backgroundImage="linear-gradient(to bottom, #43E44B, #0AE0A7)" />
+              <LevelDot backgroundImage="linear-gradient(to bottom, #FEA700, #FFD400)" />
               <LevelDot
-                backgroundImage="linear-gradient(to bottom, #FEA700, #FFD400)"
+                backgroundImage="linear-gradient(to bottom, #43E44B, #0AE0A7)"
                 right={"30px"}
               />
             </>
