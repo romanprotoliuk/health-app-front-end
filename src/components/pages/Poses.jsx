@@ -1,8 +1,13 @@
 import { useState } from "react";
+
 import BackBtn from "../buttons/BackBtn";
 import ClearAll from "../buttons/ClearAllBtn";
+import PoseCard from "../PoseCard";
+
 import { generateRandomNumbers } from "../../utils/helper";
 import { supabase } from "../../utils/supabase";
+import CreateCustomFlow from "../buttons/CreateCustomFlow";
+import Create from "../buttons/Create";
 
 const Poses = (props) => {
   const {
@@ -18,6 +23,11 @@ const Poses = (props) => {
   const [customFlowDescription, setCustomFlowDescription] = useState("");
   const [poseSearch, setPoseSearch] = useState("");
   const [generatedId, setGeneratedId] = useState(null);
+  const [createNewFlow, setCreateNewFlow] = useState(false);
+
+  const handleCreateNewFlow = () => {
+    setCreateNewFlow(true);
+  };
 
   const handleChange = (e) => {
     setPoseSearch(e.target.value);
@@ -74,87 +84,195 @@ const Poses = (props) => {
   return (
     <>
       <BackBtn />
-      <ClearAll handleClearAllPoses={handleClearAllPoses} />
-      <div style={{ display: "flex" }}>
-        <div style={{ flex: 1 }}>
-          <h3>Create Custom Flow</h3>
-          <form onSubmit={handleCustomFlowSubmit}>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <label htmlFor="title">Flow Title:</label>
-              <input
-                type="text"
-                id="title"
-                value={customFlowTitle}
-                onChange={(e) => setCustomFlowTitle(e.target.value)}
-                required
-              />
 
-              <label htmlFor="description">Flow Description:</label>
-              <textarea
-                id="description"
-                value={customFlowDescription}
-                onChange={(e) => setCustomFlowDescription(e.target.value)}
-                required
-                style={{ height: "100px", resize: "none" }}
-              />
-            </div>
-            <div>Selected Poses:</div>
-            {selectedPoses.map((pose) => (
-              <p key={pose.id}>{pose.pose_name}</p>
-            ))}
-            <button type="submit">Create Flow</button>
-          </form>
-        </div>
-        <div style={{ flex: 1 }}>
-          {limitReached && (
-            <p style={{ color: "darkred" }}>
-              You have reached the limit of 20 poses
-            </p>
-          )}
-          <input
-            className="searchInput"
-            placeholder="Search for poses"
-            type="text"
-            onChange={handleChange}
-            value={poseSearch}
-            style={{ marginBottom: "20px" }}
-          />
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gridGap: "10px",
-              height: "80vh",
-              overflowY: "scroll",
-            }}
-          >
-            {filteredPoses.map((pose) => {
-              const isCompleted = selectedPoses.some(
-                (flow) => flow.id === pose.id
-              );
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          maxWidth: "200px",
+          margin: "0 auto",
+        }}
+      >
+        {createNewFlow && selectedPoses.length !== 0 && (
+          <ClearAll handleClearAllPoses={handleClearAllPoses} />
+        )}
 
-              return (
-                <div
-                  key={pose.id}
-                  style={
-                    isCompleted
-                      ? { border: "2px solid green", cursor: "pointer" }
-                      : { cursor: "pointer" }
-                  }
-                  onClick={() => handlePoseClickNewFlow(pose.id)}
+        {!createNewFlow && (
+          <CreateCustomFlow handleCreateNewFlow={handleCreateNewFlow} />
+        )}
+      </div>
+
+      {createNewFlow && (
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div>
+            <form onSubmit={handleCustomFlowSubmit}>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <label
+                  htmlFor="title"
+                  style={{
+                    marginTop: "60px",
+                    marginBottom: "15px",
+                    fontWeight: "600",
+                    textTransform: "uppercase",
+                    fontSize: "12px",
+                    color: "#00000080",
+                  }}
                 >
-                  <img
-                    src={pose.image_url}
-                    alt={pose.pose_name}
-                    style={{ height: "100px" }}
+                  Flow Title:
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  value={customFlowTitle}
+                  onChange={(e) => setCustomFlowTitle(e.target.value)}
+                  required
+                  style={{
+                    resize: "none",
+                    width: "250px",
+                    margin: "0 auto",
+                    border: "none",
+                    backgroundColor: "#fff",
+                    borderRadius: "5px",
+                    padding: "10px 30px 10px 20px",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    transition: "all 0.3s ease",
+                    boxShadow: "0 6px 22px 0 rgba(0, 0, 0, 0.08)",
+                    outline: "none",
+                  }}
+                />
+
+                <label
+                  htmlFor="description"
+                  style={{
+                    marginTop: "20px",
+                    marginBottom: "15px",
+                    fontWeight: "600",
+                    textTransform: "uppercase",
+                    fontSize: "12px",
+                    color: "#00000080",
+                  }}
+                >
+                  Flow Description:
+                </label>
+                <textarea
+                  id="description"
+                  value={customFlowDescription}
+                  onChange={(e) => setCustomFlowDescription(e.target.value)}
+                  required
+                  style={{
+                    height: "100px",
+                    resize: "none",
+                    width: "250px",
+                    margin: "0 auto",
+                    border: "none",
+                    backgroundColor: "#fff",
+                    borderRadius: "5px",
+                    padding: "10px 30px 10px 20px",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    transition: "all 0.3s ease",
+                    boxShadow: "0 6px 22px 0 rgba(0, 0, 0, 0.08)",
+                    outline: "none",
+                  }}
+                />
+              </div>
+              <p
+                style={{
+                  marginTop: "20px",
+                  fontWeight: "600",
+                  textTransform: "uppercase",
+                  fontSize: "12px",
+                  color: "#00000080",
+                }}
+              >
+                Selected Poses:
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                }}
+              >
+                {selectedPoses.map((pose) => (
+                  <div
+                    className="flow-description"
+                    style={{
+                      padding: "1px 6px",
+                      border: "1px solid #2870A3",
+                      borderRadius: "50px",
+                      margin: "2px",
+                    }}
+                  >
+                    <div>
+                      <p
+                        key={pose.id}
+                        style={{ marginBlockEnd: "0", marginBlockStart: "0" }}
+                      >
+                        {pose.pose_name}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Create />
+            </form>
+          </div>
+          <div>
+            {limitReached && (
+              <p style={{ color: "darkred" }}>
+                You have reached the limit of 20 poses
+              </p>
+            )}
+            <input
+              className="searchInput"
+              placeholder="Search for poses"
+              type="text"
+              onChange={handleChange}
+              value={poseSearch}
+              style={{
+                width: "250px",
+                margin: "60px 0 20px 0",
+                border: "none",
+                backgroundColor: "#fff",
+                borderRadius: "5px",
+                padding: "10px 30px 10px 20px",
+                fontSize: "14px",
+                fontWeight: "500",
+                transition: "all 0.3s ease",
+                boxShadow: "0 6px 22px 0 rgba(0, 0, 0, 0.08)",
+                outline: "none",
+              }}
+            />
+            {/* <div
+              style={{
+                height: "80vh",
+                overflowY: "scroll",
+              }}
+            > */}
+            <div className="flow-poses-details">
+              {filteredPoses.map((pose, idx) => {
+                const isCompleted = selectedPoses.some(
+                  (flow) => flow.id === pose.id
+                );
+                return (
+                  <PoseCard
+                    key={idx}
+                    pose={pose}
+                    poseNum={idx + 1}
+                    isCompleted={isCompleted}
+                    onClick={() => handlePoseClickNewFlow(pose.id)}
+                    flowId={pose.id}
+                    isFromPose={true}
                   />
-                  <div>{pose.pose_name}</div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
+        // </div>
+      )}
     </>
   );
 };

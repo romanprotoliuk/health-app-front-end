@@ -105,6 +105,9 @@ a:visited {
   border-radius: 5px;
 } */
 
+.searchInput::placeholder {
+  text-align: center;
+}
 
 
 .pose-name {
