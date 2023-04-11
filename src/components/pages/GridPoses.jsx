@@ -120,6 +120,9 @@ const GridPoses = (props) => {
 
   return (
     <>
+      {props.isAuthenticated && (
+        <p style={{ marginBottom: "40px" }}>Hi, {props.user.nickname}</p>
+      )}
       <Filters
         difficultyFilter={props.difficultyFilter}
         handleSelectDifficulty={props.handleSelectDifficulty}

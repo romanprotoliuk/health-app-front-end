@@ -18,10 +18,13 @@ const DeleteFlowBtn = ({ handleDeleteFlow, id }) => {
         transition: "all 0.3s ease",
         boxShadow: "0 6px 22px 0 rgb(0 0 0 / 8%), 0 1px 6px 0 rgb(0 0 0 / 4%)",
         outline: "none",
+        cursor: "pointer",
+        backgroundImage:
+          "linear-gradient(315deg, rgb(248, 54, 0), rgb(254, 109, 16))",
       }}
       onClick={() => handleDeleteFlow(id)}
     >
-      <FontAwesomeIcon icon={faArrowRotateRight} />
+      <FontAwesomeIcon icon={faArrowRotateRight} color={"white"} />
     </button>
   );
 };

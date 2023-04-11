@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { supabase } from "./utils/supabase";
+import { redirect } from "react-router-dom";
 import "./App.css";
 
 // Components
@@ -162,6 +163,7 @@ const App = () => {
   useEffect(() => {
     registerUserInSupabase();
   }, [registerUserInSupabase]);
+
   useEffect(() => {
     const customFlows = JSON.parse(localStorage.getItem("customFlows")) || [];
     setAllCustomFlows(customFlows);
@@ -201,6 +203,22 @@ const App = () => {
     }
   };
 
+  const handleDeleteCustomFlow = async (id) => {
+    <Navigate replace to="/favorites" />;
+    try {
+      const { error } = await supabase
+        .from("sequences")
+        .delete()
+        .eq("id", id)
+        .eq("auth0_id", userSub);
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSelectDifficulty = (event) => {
     setDifficultyFilter(event.target.value);
   };
@@ -232,6 +250,8 @@ const App = () => {
               bodyPartsFilter={bodyPartsFilter}
               handleSelectDifficulty={handleSelectDifficulty}
               handleSelectBodyParts={handleSelectBodyParts}
+              user={user}
+              isAuthenticated={isAuthenticated}
             />
           }
         />
@@ -266,6 +286,7 @@ const App = () => {
                 handleDeleteFlow={handleDeleteFlow}
                 isAuthenticated={isAuthenticated}
                 customUserFlows={customUserFlows}
+                handleDeleteCustomFlow={handleDeleteCustomFlow}
               />
             ) : (
               <Login />

@@ -1,8 +1,7 @@
 import { useParams } from "react-router-dom";
 import BackBtn from "../buttons/BackBtn";
 import DeleteFlowBtn from "../buttons/DeleteFlowBtn";
-import SaveBtn from "../buttons/SaveBtn";
-import UnsaveBtn from "../buttons/UnsaveBtn";
+import DeleteCustomFlowBtb from "../buttons/DeleteCustomFlowBtn";
 import PoseCard from "../PoseCard";
 import LoadingSpinner from "../LoadingSpinner";
 
@@ -15,6 +14,7 @@ const FlowDetailsCustom = (props) => {
     handleDeleteFlow,
     isAuthenticated,
     customUserFlows,
+    handleDeleteCustomFlow,
   } = props;
   const { id } = useParams();
 
@@ -31,7 +31,25 @@ const FlowDetailsCustom = (props) => {
 
   return (
     <>
-      <h3>Flow Details</h3>
+      <div className="details-main-container">
+        <h3
+          style={{
+            fontWeight: "600",
+            textTransform: "uppercase",
+            color: "#333333",
+          }}
+        >
+          {selected.sequence_name}
+        </h3>
+        <p className="flow-description" style={{ color: "#484848" }}>
+          {selected.description}
+        </p>
+
+        <DeleteCustomFlowBtb
+          handleDeleteCustomFlow={handleDeleteCustomFlow}
+          id={selected.id}
+        />
+      </div>
       <BackBtn />
 
       {isAuthenticated ? (

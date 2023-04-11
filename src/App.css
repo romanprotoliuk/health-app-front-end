@@ -38,7 +38,15 @@ a:visited {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 20px;
+  grid-auto-flow: dense;
 }
+
+@media (max-width: 768px) {
+  .flow-container-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 .flow-container-left {
   width: 30vw;
@@ -57,7 +65,7 @@ a:visited {
   padding: 30px;
   border-radius: 20px;
   background-color: #fff;
-  box-shadow: 0 6px 22px 0 rgba(0, 0, 0, 0.08), 0 1px 6px 0 rgba(0, 0, 0, 0.04);    
+  box-shadow: 0 6px 22px 0 rgba(0, 0, 0, 0.08), 0 1px 6px 0 rgba(0, 0, 0, 0.04);  
 }
 
 .flow-card-details {
@@ -90,12 +98,12 @@ a:visited {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
   text-align: center;
 }
-
+/* 
 .pose-image {
   width: 100%;
   object-fit: contain;
   border-radius: 5px;
-}
+} */
 
 
 
@@ -155,7 +163,7 @@ input.full-width {
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  min-width: 150px;
+  /* min-width: 150px; */
   /* min-height: 150px; */
   padding-bottom: 100%;
 }
