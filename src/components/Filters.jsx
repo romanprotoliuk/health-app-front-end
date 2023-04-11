@@ -15,7 +15,7 @@ const FiltersContainer = styled.div`
 
   select {
     border: none;
-    background-color: transparent;
+    background-color: #fff;
     border-radius: 5px;
     padding: 10px 30px 10px 20px;
     font-family: "Lato", sans-serif;

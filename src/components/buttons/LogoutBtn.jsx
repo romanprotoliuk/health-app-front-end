@@ -1,6 +1,7 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import "./buttons.css";
+import { Link } from "react-router-dom";
 
 const LogoutButton = ({ setUserSub }) => {
   const { logout } = useAuth0();
@@ -11,13 +12,20 @@ const LogoutButton = ({ setUserSub }) => {
   };
 
   return (
-    <button
-      className="custom-btn btn-6"
+    <Link
       onClick={handleLogOut}
-      style={{ cursor: "pointer" }}
+      style={{
+        fontWeight: "600",
+        textTransform: "uppercase",
+        fontSize: "12px",
+        color: "#333333",
+        textDecoration: "none",
+        cursor: "pointer",
+        marginTop: "10px",
+      }}
     >
       Log out
-    </button>
+    </Link>
   );
 };
 

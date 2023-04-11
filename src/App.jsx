@@ -218,7 +218,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <Menu isAuthenticated={isAuthenticated} />
+      <Menu isAuthenticated={isAuthenticated} setUserSub={setUserSub} />
       <Navbar isAuthenticated={isAuthenticated} setUserSub={setUserSub} />
       <Routes>
         <Route

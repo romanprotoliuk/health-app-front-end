@@ -52,13 +52,7 @@ const Navbar = ({ isAuthenticated, setUserSub }) => (
         />
       </div>
     </Link>
-    <NavLinks>
-      {isAuthenticated && <NavLink to="/favorites">My flows</NavLink>}
-      {isAuthenticated && <NavLink to="/poses">Poses</NavLink>}
-    </NavLinks>
-    {isAuthenticated ? (
-      <LogoutButton setUserSub={setUserSub} />
-    ) : (
+    {!isAuthenticated && (
       <div style={{ margin: "30px 0px" }}>
         <p
           style={{
