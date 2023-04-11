@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import "./Menu.css";
 import LogoutButton from "../buttons/LogoutBtn";
 import { useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Menu = ({ isAuthenticated, setUserSub }) => {
   const [menuIconSetting, setMenuIconSetting] = useState(false);
+  const { loginWithRedirect } = useAuth0();
 
   const handleMenuIcon = () => {
     setMenuIconSetting(!menuIconSetting);
@@ -46,8 +48,22 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
             <div class="div-block-26"></div>
 
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ marginTop: "10px" }}>
-                {isAuthenticated && (
+              <div style={{ padding: "10px 0px" }}>
+                <Link
+                  style={{
+                    fontWeight: "600",
+                    textTransform: "uppercase",
+                    fontSize: "12px",
+                    color: "#333333",
+                    textDecoration: "none",
+                  }}
+                  to={"/about"}
+                >
+                  About
+                </Link>
+              </div>
+              {isAuthenticated && (
+                <div style={{ marginTop: "10px" }}>
                   <Link
                     style={{
                       fontWeight: "600",
@@ -60,10 +76,10 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                   >
                     My flows
                   </Link>
-                )}
-              </div>
-              <div style={{ marginTop: "10px" }}>
-                {isAuthenticated && (
+                </div>
+              )}
+              {isAuthenticated && (
+                <div style={{ marginTop: "10px" }}>
                   <Link
                     style={{
                       fontWeight: "600",
@@ -76,12 +92,31 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                   >
                     Poses
                   </Link>
-                )}
-              </div>
+                </div>
+              )}
 
-              <div style={{ marginTop: "30px" }}>
-                {isAuthenticated && <LogoutButton setUserSub={setUserSub} />}
-              </div>
+              {!isAuthenticated && (
+                <div style={{ marginTop: "10px" }}>
+                  <Link
+                    style={{
+                      fontWeight: "600",
+                      textTransform: "uppercase",
+                      fontSize: "12px",
+                      color: "#333333",
+                      textDecoration: "none",
+                    }}
+                    onClick={() => loginWithRedirect()}
+                  >
+                    Login or Register
+                  </Link>
+                </div>
+              )}
+
+              {isAuthenticated && (
+                <div style={{ marginTop: "30px" }}>
+                  <LogoutButton setUserSub={setUserSub} />
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -91,3 +126,22 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
 };
 
 export default Menu;
+
+// import React from "react";
+// import { useAuth0 } from "@auth0/auth0-react";
+// import "./buttons.css";
+
+// const LoginButton = () => {
+//   const { loginWithRedirect } = useAuth0();
+//   return (
+//     <button
+//       className="custom-btn btn-6"
+//       onClick={() => loginWithRedirect()}
+//       style={{ cursor: "pointer" }}
+//     >
+//       <span>Log In or Register</span>
+//     </button>
+//   );
+// };
+
+// export default LoginButton;

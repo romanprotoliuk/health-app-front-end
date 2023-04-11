@@ -14,6 +14,7 @@ import Login from "./components/pages/Login";
 import LoadingSpinner from "./components/LoadingSpinner";
 import FlowDetailsCustom from "./components/pages/FlowDetailsCustom";
 import Menu from "./components/Menu/Menu";
+import About from "./components/pages/About";
 
 import { getUserFlows } from "./utils/helper";
 import { fetchData } from "./utils/helper";
@@ -234,6 +235,7 @@ const App = () => {
             />
           }
         />
+        <Route path="/about" element={<About />} />
         <Route
           path="/flow/:id"
           element={
