@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { supabase } from "./utils/supabase";
 import "./App.css";
@@ -14,6 +13,7 @@ import Navbar from "./components/Navbar";
 import Login from "./components/pages/Login";
 import LoadingSpinner from "./components/LoadingSpinner";
 import FlowDetailsCustom from "./components/pages/FlowDetailsCustom";
+import Menu from "./components/Menu/Menu";
 
 import { getUserFlows } from "./utils/helper";
 import { fetchData } from "./utils/helper";
@@ -218,6 +218,7 @@ const App = () => {
 
   return (
     <div className="App">
+      <Menu isAuthenticated={isAuthenticated} />
       <Navbar isAuthenticated={isAuthenticated} setUserSub={setUserSub} />
       <Routes>
         <Route
@@ -236,25 +237,21 @@ const App = () => {
         <Route
           path="/flow/:id"
           element={
-            isAuthenticated ? (
-              <FlowDetails
-                flows={flows}
-                filteredFlows={filteredFlows}
-                handlePoseClick={handlePoseClick}
-                poseCompletion={poseCompletion}
-                setPoseCompletion={setPoseCompletion}
-                handleDeleteFlow={handleDeleteFlow}
-                handleFavoritedClick={handleFavoritedClick}
-                handleUnlikeFlow={handleUnlikeFlow}
-                favoritedFlows={favoritedFlows}
-                isSavedCompleted={isSavedCompleted}
-                setIsSavedCompleted={setIsSavedCompleted}
-                isAuthenticated={isAuthenticated}
-                userFlowIds={userFlowIds}
-              />
-            ) : (
-              <Login />
-            )
+            <FlowDetails
+              flows={flows}
+              filteredFlows={filteredFlows}
+              handlePoseClick={handlePoseClick}
+              poseCompletion={poseCompletion}
+              setPoseCompletion={setPoseCompletion}
+              handleDeleteFlow={handleDeleteFlow}
+              handleFavoritedClick={handleFavoritedClick}
+              handleUnlikeFlow={handleUnlikeFlow}
+              favoritedFlows={favoritedFlows}
+              isSavedCompleted={isSavedCompleted}
+              setIsSavedCompleted={setIsSavedCompleted}
+              isAuthenticated={isAuthenticated}
+              userFlowIds={userFlowIds}
+            />
           }
         />
         <Route

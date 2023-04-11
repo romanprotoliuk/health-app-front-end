@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import "./buttons.css";
 
 const LogoutButton = ({ setUserSub }) => {
   const { logout } = useAuth0();
@@ -10,7 +11,11 @@ const LogoutButton = ({ setUserSub }) => {
   };
 
   return (
-    <button onClick={handleLogOut} style={{ cursor: "pointer" }}>
+    <button
+      className="custom-btn btn-6"
+      onClick={handleLogOut}
+      style={{ cursor: "pointer" }}
+    >
       Log out
     </button>
   );
