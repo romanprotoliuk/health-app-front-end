@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { useMediaQuery } from "@mui/material";
 
 const FiltersContainer = styled.div`
   display: flex;
@@ -21,7 +22,6 @@ const FiltersContainer = styled.div`
     font-family: "Lato", sans-serif;
     font-size: 14px;
     font-weight: 500;
-    // color: #33333390;
     transition: all 0.3s ease;
     box-shadow: 0 6px 22px 0 rgb(0 0 0 / 8%), 0 1px 6px 0 rgb(0 0 0 / 4%);
     outline: none;
@@ -32,6 +32,21 @@ const FiltersContainer = styled.div`
     background-position: calc(100% - 10px) center;
     background-size: 10px;
     opacity: 0.5;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    justify-content: space-between;
+    height: 120px;
+    width: 100%;
+
+    label {
+      margin-bottom: 10px;
+    }
+
+    select {
+      margin-bottom: 10px;
+    }
   }
 `;
 
@@ -54,6 +69,7 @@ const Filters = (props) => {
     "Shoulders",
   ];
 
+  const isMobile = useMediaQuery("(max-width: 600px)");
   return (
     <FiltersContainer>
       <label
@@ -71,7 +87,11 @@ const Filters = (props) => {
         id="difficulty"
         value={props.difficultyFilter}
         onChange={props.handleSelectDifficulty}
-        style={{ marginRight: "30px", cursor: "pointer" }}
+        style={{
+          marginRight: isMobile ? 0 : "30px",
+          cursor: "pointer",
+          marginBottom: isMobile ? "30px" : 0,
+        }}
       >
         <option value="">All</option>
         <option value="beginner">Beginner</option>

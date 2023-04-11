@@ -183,7 +183,7 @@ const FlowDetails = (props) => {
         </div>
       )}
 
-      <div className="flow-poses">
+      <div className="flow-poses-details">
         {selected.sequence_poses.map((pose, idx) => {
           const isCompleted = poseCompletion[selected.id]?.[idx];
           return (
