@@ -17,6 +17,8 @@ import FlowDetailsCustom from "./components/pages/FlowDetailsCustom";
 import Menu from "./components/Menu/Menu";
 import About from "./components/pages/About";
 
+import ChatRoom from "./components/ChatRoom";
+
 import { getUserFlows } from "./utils/helper";
 import { fetchData } from "./utils/helper";
 import { getMatchingFlows } from "./utils/helper";
@@ -40,6 +42,7 @@ const App = () => {
     JSON.parse(localStorage.getItem("poseCompletion")) || {}
   );
   const [selectedPoses, setSelectedPoses] = useState([]);
+  const [chatRooms, setChatRooms] = useState([]);
 
   const handlePoseClick = (flowId, poseId) => {
     setPoseCompletion((prevPoseCompletion) => {
@@ -117,6 +120,19 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem("selectedPoses", JSON.stringify(selectedPoses));
   }, [selectedPoses]);
+
+  useEffect(() => {
+    const fetchChatRooms = async () => {
+      try {
+        const { data } = await supabase.from("chat_rooms").select("*");
+        setChatRooms(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchChatRooms();
+  }, []);
 
   const registerUserInSupabase = useCallback(async () => {
     if (isAuthenticated && user) {
@@ -252,6 +268,7 @@ const App = () => {
               handleSelectBodyParts={handleSelectBodyParts}
               user={user}
               isAuthenticated={isAuthenticated}
+              chatRooms={chatRooms}
             />
           }
         />

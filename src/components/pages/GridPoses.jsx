@@ -1,7 +1,17 @@
 import { Link } from "react-router-dom";
 import Filters from "../Filters";
+import ChatRoom from "../ChatRoom";
+import LoadingSpinner from "../LoadingSpinner";
 
 const GridPoses = (props) => {
+  if (props.ChatRooms === "undefined") {
+    return (
+      <>
+        <LoadingSpinner text="Loading..." />
+      </>
+    );
+  }
+  // props.chatRoom
   const renderCards = (
     props.filteredFlows && props.filteredFlows.length > 0
       ? props.filteredFlows
@@ -131,6 +141,16 @@ const GridPoses = (props) => {
       />
       <DifficultyLevelBar />
       <div className="flow-container-grid">{renderCards}</div>
+      <h1>Chat Application</h1>
+      <div className="chat-room-container">
+        {props.chatRooms.map((chatRoom) => (
+          <ChatRoom
+            key={chatRoom.id}
+            roomId={props.chatRooms[0].id}
+            user={props.user}
+          />
+        ))}
+      </div>
     </>
   );
 };
