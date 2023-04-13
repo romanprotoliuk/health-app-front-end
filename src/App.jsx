@@ -16,18 +16,17 @@ import LoadingSpinner from "./components/LoadingSpinner";
 import FlowDetailsCustom from "./components/pages/FlowDetailsCustom";
 import Menu from "./components/Menu/Menu";
 import About from "./components/pages/About";
+import GridRoutines from "./components/pages/GridRoutines";
+import Exercises from "./components/pages/Exercises";
 
-import ChatRoom from "./components/ChatRoom";
-
-import { getUserFlows } from "./utils/helper";
 import { fetchData } from "./utils/helper";
-import { getMatchingFlows } from "./utils/helper";
-import { convertPosesToIds } from "./utils/helper";
 
 const App = () => {
   const { isAuthenticated, isLoading, user } = useAuth0();
   const [flows, setFlows] = useState([]);
   const [poses, setPoses] = useState([]);
+  const [routines, setRoutines] = useState([]);
+  const [exercises, setExercises] = useState([]);
   const [filteredFlows, setFilteredFlows] = useState([]);
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [bodyPartsFilter, setBodyPartsFilter] = useState("");
@@ -91,8 +90,11 @@ const App = () => {
   };
 
   useEffect(() => {
-    fetchData(setFlows, setPoses, userSub);
+    fetchData(setFlows, setPoses, userSub, setRoutines, setExercises);
   }, [poseCompletion]);
+
+  console.log({ routines });
+  console.log({ exercises });
 
   const posesByPoseName = useMemo(() => {
     return poses.reduce((acc, pose) => {
@@ -270,6 +272,7 @@ const App = () => {
             />
           }
         />
+        <Route path="/routines" element={<GridRoutines />} />
         <Route path="/about" element={<About />} />
         <Route
           path="/flow/:id"
@@ -348,7 +351,26 @@ const App = () => {
             )
           }
         />
+        <Route
+          path="/exercises"
+          element={
+            isAuthenticated ? (
+              <Exercises
+                exercises={exercises}
+                selectedPoses={selectedPoses}
+                setSelectedPoses={setSelectedPoses}
+                handlePoseClickNewFlow={handlePoseClickNewFlow}
+                setAllCustomFlows={setAllCustomFlows}
+                allCustomFlows={allCustomFlows}
+                userSub={userSub}
+              />
+            ) : (
+              <Login />
+            )
+          }
+        />
 
+        {/* Exercises */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>

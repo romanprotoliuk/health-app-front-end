@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import LoginButton from "./buttons/LoginBtn";
-import LogoutButton from "./buttons/LogoutBtn";
 import Logo from "./pq-log.png";
 import LogoType from "./pq.png";
 
@@ -12,23 +11,6 @@ const NavbarContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-`;
-
-const NavTitle = styled.h1`
-  margin: 0;
-`;
-
-const NavLinks = styled.div`
-  display: flex;
-`;
-
-const NavLink = styled(Link)`
-  color: #fff;
-  text-decoration: none;
-  margin-right: 1rem;
-  &:hover {
-    color: #ccc;
-  }
 `;
 
 const Navbar = ({ isAuthenticated, setUserSub }) => (

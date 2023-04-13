@@ -11,7 +11,6 @@ const GridPoses = (props) => {
       </>
     );
   }
-  // props.chatRoom
   const renderCards = (
     props.filteredFlows && props.filteredFlows.length > 0
       ? props.filteredFlows

@@ -62,6 +62,20 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                   About
                 </Link>
               </div>
+              <div>
+                <Link
+                  style={{
+                    fontWeight: "600",
+                    textTransform: "uppercase",
+                    fontSize: "12px",
+                    color: "#333333",
+                    textDecoration: "none",
+                  }}
+                  to={"/routines"}
+                >
+                  Strength Training
+                </Link>
+              </div>
               {isAuthenticated && (
                 <div style={{ marginTop: "10px" }}>
                   <Link
@@ -91,6 +105,23 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                     to="/poses"
                   >
                     Poses
+                  </Link>
+                </div>
+              )}
+
+              {isAuthenticated && (
+                <div style={{ marginTop: "10px" }}>
+                  <Link
+                    style={{
+                      fontWeight: "600",
+                      textTransform: "uppercase",
+                      fontSize: "12px",
+                      color: "#333333",
+                      textDecoration: "none",
+                    }}
+                    to="/exercises"
+                  >
+                    Exercises
                   </Link>
                 </div>
               )}

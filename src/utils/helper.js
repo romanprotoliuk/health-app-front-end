@@ -22,19 +22,22 @@ export const getUserFlows = async (auth0_id) => {
     // Map over the userFlows array to extract just the flow IDs
     const flowIds = userFlows.map((userFlow) => userFlow.flow_id);
 
-    // return flowIds;
+    return flowIds;
   } catch (error) {
     console.error(error);
   }
 };
 
-export const fetchData = async (setFlows, setPoses) => {
+export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExercises) => {
   try {
-    const [posesResponse, flowsResponse] = await Promise.all([
+    const [posesResponse, flowsResponse, routinesResponse, exercisesResponse] = await Promise.all([
       axios.get("http://localhost:8000/api/poses/"),
       axios.get("http://localhost:8000/api/flows/"),
+      axios.get("http://localhost:8000/api/routines/"),
+      axios.get("http://localhost:8000/api/exercises/"),
     ]);
-
+    setRoutines(routinesResponse.data)
+    setExercises(exercisesResponse.data)
     // Group poses by pose_name for efficient lookup
     const posesByPoseName = posesResponse.data.reduce((acc, pose) => {
       acc[pose.pose_name] = pose;
@@ -88,7 +91,7 @@ export const convertPosesToIds = (sequenceObj) => {
 };
 
 export const formatDate = (dateString) => {
-    const date = new Date(dateString);
+  const date = new Date(dateString);
   const now = new Date();
   const seconds = Math.floor((now - date) / 1000);
   const minutes = Math.floor(seconds / 60);
@@ -96,13 +99,12 @@ export const formatDate = (dateString) => {
   const days = Math.floor(hours / 24);
 
   if (days > 0) {
-    return `${days} day${days > 1 ? 's' : ''} ago`;
+    return `${days} day${days > 1 ? "s" : ""} ago`;
   } else if (hours > 0) {
-    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    return `${hours} hour${hours > 1 ? "s" : ""} ago`;
   } else if (minutes > 0) {
-    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
   } else {
-    return 'just now';
+    return "just now";
   }
-  }
-  
+};

@@ -11,9 +11,30 @@ const ChatRoom = ({ roomId, user, isAuthenticated }) => {
   const [newMessage, setNewMessage] = useState("");
   const [usersOnline, setUserOnline] = useState([]);
   const bottomRef = useRef(null);
-  console.log({ user });
+  const chatWrapperRef = useRef(null);
+
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // The Chat component is visible, scroll to the bottom of the messages
+            bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    if (chatWrapperRef.current) {
+      observer.observe(chatWrapperRef.current);
+    }
+
+    return () => {
+      if (chatWrapperRef.current) {
+        observer.unobserve(chatWrapperRef.current);
+      }
+    };
   }, [messages]);
 
   const fetchData = useCallback(async () => {
@@ -97,161 +118,161 @@ const ChatRoom = ({ roomId, user, isAuthenticated }) => {
     }
   };
 
-  console.log({ messages });
-
   return (
-    <div>
-      <h3
-        style={{
-          fontWeight: "600",
-          textTransform: "uppercase",
-          color: "#333333",
-        }}
-      >
-        Community Chat
-      </h3>
-      <p
-        style={{
-          fontWeight: "600",
-          textTransform: "uppercase",
-          fontSize: "12px",
-          color: "#00000080",
-        }}
-      >
-        Here you can report bugs, make feature and UI suggestions, or just say
-        something nice (:
-      </p>
+    <div ref={chatWrapperRef}>
+      <div>
+        <h3
+          style={{
+            fontWeight: "600",
+            textTransform: "uppercase",
+            color: "#333333",
+          }}
+        >
+          Community Chat
+        </h3>
+        <p
+          style={{
+            fontWeight: "600",
+            textTransform: "uppercase",
+            fontSize: "12px",
+            color: "#00000080",
+          }}
+        >
+          Here you can report bugs, make feature and UI suggestions, or just say
+          something nice (:
+        </p>
 
-      <div className="parent-container">
-        <div style={{ position: "absolute", top: "4vh", left: "2.5vw" }}>
-          <OnlineUsers presenceState={usersOnline} />
-        </div>
-        <div className="action-container">
-          {messages.map((message) => (
-            <>
-              <div
-                className={
-                  user?.nickname === message.sender
-                    ? "message-list-my-own"
-                    : "message-list"
-                }
-              >
+        <div className="parent-container">
+          <div style={{ position: "absolute", top: "4vh", left: "2.5vw" }}>
+            <OnlineUsers presenceState={usersOnline} />
+          </div>
+          <div className="action-container">
+            {messages.map((message) => (
+              <>
                 <div
                   className={
                     user?.nickname === message.sender
-                      ? "outter-container-message-my-own"
-                      : "outter-container-message"
+                      ? "message-list-my-own"
+                      : "message-list"
                   }
                 >
-                  {user?.nickname === message.sender ? (
-                    <>
-                      <div className="container-message" key={message.id}>
-                        <div className="message-content">
-                          <p
+                  <div
+                    className={
+                      user?.nickname === message.sender
+                        ? "outter-container-message-my-own"
+                        : "outter-container-message"
+                    }
+                  >
+                    {user?.nickname === message.sender ? (
+                      <>
+                        <div className="container-message" key={message.id}>
+                          <div className="message-content">
+                            <p
+                              style={{
+                                marginBlockStart: "0",
+                                marginBlockEnd: "0",
+                              }}
+                            >
+                              {message.message}
+                            </p>
+                            <small className="small-right">
+                              {formatDate(message.created_at)}
+                            </small>
+                          </div>
+                        </div>
+                        <div style={{ marginLeft: "30px" }}>
+                          <div
                             style={{
-                              marginBlockStart: "0",
-                              marginBlockEnd: "0",
+                              width: "55px",
+                              height: "55px",
+                              backgroundColor: "white",
+                              borderRadius: "6px",
+                              marginLeft: "10px",
                             }}
-                          >
-                            {message.message}
-                          </p>
-                          <small className="small-right">
-                            {formatDate(message.created_at)}
-                          </small>
+                            className="image-div-chat"
+                          ></div>
+                          <div className="sender-time-holder-my-own">
+                            <small className="sender">
+                              {message.sender.length > 8
+                                ? message.sender.slice(0, 8) + ".."
+                                : message.sender}
+                            </small>
+                          </div>
                         </div>
-                      </div>
-                      <div style={{ marginLeft: "30px" }}>
-                        <div
-                          style={{
-                            width: "55px",
-                            height: "55px",
-                            backgroundColor: "white",
-                            borderRadius: "6px",
-                            marginLeft: "10px",
-                          }}
-                          className="image-div-chat"
-                        ></div>
-                        <div className="sender-time-holder-my-own">
-                          <small className="sender">
-                            {message.sender.length > 8
-                              ? message.sender.slice(0, 8) + ".."
-                              : message.sender}
-                          </small>
-                        </div>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div style={{ width: "80px", marginRight: "20px" }}>
-                        <div
-                          style={{
-                            width: "55px",
-                            height: "55px",
-                            backgroundColor: "white",
-                            borderRadius: "6px",
-                            marginRight: "10px",
-                          }}
-                          className="image-div-chat"
-                        ></div>
-                        <div className="sender-time-holder">
-                          <small className="sender">
-                            {message.sender.length > 8
-                              ? message.sender.slice(0, 8) + ".."
-                              : message.sender}
-                          </small>
-                        </div>
-                      </div>
-                      <div className="container-message" key={message.id}>
-                        <div className="message-content">
-                          <p
+                      </>
+                    ) : (
+                      <>
+                        <div style={{ width: "80px", marginRight: "20px" }}>
+                          <div
                             style={{
-                              marginBlockStart: "0",
-                              marginBlockEnd: "0",
+                              width: "55px",
+                              height: "55px",
+                              backgroundColor: "white",
+                              borderRadius: "6px",
+                              marginRight: "10px",
                             }}
-                          >
-                            {message.message}
-                          </p>
-                          <small
-                            style={{
-                              fontWeight: "600",
-                              textTransform: "uppercase",
-                              fontSize: "8px",
-                              color: "#00000080",
-                              opacity: ".6",
-                            }}
-                          >
-                            {formatDate(message.created_at)}
-                          </small>
+                            className="image-div-chat"
+                          ></div>
+                          <div className="sender-time-holder">
+                            <small className="sender">
+                              {message.sender.length > 8
+                                ? message.sender.slice(0, 8) + ".."
+                                : message.sender}
+                            </small>
+                          </div>
                         </div>
-                      </div>
-                    </>
-                  )}
+                        <div className="container-message" key={message.id}>
+                          <div className="message-content">
+                            <p
+                              style={{
+                                marginBlockStart: "0",
+                                marginBlockEnd: "0",
+                              }}
+                            >
+                              {message.message}
+                            </p>
+                            <small
+                              style={{
+                                fontWeight: "600",
+                                textTransform: "uppercase",
+                                fontSize: "8px",
+                                color: "#00000080",
+                                opacity: ".6",
+                              }}
+                            >
+                              {formatDate(message.created_at)}
+                            </small>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </>
-          ))}
-          <div ref={bottomRef} />
-        </div>
-        <div className="background-container" />
-      </div>
-
-      <div style={{ marginTop: "20px" }}>
-        {isAuthenticated && <MessageForm onSubmit={handleNewMessage} />}
-        {!isAuthenticated && (
-          <div style={{ margin: "30px 0px" }}>
-            <p
-              style={{
-                fontWeight: "600",
-                textTransform: "uppercase",
-                fontSize: "12px",
-                color: "#00000080",
-              }}
-            >
-              To Chat
-            </p>
-            <LoginButton style={{ cursor: "pointer" }} />
+              </>
+            ))}
+            <div ref={bottomRef} />
           </div>
-        )}
+          <div className="background-container" />
+        </div>
+
+        <div style={{ marginTop: "20px" }}>
+          {isAuthenticated && <MessageForm onSubmit={handleNewMessage} />}
+          {!isAuthenticated && (
+            <div style={{ margin: "30px 0px" }}>
+              <p
+                style={{
+                  fontWeight: "600",
+                  textTransform: "uppercase",
+                  fontSize: "12px",
+                  color: "#00000080",
+                }}
+              >
+                To Chat
+              </p>
+              <LoginButton style={{ cursor: "pointer" }} />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
