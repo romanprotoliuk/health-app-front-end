@@ -34,18 +34,52 @@ a:visited {
   display: flex;
 }
 
-.flow-container-grid {
+/* .flow-container-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 20px;
   grid-auto-flow: dense;
+} */
+
+.flow-container-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
 }
 
-@media (max-width: 768px) {
+/* For screens with a minimum width of 480px, display a 2-column grid */
+@media screen and (min-width: 480px) {
+  .flow-container-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* For screens with a minimum width of 768px, display a 3-column grid */
+@media screen and (min-width: 768px) {
+  .flow-container-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* For screens with a minimum width of 1000px, display a 4-column grid */
+@media screen and (min-width: 1000px) {
+  .flow-container-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* For screens with a minimum width of 1200px, display a 5-column grid */
+@media screen and (min-width: 1200px) {
+  .flow-container-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* @media (max-width: 768px) {
   .flow-container-grid {
     grid-template-columns: 1fr;
   }
-}
+} */
 
 
 .flow-container-left {

@@ -1,8 +1,8 @@
-.flow-container-grid {
+/* .flow-container-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     grid-gap: 1rem;
-  }
+  } */
 
   .details-main-container {
     margin: 30px auto 50px auto;
@@ -18,9 +18,9 @@
     
   }
   
-  @media (max-width: 768px) {
+  /* @media (max-width: 768px) {
     .flow-container-grid {
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
-  }
+  } */
   

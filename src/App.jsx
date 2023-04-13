@@ -136,8 +136,6 @@ const App = () => {
 
   const registerUserInSupabase = useCallback(async () => {
     if (isAuthenticated && user) {
-      console.log("User is authenticated:", user);
-
       // Check if the user is already registered in Supabase
       const { sub, email } = user;
       setUserSub(sub);

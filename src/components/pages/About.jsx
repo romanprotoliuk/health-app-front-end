@@ -37,11 +37,11 @@ const About = () => {
           href="https://romanprotoliuk-links.webflow.io/"
           target="_blank"
           rel="noopener noreferrer"
+          className="custom-btn btn-13"
           style={{
             fontWeight: "600",
             textTransform: "uppercase",
             fontSize: "12px",
-            color: "#00000080",
           }}
         >
           @romanprotoliuk
