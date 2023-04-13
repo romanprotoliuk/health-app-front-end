@@ -19,8 +19,11 @@ const OnlineUsers = ({ presenceState }) => {
 
   return (
     <div>
-      <h2>Online Users</h2>
-      <p>{onlineUsersCount} users are online.</p>
+      {onlineUsersCount === 1 ? (
+        <p>{onlineUsersCount} user is online.</p>
+      ) : (
+        <p>{onlineUsersCount} users are online.</p>
+      )}
     </div>
   );
 };

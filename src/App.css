@@ -171,6 +171,136 @@ input.full-width {
   padding-bottom: 100%;
 }
 
+.chat-room-container {
+  padding: 50px 0;
+}
+
+
+  .parent-container {
+    position: relative;
+  }
+  
+  .action-container {
+    z-index: 10;
+    height: 80vh;
+    /* width: 100%; */
+    overflow-y: scroll;
+    padding: 20px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+   .background-container {
+    z-index: 9;
+    height: 100%;
+    width: 100%;
+    /* position: absolute; */
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    border-radius: 6px;
+  }
+  
+  .background-container::before,
+  .background-container::after {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    z-index: -1;
+    animation: spin 2.5s linear infinite;
+  }
+  
+  @property --rotate {
+    syntax: "<angle>";
+    initial-value: 132deg;
+    inherits: false;
+  }
+
+  .background-container::before {
+    border-radius: 8px;
+    background-image: linear-gradient(var(--rotate), #43e44bb1, #0ae0a7c7);
+  }
+  
+  .background-container::after {
+    filter: blur(4px);
+    background-image: linear-gradient(var(--rotate), #5ddcffa9,rgba(254, 165, 0, rgba(255, 213, 0, 0.6) 212, 0));
+  }
+  
+  @keyframes spin {
+    0% {
+      --rotate: 0deg;
+    }
+    100% {
+      --rotate: 360deg;
+    }
+  }
+  
+  .message-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .message-list-my-own {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  .outter-container-message,
+  .outter-container-message-my-own {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+  }
+  
+  
+  
+  .container-message {
+    z-index: 12;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    background-color: rgba(255, 255, 255, 0.28);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  
+  .message-content {
+    padding: 10px 20px;
+    flex-direction: column;
+    word-wrap: break-word;
+    text-align: left;
+  }
+  
+  .sender-time-holder {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sender-time-holder-my-own {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+
+  .sender {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 8px;
+    color: rgba(219, 53, 2, 0.43);
+    opacity: 0.8;
+  }
+  
+  
+  
 
 @keyframes App-logo-spin {
   from {
