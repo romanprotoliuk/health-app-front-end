@@ -3,6 +3,7 @@ import { supabase } from "../utils/supabase";
 import OnlineUsers from "./OnlineUsers";
 import MessageForm from "./MessageForm";
 import { formatDate } from "../utils/helper";
+import LoginButton from "./buttons/LoginBtn";
 
 const ChatRoom = ({ roomId, user, isAuthenticated }) => {
   const [room, setRoom] = useState(null);
@@ -117,49 +118,32 @@ const ChatRoom = ({ roomId, user, isAuthenticated }) => {
           color: "#00000080",
         }}
       >
-        Here you can report bugs, make features and UI suggestion, or just say
+        Here you can report bugs, make feature and UI suggestions, or just say
         something nice (:
       </p>
-      <OnlineUsers presenceState={usersOnline} />
+
       <div className="parent-container">
+        <div style={{ position: "absolute", top: "4vh", left: "2.5vw" }}>
+          <OnlineUsers presenceState={usersOnline} />
+        </div>
         <div className="action-container">
           {messages.map((message) => (
             <>
-              {/* <div className={own ? "message own" : "message"}>
-                <div className="message-top">
-                  <div className="john">
-                    <div>
-                      <img className="message-img" src={avatar} alt="" />
-                    </div>
-
-                    <div className="message-bottom" onClick={handleNameClick}>
-                      <h4 className="user-name-pointer">{name}</h4>
-                    </div>
-                  </div>
-                  <div className="message-text">
-                    <p>{content}</p>
-                    <div className="message-bottom">
-                      <p className="mainchat-time-small">{format(createdAt)}</p>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
-
               <div
                 className={
-                  user.nickname === message.sender
+                  user?.nickname === message.sender
                     ? "message-list-my-own"
                     : "message-list"
                 }
               >
                 <div
                   className={
-                    user.nickname === message.sender
+                    user?.nickname === message.sender
                       ? "outter-container-message-my-own"
                       : "outter-container-message"
                   }
                 >
-                  {user.nickname === message.sender ? (
+                  {user?.nickname === message.sender ? (
                     <>
                       <div className="container-message" key={message.id}>
                         <div className="message-content">
@@ -171,15 +155,7 @@ const ChatRoom = ({ roomId, user, isAuthenticated }) => {
                           >
                             {message.message}
                           </p>
-                          <small
-                            style={{
-                              fontWeight: "600",
-                              textTransform: "uppercase",
-                              fontSize: "8px",
-                              color: "#00000080",
-                              opacity: ".6",
-                            }}
-                          >
+                          <small className="small-right">
                             {formatDate(message.created_at)}
                           </small>
                         </div>
@@ -261,6 +237,21 @@ const ChatRoom = ({ roomId, user, isAuthenticated }) => {
 
       <div style={{ marginTop: "20px" }}>
         {isAuthenticated && <MessageForm onSubmit={handleNewMessage} />}
+        {!isAuthenticated && (
+          <div style={{ margin: "30px 0px" }}>
+            <p
+              style={{
+                fontWeight: "600",
+                textTransform: "uppercase",
+                fontSize: "12px",
+                color: "#00000080",
+              }}
+            >
+              To Chat
+            </p>
+            <LoginButton style={{ cursor: "pointer" }} />
+          </div>
+        )}
       </div>
     </div>
   );

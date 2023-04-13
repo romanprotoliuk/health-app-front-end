@@ -20,9 +20,33 @@ const OnlineUsers = ({ presenceState }) => {
   return (
     <div>
       {onlineUsersCount === 1 ? (
-        <p>{onlineUsersCount} user is online.</p>
+        <p
+          style={{
+            marginBlockStart: "0",
+            marginBlockEnd: "0",
+            fontWeight: "600",
+            textTransform: "uppercase",
+            fontSize: "8px",
+            color: "#00000080",
+            opacity: ".6",
+          }}
+        >
+          {onlineUsersCount} user is online
+        </p>
       ) : (
-        <p>{onlineUsersCount} users are online.</p>
+        <p
+          style={{
+            marginBlockStart: "0",
+            marginBlockEnd: "0",
+            fontWeight: "600",
+            textTransform: "uppercase",
+            fontSize: "8px",
+            color: "#00000080",
+            opacity: ".6",
+          }}
+        >
+          {onlineUsersCount} users are online
+        </p>
       )}
     </div>
   );
