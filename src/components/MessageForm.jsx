@@ -35,6 +35,7 @@ const MessageForm = ({ onSubmit }) => {
           boxShadow: "0 6px 22px 0 rgba(0, 0, 0, 0.08)",
           outline: "none",
         }}
+        placeholder="..."
         type="text"
         value={newMessage}
         onChange={handleChange}
@@ -55,7 +56,8 @@ const MessageForm = ({ onSubmit }) => {
         }}
         type="submit"
       >
-        <FontAwesomeIcon icon={faPaperPlane} style={{ opacity: "0.5" }} />
+        Send
+        {/* <FontAwesomeIcon icon={faPaperPlane} style={{ opacity: "0.5" }} /> */}
       </button>
     </form>
   );

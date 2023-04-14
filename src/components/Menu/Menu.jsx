@@ -62,7 +62,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                   About
                 </Link>
               </div>
-              <div>
+              {/* <div>
                 <Link
                   style={{
                     fontWeight: "600",
@@ -75,7 +75,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                 >
                   Strength Training
                 </Link>
-              </div>
+              </div> */}
               {isAuthenticated && (
                 <div style={{ marginTop: "10px" }}>
                   <Link
@@ -109,7 +109,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                 </div>
               )}
 
-              {isAuthenticated && (
+              {/* {isAuthenticated && (
                 <div style={{ marginTop: "10px" }}>
                   <Link
                     style={{
@@ -124,7 +124,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                     Exercises
                   </Link>
                 </div>
-              )}
+              )} */}
 
               {!isAuthenticated && (
                 <div style={{ marginTop: "10px" }}>
