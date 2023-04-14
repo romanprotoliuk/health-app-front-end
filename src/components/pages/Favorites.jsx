@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { useEffect, useCallback } from "react";
 import { supabase } from "../../utils/supabase";
@@ -8,13 +9,20 @@ import BackBtn from "../buttons/BackBtn";
 const Favorites = (props) => {
   const {
     poses,
+    routines,
     favoritedFlows,
     flows,
     userSub,
     setFavoritedFlows,
+    setFavoritedRoutines,
+    favoritedRoutines,
     setUserFlowIds,
+    setUserRoutineIds,
     customUserFlows,
     setCustomUserFlows,
+    exercises,
+    setCustomUserRoutines,
+    customUserRoutines,
   } = props;
 
   const updateFavoritedFlows = useCallback(
@@ -24,11 +32,25 @@ const Favorites = (props) => {
     [setFavoritedFlows]
   );
 
+  const updateFavoritedRoutines = useCallback(
+    (matchingRoutines) => {
+      setFavoritedRoutines(matchingRoutines);
+    },
+    [setFavoritedRoutines]
+  );
+
   const updatedCustomUserFlows = useCallback(
     (matchingCustomFlows) => {
       setCustomUserFlows(matchingCustomFlows);
     },
     [setCustomUserFlows]
+  );
+
+  const updatedCustomUserRoutines = useCallback(
+    (matchingCustomRoutines) => {
+      setCustomUserRoutines(matchingCustomRoutines);
+    },
+    [setCustomUserRoutines]
   );
 
   useEffect(() => {
@@ -46,6 +68,27 @@ const Favorites = (props) => {
         setUserFlowIds(userFlowIds);
         const matchingFlows = getMatchingFlows(userFlowIds, flows);
         updateFavoritedFlows(matchingFlows);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const fetchUserRoutines = async () => {
+      try {
+        const { data: userRoutineData, error } = await supabase
+          .from("users_routines_new")
+          .select("routine_id")
+          .eq("auth0_id", userSub);
+
+        if (error) {
+          throw error;
+        }
+        const userRoutineIds = userRoutineData.map(
+          (userFlow) => userFlow.routine_id
+        );
+        setUserRoutineIds(userRoutineIds);
+        const matchingFlows = getMatchingFlows(userRoutineIds, routines);
+        updateFavoritedRoutines(matchingFlows);
       } catch (error) {
         console.error(error);
       }
@@ -74,9 +117,39 @@ const Favorites = (props) => {
       }
     };
 
+    const fetchCustomUserRoutines = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("customroutines")
+          .select("*")
+          .eq("auth0_id", userSub);
+
+        const customFlowsWithPoses = data.map((exercise) => {
+          const routinesNew = exercise.routine_exercises.map((poseId) => {
+            return exercises.find((exercise) => exercise.id === poseId);
+          });
+          return { ...exercise, routine_poses: routinesNew };
+        });
+
+        setCustomUserRoutines(customFlowsWithPoses);
+
+        if (error) {
+          throw error;
+        }
+      } catch (error) {}
+    };
+
+    fetchUserRoutines();
+    fetchCustomUserRoutines();
     fetchCustomUserFlows();
     fetchUserFlows();
-  }, [flows, userSub, updateFavoritedFlows, updatedCustomUserFlows]);
+  }, [
+    flows,
+    userSub,
+    updateFavoritedFlows,
+    updatedCustomUserFlows,
+    updatedCustomUserRoutines,
+  ]);
 
   const renderCards = favoritedFlows.map((flow) => {
     const levels = flow.level.split(",");
@@ -188,9 +261,86 @@ const Favorites = (props) => {
       </Link>
     );
   });
-  const renderCustomFlows = customUserFlows.map((flow) => {
+
+  const renderRoutineCards = favoritedRoutines.map((flow) => {
+    const target = flow.targets.split(",");
+    const renderBenefits = target.map((benefit, index) => {
+      return (
+        <div
+          key={index}
+          className="flow-description"
+          style={{
+            padding: "1px 6px",
+            border: "1px solid #2870A3",
+            borderRadius: "50px",
+            margin: "2px",
+          }}
+        >
+          <div>
+            <p
+              style={{
+                marginBlockEnd: "0",
+                marginBlockStart: "0",
+              }}
+            >
+              {benefit}
+            </p>
+          </div>
+        </div>
+      );
+    });
+
     return (
-      <>
+      <Link
+        to={`/routine/${flow.id}`}
+        key={flow.id}
+        className="flow-card"
+        style={{
+          textDecoration: "none",
+          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          alignContent: "stretch",
+        }}
+      >
+        <div style={{ flexGrow: 1 }}>
+          <h3
+            style={{
+              fontWeight: "600",
+              textTransform: "uppercase",
+              color: "#333333",
+            }}
+          >
+            {flow.routine_name}
+          </h3>
+          <p className="flow-description" style={{ color: "#484848" }}>
+            {flow.description}
+          </p>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              height: "2px",
+              backgroundColor: "#FAFAFC",
+              marginBottom: "10px",
+            }}
+          ></div>
+          {renderBenefits}
+        </div>
+      </Link>
+    );
+  });
+
+  const renderCustomFlows = customUserFlows.map((flow, id) => {
+    return (
+      <React.Fragment key={id}>
         <Link
           to={`/flows/${flow.id}`}
           key={flow.id}
@@ -203,7 +353,26 @@ const Favorites = (props) => {
           <p className="flow-description">{flow?.targets}</p>
           <p className="flow-description">{flow?.benefits}</p>
         </Link>
-      </>
+      </React.Fragment>
+    );
+  });
+
+  const renderCustomRoutines = customUserRoutines.map((flow, id) => {
+    return (
+      <React.Fragment key={id}>
+        <Link
+          to={`/routines/${flow.id}`}
+          key={flow.id}
+          className="flow-card"
+          style={{ textDecoration: "none" }}
+        >
+          <h2>{flow.routine_name}</h2>
+          <p className="flow-description">{flow?.description}</p>
+          <p className="flow-description">{flow?.level}</p>
+          <p className="flow-description">{flow?.targets}</p>
+          <p className="flow-description">{flow?.benefits}</p>
+        </Link>
+      </React.Fragment>
     );
   });
 
@@ -228,12 +397,39 @@ const Favorites = (props) => {
           textTransform: "uppercase",
           fontSize: "12px",
           color: "#00000080",
+        }}
+      >
+        My favorited Routines
+      </p>
+      {favoritedRoutines < 1 && <p>you have no fave routines</p>}
+      <div className="flow-container-grid">{renderRoutineCards}</div>
+      <p
+        style={{
+          fontWeight: "600",
+          textTransform: "uppercase",
+          fontSize: "12px",
+          color: "#00000080",
           marginTop: "40px",
         }}
       >
         My own flows
       </p>
+      {customUserFlows < 1 && <p>you have no custom flows</p>}
       <div className="flow-container-grid">{renderCustomFlows}</div>
+
+      <p
+        style={{
+          fontWeight: "600",
+          textTransform: "uppercase",
+          fontSize: "12px",
+          color: "#00000080",
+          marginTop: "40px",
+        }}
+      >
+        My own workout routines
+      </p>
+      {customUserRoutines < 1 && <p>you have no fave routines</p>}
+      <div className="flow-container-grid">{renderCustomRoutines}</div>
     </>
   );
 };

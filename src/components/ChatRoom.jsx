@@ -147,8 +147,8 @@ const ChatRoom = ({ roomId, user, isAuthenticated }) => {
             <OnlineUsers presenceState={usersOnline} />
           </div>
           <div className="action-container">
-            {messages.map((message) => (
-              <>
+            {messages.map((message, id) => (
+              <React.Fragment key={id}>
                 <div
                   className={
                     user?.nickname === message.sender
@@ -248,7 +248,7 @@ const ChatRoom = ({ roomId, user, isAuthenticated }) => {
                     )}
                   </div>
                 </div>
-              </>
+              </React.Fragment>
             ))}
             <div ref={bottomRef} />
           </div>

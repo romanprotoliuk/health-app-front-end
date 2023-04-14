@@ -31,7 +31,7 @@ const OnlineUsers = ({ presenceState }) => {
             opacity: ".6",
           }}
         >
-          {onlineUsersCount} user is online
+          {onlineUsersCount} user online
         </p>
       ) : (
         <p
@@ -45,7 +45,7 @@ const OnlineUsers = ({ presenceState }) => {
             opacity: ".6",
           }}
         >
-          {onlineUsersCount} users are online
+          {onlineUsersCount} users online
         </p>
       )}
     </div>

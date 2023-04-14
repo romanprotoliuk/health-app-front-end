@@ -20,7 +20,9 @@ const PoseCard = (props) => {
         style={{ backgroundImage: `url(${pose.image_url})` }}
       />
       <p style={{ fontSize: "10px" }}>{poseNum}</p>
-      <h3 className="pose-name">{pose.pose_name}</h3>
+      <h3 className="pose-name">{pose?.pose_name}</h3>
+      <h3 className="pose-name">{pose?.exercise_name}</h3>
+      <p style={{ fontSize: "10px" }}>{pose?.repetitions}</p>
       {isCompleted && <CheckMark isFromPose={isFromPose} />}
       {/* <p>{isCompleted ? " (Completed)" : ""}</p> */}
     </div>

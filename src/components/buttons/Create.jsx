@@ -1,6 +1,6 @@
 import "./buttons.css";
 
-const Create = () => {
+const Create = ({ buttonWord = "Create Flow" }) => {
   return (
     <>
       <button
@@ -8,7 +8,7 @@ const Create = () => {
         style={{ cursor: "pointer", marginTop: "60px" }}
         type="submit"
       >
-        <span>Create Flow</span>
+        <span>{buttonWord}</span>
       </button>
     </>
   );

@@ -18,6 +18,8 @@ import Menu from "./components/Menu/Menu";
 import About from "./components/pages/About";
 import GridRoutines from "./components/pages/GridRoutines";
 import Exercises from "./components/pages/Exercises";
+import RoutineDetailsCustom from "./components/pages/RoutineDetailsCustom";
+import RoutineDetails from "./components/pages/RoutineDetails";
 
 import { fetchData } from "./utils/helper";
 
@@ -32,15 +34,21 @@ const App = () => {
   const [bodyPartsFilter, setBodyPartsFilter] = useState("");
   const [isSavedCompleted, setIsSavedCompleted] = useState(false);
   const [allCustomFlows, setAllCustomFlows] = useState([]);
+  const [allCustomRoutines, setAllCustomRoutines] = useState([]);
   const [userSub, setUserSub] = useState(null);
   const [userFlowIds, setUserFlowIds] = useState([]);
+  const [userRoutineIds, setUserRoutineIds] = useState([]);
   const [favoritedFlows, setFavoritedFlows] = useState([]);
+  const [favoritedRoutines, setFavoritedRoutines] = useState([]);
   const [idsForAll, setIdsForAll] = useState([]);
+  const [idsForAllExercises, setIdsForAllExercises] = useState([]);
   const [customUserFlows, setCustomUserFlows] = useState([]);
+  const [customUserRoutines, setCustomUserRoutines] = useState([]);
   const [poseCompletion, setPoseCompletion] = useState(
     JSON.parse(localStorage.getItem("poseCompletion")) || {}
   );
   const [selectedPoses, setSelectedPoses] = useState([]);
+  const [selectedExercises, setSelectedExercises] = useState([]);
   const [chatRooms, setChatRooms] = useState([]);
 
   const handlePoseClick = (flowId, poseId) => {
@@ -77,6 +85,25 @@ const App = () => {
     setIdsForAll(idsForAllPoses);
   };
 
+  const handlePoseClickNewRoutine = (poseId) => {
+    setSelectedExercises((prevSelectedExercises) => {
+      const isPoseAlreadySelected = prevSelectedExercises.some(
+        (p) => p.id === poseId
+      );
+
+      if (isPoseAlreadySelected) {
+        return prevSelectedExercises.filter((p) => p.id !== poseId);
+      } else if (prevSelectedExercises.length < 20) {
+        const newExercise = exercises.find((p) => p.id === poseId);
+        return [...prevSelectedExercises, newExercise];
+      } else {
+        return prevSelectedExercises;
+      }
+    });
+    const idsForAllExercises = selectedExercises.map((exercise) => exercise.id);
+    setIdsForAllExercises(idsForAllExercises);
+  };
+
   const handleDeleteFlow = (flowId) => {
     setPoseCompletion((prevPoseCompletion) => {
       const updatedPoseCompletion = { ...prevPoseCompletion };
@@ -92,9 +119,6 @@ const App = () => {
   useEffect(() => {
     fetchData(setFlows, setPoses, userSub, setRoutines, setExercises);
   }, [poseCompletion]);
-
-  console.log({ routines });
-  console.log({ exercises });
 
   const posesByPoseName = useMemo(() => {
     return poses.reduce((acc, pose) => {
@@ -115,6 +139,18 @@ const App = () => {
     setFilteredFlows(filtered);
   }, [bodyPartsFilter, difficultyFilter, flows]);
 
+  // useEffect(() => {
+  //   // Filter flows based on bodyParts filter and difficulty filter
+  //   const filtered = flows.filter(
+  //     (flow) =>
+  //       (difficultyFilter === "" ||
+  //         flow.level.split(",").includes(difficultyFilter)) &&
+  //       (bodyPartsFilter === "" ||
+  //         flow.targets.split(",").includes(bodyPartsFilter))
+  //   );
+  //   setFilteredFlows(filtered);
+  // }, [bodyPartsFilter, difficultyFilter, flows]);
+
   useEffect(() => {
     localStorage.setItem("poseCompletion", JSON.stringify(poseCompletion));
   }, [poseCompletion]);
@@ -122,6 +158,13 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem("selectedPoses", JSON.stringify(selectedPoses));
   }, [selectedPoses]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "selectedExercises",
+      JSON.stringify(selectedExercises)
+    );
+  }, [selectedExercises]);
 
   useEffect(() => {
     const fetchChatRooms = async () => {
@@ -185,6 +228,12 @@ const App = () => {
     setAllCustomFlows(customFlows);
   }, []);
 
+  useEffect(() => {
+    const customRoutines =
+      JSON.parse(localStorage.getItem("customRoutines")) || [];
+    setAllCustomFlows(customRoutines);
+  }, []);
+
   const handleFavoritedClick = async (flowId) => {
     try {
       const { error } = await supabase
@@ -196,6 +245,22 @@ const App = () => {
       }
 
       setUserFlowIds([...userFlowIds, flowId]);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleFavoritedRoutineClick = async (flowId) => {
+    try {
+      const { error } = await supabase
+        .from("users_routines_new ")
+        .insert([{ auth0_id: userSub, routine_id: flowId }]);
+
+      if (error) {
+        throw error;
+      }
+
+      setUserRoutineIds([...userRoutineIds, flowId]);
     } catch (error) {
       console.error(error);
     }
@@ -219,11 +284,53 @@ const App = () => {
     }
   };
 
+  const handleUnlikeRoutine = async (flowId) => {
+    try {
+      const { error } = await supabase
+        .from("users_routines_new ")
+        .delete()
+        .eq("auth0_id", userSub)
+        .eq("routine_id", flowId);
+
+      if (error) {
+        throw error;
+      }
+
+      setUserRoutineIds(userRoutineIds.filter((id) => id !== flowId));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // CREATE TABLE users_routines_new (
+  //   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  //   auth0_id text references users(auth0_id),
+  //   routine_id integer,
+  //   created_at timestamp with time zone default now(),
+  //   updated_at timestamp with time zone default now()
+  // );
+
   const handleDeleteCustomFlow = async (id) => {
     <Navigate replace to="/favorites" />;
     try {
       const { error } = await supabase
         .from("sequences")
+        .delete()
+        .eq("id", id)
+        .eq("auth0_id", userSub);
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeleteCustomRoutine = async (id) => {
+    <Navigate replace to="/favorites" />;
+    try {
+      const { error } = await supabase
+        .from("customroutines")
         .delete()
         .eq("id", id)
         .eq("auth0_id", userSub);
@@ -272,7 +379,21 @@ const App = () => {
             />
           }
         />
-        <Route path="/routines" element={<GridRoutines />} />
+        <Route
+          path="/routines"
+          element={
+            <GridRoutines
+              routines={routines}
+              // filteredFlows={filteredFlows}
+              // difficultyFilter={difficultyFilter}
+              // bodyPartsFilter={bodyPartsFilter}
+              handleSelectDifficulty={handleSelectDifficulty}
+              handleSelectBodyParts={handleSelectBodyParts}
+              user={user}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
         <Route path="/about" element={<About />} />
         <Route
           path="/flow/:id"
@@ -295,6 +416,26 @@ const App = () => {
           }
         />
         <Route
+          path="/routine/:id"
+          element={
+            <RoutineDetails
+              routines={routines}
+              filteredFlows={filteredFlows}
+              handlePoseClick={handlePoseClick}
+              poseCompletion={poseCompletion}
+              setPoseCompletion={setPoseCompletion}
+              handleDeleteFlow={handleDeleteFlow}
+              handleFavoritedRoutineClick={handleFavoritedRoutineClick}
+              handleUnlikeRoutine={handleUnlikeRoutine}
+              favoritedFlows={favoritedFlows}
+              isSavedCompleted={isSavedCompleted}
+              setIsSavedCompleted={setIsSavedCompleted}
+              isAuthenticated={isAuthenticated}
+              userRoutineIds={userRoutineIds}
+            />
+          }
+        />
+        <Route
           path="/flows/:id"
           element={
             isAuthenticated ? (
@@ -312,20 +453,44 @@ const App = () => {
           }
         />
         <Route
+          path="/routines/:id"
+          element={
+            isAuthenticated ? (
+              <RoutineDetailsCustom
+                handlePoseClick={handlePoseClick}
+                poseCompletion={poseCompletion}
+                handleDeleteFlow={handleDeleteFlow}
+                isAuthenticated={isAuthenticated}
+                customUserFlows={customUserRoutines}
+                handleDeleteCustomFlow={handleDeleteCustomRoutine}
+              />
+            ) : (
+              <Login />
+            )
+          }
+        />
+        <Route
           path="/favorites"
           element={
             isAuthenticated ? (
               <Favorites
                 poses={poses}
+                routines={routines}
                 favoritedFlows={favoritedFlows}
                 flows={flows}
                 allCustomFlows={allCustomFlows}
                 userSub={userSub}
                 setFavoritedFlows={setFavoritedFlows}
+                favoritedRoutines={favoritedRoutines}
+                setFavoritedRoutines={setFavoritedRoutines}
                 userFlowIds={userFlowIds}
                 setUserFlowIds={setUserFlowIds}
+                setUserRoutineIds={setUserRoutineIds}
                 customUserFlows={customUserFlows}
                 setCustomUserFlows={setCustomUserFlows}
+                exercises={exercises}
+                setCustomUserRoutines={setCustomUserRoutines}
+                customUserRoutines={customUserRoutines}
               />
             ) : (
               <Login />
@@ -357,11 +522,15 @@ const App = () => {
             isAuthenticated ? (
               <Exercises
                 exercises={exercises}
-                selectedPoses={selectedPoses}
-                setSelectedPoses={setSelectedPoses}
-                handlePoseClickNewFlow={handlePoseClickNewFlow}
-                setAllCustomFlows={setAllCustomFlows}
-                allCustomFlows={allCustomFlows}
+                // selectedPoses={selectedPoses}
+                selectedExercises={selectedExercises}
+                setSelectedExercises={setSelectedExercises}
+                // setSelectedPoses={setSelectedPoses}
+                handlePoseClickNewRoutine={handlePoseClickNewRoutine}
+                setAllCustomRoutines={setAllCustomRoutines}
+                // setAllCustomFlows={setAllCustomFlows}
+                // allCustomFlows={allCustomFlows}
+                allCustomRoutines={allCustomRoutines}
                 userSub={userSub}
               />
             ) : (

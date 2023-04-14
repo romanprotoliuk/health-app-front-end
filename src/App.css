@@ -34,12 +34,11 @@ a:visited {
   display: flex;
 }
 
-/* .flow-container-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-gap: 20px;
-  grid-auto-flow: dense;
-} */
+/* Remove blue text decoration for visited links */
+a:visited {
+  color: inherit;
+  text-decoration: none;
+}
 
 .flow-container-grid {
   display: grid;

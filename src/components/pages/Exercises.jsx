@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import BackBtn from "../buttons/BackBtn";
 import ClearAll from "../buttons/ClearAllBtn";
-import PoseCard from "../PoseCard";
 import ExerciseCard from "../ExerciseCard";
 
 import { generateRandomNumbers } from "../../utils/helper";
@@ -13,11 +12,16 @@ import Create from "../buttons/Create";
 const Exercises = (props) => {
   const {
     exercises,
-    selectedPoses,
-    setSelectedPoses,
-    handlePoseClickNewFlow,
-    setAllCustomFlows,
-    allCustomFlows,
+    // selectedPoses,
+    selectedExercises,
+    setSelectedExercises,
+    // setSelectedPoses,
+    // handlePoseClickNewFlow,
+    handlePoseClickNewRoutine,
+    // setAllCustomFlows,
+    setAllCustomRoutines,
+    // allCustomFlows,
+    allCustomRoutines,
     userSub,
   } = props;
   const [customFlowTitle, setCustomFlowTitle] = useState("");
@@ -40,29 +44,30 @@ const Exercises = (props) => {
     const newGeneratedId = generateRandomNumbers();
     setGeneratedId(newGeneratedId);
 
-    const customFlow = {
-      sequence_name: customFlowTitle,
-      sequence_poses: selectedPoses.map((pose) => pose.id),
+    const customRoutine = {
+      routine_name: customFlowTitle,
+      routine_exercises: selectedExercises.map((exercise) => exercise.id),
       description: customFlowDescription,
       id: newGeneratedId,
       auth0_id: userSub,
     };
 
     const { data, error } = await supabase
-      .from("sequences")
-      .insert([customFlow]);
+      .from("customroutines")
+      .insert([customRoutine]);
     if (error) {
       console.log(error);
       return;
     }
 
-    setAllCustomFlows((prevFlows) => [...prevFlows, customFlow]);
-    setSelectedPoses([]);
+    // setAllCustomFlows((prevFlows) => [...prevFlows, customFlow]);
+    setAllCustomRoutines((prevRoutines) => [...prevRoutines, customRoutine]);
+    setSelectedExercises([]);
     setCustomFlowTitle("");
     setCustomFlowDescription("");
     localStorage.setItem(
-      "customFlows",
-      JSON.stringify([...allCustomFlows, customFlow])
+      "customRoutine",
+      JSON.stringify([...allCustomRoutines, customRoutine])
     );
   };
 
@@ -74,12 +79,12 @@ const Exercises = (props) => {
     });
   };
 
-  const limitReached = selectedPoses.length === 20;
+  const limitReached = selectedExercises.length === 20;
   const filteredPoses = getFilteredPoses();
 
   const handleClearAllPoses = () => {
-    setSelectedPoses([]);
-    localStorage.removeItem("selectedPoses");
+    setSelectedExercises([]);
+    localStorage.removeItem("selectedExercises");
   };
 
   return (
@@ -94,12 +99,15 @@ const Exercises = (props) => {
           margin: "0 auto",
         }}
       >
-        {createNewFlow && selectedPoses.length !== 0 && (
+        {createNewFlow && selectedExercises.length !== 0 && (
           <ClearAll handleClearAllPoses={handleClearAllPoses} />
         )}
 
         {!createNewFlow && (
-          <CreateCustomFlow handleCreateNewFlow={handleCreateNewFlow} />
+          <CreateCustomFlow
+            handleCreateNewFlow={handleCreateNewFlow}
+            customText="Create Custom Routine"
+          />
         )}
       </div>
 
@@ -196,7 +204,7 @@ const Exercises = (props) => {
                   flexWrap: "wrap",
                 }}
               >
-                {selectedPoses.map((pose) => (
+                {selectedExercises.map((exercise) => (
                   <div
                     className="flow-description"
                     style={{
@@ -208,16 +216,16 @@ const Exercises = (props) => {
                   >
                     <div>
                       <p
-                        key={pose.id}
+                        key={exercise.id}
                         style={{ marginBlockEnd: "0", marginBlockStart: "0" }}
                       >
-                        {pose.pose_name}
+                        {exercise.exercise_name}
                       </p>
                     </div>
                   </div>
                 ))}
               </div>
-              <Create />
+              <Create buttonWord="Create Routine" />
             </form>
           </div>
           <div>
@@ -254,7 +262,7 @@ const Exercises = (props) => {
             > */}
             <div className="flow-poses-details">
               {filteredPoses.map((exercise, idx) => {
-                const isCompleted = selectedPoses.some(
+                const isCompleted = selectedExercises.some(
                   (flow) => flow.id === exercise.id
                 );
                 return (
@@ -263,7 +271,7 @@ const Exercises = (props) => {
                     exercise={exercise}
                     poseNum={idx + 1}
                     isCompleted={isCompleted}
-                    onClick={() => handlePoseClickNewFlow(exercise.id)}
+                    onClick={() => handlePoseClickNewRoutine(exercise.id)}
                     flowId={exercise.id}
                     isFromPose={true}
                   />

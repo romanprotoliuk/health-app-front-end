@@ -36,13 +36,18 @@ export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExe
       axios.get("http://localhost:8000/api/routines/"),
       axios.get("http://localhost:8000/api/exercises/"),
     ]);
-    setRoutines(routinesResponse.data)
-    setExercises(exercisesResponse.data)
+  
     // Group poses by pose_name for efficient lookup
     const posesByPoseName = posesResponse.data.reduce((acc, pose) => {
       acc[pose.pose_name] = pose;
       return acc;
     }, {});
+
+
+    // const posesByRoutineName = routinesResponse.data.reduce((acc, routine) => {
+    //     acc[routine.routine_name] = routine;
+    //     return acc;
+    //   }, {});
 
     const flowsWithPosesData = flowsResponse.data.map((flow) => {
       const poseNames = flow.sequence_poses.split(",");
@@ -67,8 +72,48 @@ export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExe
       };
     });
 
-    setFlows(flowsWithPosesData);
-    setPoses(posesResponse.data);
+    const exercisesByName = exercisesResponse.data.reduce((acc, exercise) => {
+        acc[exercise.exercise_name] = exercise;
+        return acc;
+      }, {});
+  
+      const routinesWithExercisesData = routinesResponse.data.map((routine) => {
+        const exerciseDescriptions =
+          typeof routine.routine_poses === "string" &&
+          routine.routine_poses.length > 0
+            ? routine.routine_poses.split(",")
+            : [];
+  
+        const routineExercises = exerciseDescriptions.map(
+          (exerciseDescription) => {
+            const [exerciseName, repetitions] = exerciseDescription.split("*");
+            const exercise = exercisesByName[exerciseName.trim()];
+            return exercise
+              ? {
+                  ...exercise,
+                  repetitions,
+                  completed: false,
+                  routineId: routine.id,
+                }
+              : null;
+          }
+        );
+  
+        return {
+          ...routine,
+          routine_poses: routineExercises.filter(
+            (exercise) => exercise !== null
+          ),
+          showPoses: false,
+          posesCompleted: 0,
+          routineId: routine.id,
+        };
+      });
+  
+      setRoutines(routinesWithExercisesData);
+      setExercises(exercisesResponse.data);
+      setFlows(flowsWithPosesData);
+      setPoses(posesResponse.data);
   } catch (error) {
     console.log(error);
   }
@@ -81,6 +126,10 @@ export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExe
 export const getMatchingFlows = (allFlows, flows) => {
   return flows.filter((flow) => allFlows.includes(flow.id));
 };
+
+export const getMatchingRoutines = (allFlows, flows) => {
+    return flows.filter((flow) => allFlows.includes(flow.id));
+  };
 
 export const convertPosesToIds = (sequenceObj) => {
   const ids = sequenceObj.sequence_poses.map((pose) => pose.id);
@@ -108,3 +157,14 @@ export const formatDate = (dateString) => {
     return "just now";
   }
 };
+
+export const transformData = (data) => {
+    return data.map((workout) => {
+      const transformedPoses = workout.routine_poses.map((pose) => {
+        const [name, description] = pose.split("*");
+        return { [name.trim()]: description.trim() };
+      });
+      return { ...workout, routine_poses: transformedPoses };
+    });
+  }
+  

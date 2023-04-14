@@ -30,7 +30,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
         </div>
 
         {menuIconSetting && (
-          <div class="menu-content w-nav">
+          <div className="menu-content w-nav">
             <div style={{ padding: "10px 0px" }}>
               <Link
                 style={{
@@ -45,7 +45,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                 Home
               </Link>
             </div>
-            <div class="div-block-26"></div>
+            <div className="div-block-26"></div>
 
             <div style={{ display: "flex", flexDirection: "column" }}>
               <div style={{ padding: "10px 0px" }}>
@@ -88,7 +88,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                     }}
                     to="/favorites"
                   >
-                    My flows
+                    My Profile
                   </Link>
                 </div>
               )}
