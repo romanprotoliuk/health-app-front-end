@@ -31,10 +31,11 @@ export const getUserFlows = async (auth0_id) => {
 export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExercises) => {
   try {
     const [posesResponse, flowsResponse, routinesResponse, exercisesResponse] = await Promise.all([
-      axios.get("http://localhost:8000/api/poses/"),
-      axios.get("http://localhost:8000/api/flows/"),
-      axios.get("http://localhost:8000/api/routines/"),
-      axios.get("http://localhost:8000/api/exercises/"),
+        axios.get(process.env.REACT_APP_HEALTH_API + '/api/poses/'),
+        axios.get(process.env.REACT_APP_HEALTH_API + '/api/flows/'),
+        axios.get(process.env.REACT_APP_HEALTH_API + '/api/routines/'),
+        axios.get(process.env.REACT_APP_HEALTH_API + '/api/exercises/'),
+        
     ]);
   
     // Group poses by pose_name for efficient lookup
