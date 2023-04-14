@@ -14,27 +14,7 @@ const ChatRoom = ({ roomId, user, isAuthenticated }) => {
   const chatWrapperRef = useRef(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            // The Chat component is visible, scroll to the bottom of the messages
-            bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-
-    if (chatWrapperRef.current) {
-      observer.observe(chatWrapperRef.current);
-    }
-
-    return () => {
-      if (chatWrapperRef.current) {
-        observer.unobserve(chatWrapperRef.current);
-      }
-    };
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   const fetchData = useCallback(async () => {
