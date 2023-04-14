@@ -123,7 +123,14 @@ const ChatRoom = ({ roomId, user, isAuthenticated }) => {
         </p>
 
         <div className="parent-container">
-          <div style={{ position: "absolute", top: "4vh", left: "2.5vw" }}>
+          <div
+            style={{
+              position: "absolute",
+              top: "4vh",
+              left: "2.5vw",
+              zIndex: "21",
+            }}
+          >
             <OnlineUsers presenceState={usersOnline} />
           </div>
           <div className="action-container">
@@ -160,17 +167,14 @@ const ChatRoom = ({ roomId, user, isAuthenticated }) => {
                             </small>
                           </div>
                         </div>
-                        <div style={{ marginLeft: "30px" }}>
-                          <div
-                            style={{
-                              width: "55px",
-                              height: "55px",
-                              backgroundColor: "white",
-                              borderRadius: "6px",
-                              marginLeft: "10px",
-                            }}
-                            className="image-div-chat"
-                          ></div>
+                        <div
+                          style={{
+                            marginLeft: "30px",
+                            zIndex: "20",
+                            position: "relative",
+                          }}
+                        >
+                          <div className="image-div-chat"></div>
                           <div className="sender-time-holder-my-own">
                             <small className="sender">
                               {message.sender.length > 8
@@ -183,16 +187,7 @@ const ChatRoom = ({ roomId, user, isAuthenticated }) => {
                     ) : (
                       <>
                         <div style={{ width: "80px", marginRight: "20px" }}>
-                          <div
-                            style={{
-                              width: "55px",
-                              height: "55px",
-                              backgroundColor: "white",
-                              borderRadius: "6px",
-                              marginRight: "10px",
-                            }}
-                            className="image-div-chat"
-                          ></div>
+                          <div className="image-div-chat"></div>
                           <div className="sender-time-holder">
                             <small className="sender">
                               {message.sender.length > 8

@@ -138,6 +138,17 @@ a:visited {
   border-radius: 5px;
 } */
 
+.image-div-chat {
+  /* float: inline-start; */
+  position: relative;
+  z-index: 12;
+  width: 55px;
+  height: 55px;
+  background-color: white;
+  border-radius: 6px;
+  z-index: 12;
+}
+
 .searchInput::placeholder {
   text-align: center;
 }
@@ -204,74 +215,80 @@ input.full-width {
   padding-bottom: 100%;
 }
 
+/*  */
+
 .chat-room-container {
   padding: 50px 0;
 }
 
+.parent-container {
+  position: relative;
+}
 
-  .parent-container {
-    position: relative;
-  }
-  
-  .action-container {
-    z-index: 10;
-    height: 80vh;
-    /* width: 100%; */
-    overflow-y: scroll;
-    padding: 20px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-   .background-container {
-    z-index: 9;
-    height: 100%;
-    width: 100%;
-    /* position: absolute; */
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    border-radius: 6px;
-  }
-  
-  .background-container::before,
-  .background-container::after {
-    position: absolute;
-    content: "";
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
-    width: 100%;
-    margin: 0 auto;
-    z-index: -1;
-    animation: spin 2.5s linear infinite;
-  }
-  
-  @property --rotate {
-    syntax: "<angle>";
-    initial-value: 132deg;
-    inherits: false;
-  }
+.action-container {
+  z-index: 10;
+  height: 80vh;
+  overflow-y: scroll;
+  padding: 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
-  .background-container::before {
-    border-radius: 8px;
-    background-image: linear-gradient(var(--rotate), #43e44bb1, #0ae0a7c7);
+.background-container {
+  z-index: 9;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  border-radius: 6px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.background-container::before,
+.background-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.background-container::before {
+  border-radius: 8px;
+  background-image: linear-gradient(132deg, #43e44bb1, #0ae0a7c7);
+  background-size: 200% 200%;
+  animation: spin 2.5s linear infinite;
+}
+
+.background-container::after {
+  filter: blur(4px);
+  background-image: linear-gradient(132deg, #5ddcffa9, rgba(254, 165, 0, rgba(255, 213, 0, 0.6) 212, 0));
+  background-size: 200% 200%;
+  animation: spin 2.5s linear infinite reverse;
+}
+
+@keyframes spin {
+  0% {
+    background-position: 0% 50%;
   }
-  
-  .background-container::after {
-    filter: blur(4px);
-    background-image: linear-gradient(var(--rotate), #5ddcffa9,rgba(254, 165, 0, rgba(255, 213, 0, 0.6) 212, 0));
+  100% {
+    background-position: 100% 50%;
   }
-  
-  @keyframes spin {
-    0% {
-      --rotate: 0deg;
-    }
-    100% {
-      --rotate: 360deg;
-    }
-  }
+}
+
+
+
+
+
+
+
+/*  */
+
+
   
   .message-list {
     display: flex;
@@ -309,6 +326,8 @@ input.full-width {
     border: 1px solid rgba(255, 255, 255, 0.18);
   }
   
+
+
   .message-content {
     padding: 10px 20px;
     flex-direction: column;
@@ -317,6 +336,8 @@ input.full-width {
   }
   
   .sender-time-holder {
+    position: relative;
+    z-index: 20;
     margin-top: 5px;
     display: flex;
     flex-direction: column;
@@ -324,6 +345,8 @@ input.full-width {
   }
 
   .sender-time-holder-my-own {
+    position: relative;
+    z-index: 20;
     margin-top: 5px;
     display: flex;
     flex-direction: column;
