@@ -210,12 +210,12 @@ const App = () => {
           return;
         }
 
-        console.log("User successfully registered in Supabase!");
+        // console.log("User successfully registered in Supabase!");
       } else {
-        console.log("User is already registered in Supabase");
+        // console.log("User is already registered in Supabase");
       }
     } else {
-      console.log("User is not authenticated");
+      // console.log("User is not authenticated");
     }
   }, [isAuthenticated, user]);
 
