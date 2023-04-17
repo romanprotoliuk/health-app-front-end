@@ -51,6 +51,10 @@ const App = () => {
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [chatRooms, setChatRooms] = useState([]);
 
+  console.log({ poses });
+  console.log({ flows });
+  console.log({ exercises });
+  console.log({ routines });
   const handlePoseClick = (flowId, poseId) => {
     setPoseCompletion((prevPoseCompletion) => {
       const updatedPoseCompletion = { ...prevPoseCompletion };
@@ -131,10 +135,8 @@ const App = () => {
     // Filter flows based on bodyParts filter and difficulty filter
     const filtered = flows.filter(
       (flow) =>
-        (difficultyFilter === "" ||
-          flow.level.split(",").includes(difficultyFilter)) &&
-        (bodyPartsFilter === "" ||
-          flow.targets.split(",").includes(bodyPartsFilter))
+        (difficultyFilter === "" || flow.level.includes(difficultyFilter)) &&
+        (bodyPartsFilter === "" || flow.targets.includes(bodyPartsFilter))
     );
     setFilteredFlows(filtered);
   }, [bodyPartsFilter, difficultyFilter, flows]);
@@ -210,12 +212,12 @@ const App = () => {
           return;
         }
 
-        console.log("User successfully registered in Supabase!");
+        // console.log("User successfully registered in Supabase!");
       } else {
-        console.log("User is already registered in Supabase");
+        // console.log("User is already registered in Supabase");
       }
     } else {
-      console.log("User is not authenticated");
+      // console.log("User is not authenticated");
     }
   }, [isAuthenticated, user]);
 

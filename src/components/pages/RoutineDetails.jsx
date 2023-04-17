@@ -36,7 +36,7 @@ const RoutineDetails = (props) => {
   const isCompleted = poseCompletion[selected.id];
 
   // Render benefits array
-  const benefitsArray = selected.targets.split(",");
+  const benefitsArray = selected.targets;
   const renderBenefits = benefitsArray.map((target, index) => {
     return (
       <div

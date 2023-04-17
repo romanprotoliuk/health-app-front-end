@@ -152,7 +152,7 @@ const Favorites = (props) => {
   ]);
 
   const renderCards = favoritedFlows.map((flow) => {
-    const levels = flow.level.split(",");
+    const levels = flow.level;
 
     // check if each level is included in the array
     const beginner = levels.includes("beginner");
@@ -160,7 +160,7 @@ const Favorites = (props) => {
     const advanced = levels.includes("advanced");
 
     // Render benefits array
-    const benefitsArray = flow.benefits.split(",");
+    const benefitsArray = flow.benefits;
     const renderBenefits = benefitsArray.map((benefit, index) => {
       return (
         <div
@@ -263,7 +263,7 @@ const Favorites = (props) => {
   });
 
   const renderRoutineCards = favoritedRoutines.map((flow) => {
-    const target = flow.targets.split(",");
+    const target = flow.targets;
     const renderBenefits = target.map((benefit, index) => {
       return (
         <div
@@ -391,7 +391,7 @@ const Favorites = (props) => {
       </p>
       {favoritedFlows < 1 && <p>you have no fave flows</p>}
       <div className="flow-container-grid">{renderCards}</div>
-      <p
+      {/* <p
         style={{
           fontWeight: "600",
           textTransform: "uppercase",
@@ -401,7 +401,7 @@ const Favorites = (props) => {
       >
         My favorited Routines
       </p>
-      {favoritedRoutines < 1 && <p>you have no fave routines</p>}
+      {favoritedRoutines < 1 && <p>you have no fave routines</p>} */}
       <div className="flow-container-grid">{renderRoutineCards}</div>
       <p
         style={{
@@ -417,7 +417,7 @@ const Favorites = (props) => {
       {customUserFlows < 1 && <p>you have no custom flows</p>}
       <div className="flow-container-grid">{renderCustomFlows}</div>
 
-      <p
+      {/* <p
         style={{
           fontWeight: "600",
           textTransform: "uppercase",
@@ -428,7 +428,7 @@ const Favorites = (props) => {
       >
         My own workout routines
       </p>
-      {customUserRoutines < 1 && <p>you have no fave routines</p>}
+      {customUserRoutines < 1 && <p>you have no fave routines</p>} */}
       <div className="flow-container-grid">{renderCustomRoutines}</div>
     </>
   );

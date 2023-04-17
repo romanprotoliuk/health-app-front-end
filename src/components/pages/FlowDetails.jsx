@@ -37,7 +37,7 @@ const FlowDetails = (props) => {
   const isCompleted = poseCompletion[selected.id];
 
   // Render benefits array
-  const benefitsArray = selected.benefits.split(",");
+  const benefitsArray = selected.benefits;
   const renderBenefits = benefitsArray.map((benefit, index) => {
     return (
       <div
@@ -65,7 +65,7 @@ const FlowDetails = (props) => {
   });
 
   // Render levels array
-  const levelsArray = selected.level.split(",");
+  const levelsArray = selected.level;
   const renderLevels = levelsArray.map((level, index) => {
     let difLevel;
     difLevel =

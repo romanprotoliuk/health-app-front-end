@@ -1,5 +1,6 @@
 import { supabase } from "./supabase";
 import axios from "axios";
+import seed from "../seed";
 
 export const generateRandomNumbers = () => {
   const min = 1000;
@@ -30,28 +31,16 @@ export const getUserFlows = async (auth0_id) => {
 
 export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExercises) => {
   try {
-    const [posesResponse, flowsResponse, routinesResponse, exercisesResponse] = await Promise.all([
-        axios.get(process.env.REACT_APP_HEALTH_API + '/api/poses/'),
-        axios.get(process.env.REACT_APP_HEALTH_API + '/api/flows/'),
-        axios.get(process.env.REACT_APP_HEALTH_API + '/api/routines/'),
-        axios.get(process.env.REACT_APP_HEALTH_API + '/api/exercises/'),
-        
-    ]);
-  
-    // Group poses by pose_name for efficient lookup
-    const posesByPoseName = posesResponse.data.reduce((acc, pose) => {
+
+    const posesByPoseName = seed.poses.reduce((acc, pose) => {
       acc[pose.pose_name] = pose;
       return acc;
     }, {});
 
+    console.log({posesByPoseName})
 
-    // const posesByRoutineName = routinesResponse.data.reduce((acc, routine) => {
-    //     acc[routine.routine_name] = routine;
-    //     return acc;
-    //   }, {});
-
-    const flowsWithPosesData = flowsResponse.data.map((flow) => {
-      const poseNames = flow.sequence_poses.split(",");
+    const flowsWithPosesData = seed.flows.map((flow) => {
+      const poseNames = flow.sequence_poses;
       const sequencePoses = poseNames.map((poseName) => {
         const pose = posesByPoseName[poseName.trim()];
         return pose
@@ -73,16 +62,16 @@ export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExe
       };
     });
 
-    const exercisesByName = exercisesResponse.data.reduce((acc, exercise) => {
+    const exercisesByName = seed.exercises.reduce((acc, exercise) => {
         acc[exercise.exercise_name] = exercise;
         return acc;
       }, {});
   
-      const routinesWithExercisesData = routinesResponse.data.map((routine) => {
+      const routinesWithExercisesData = seed.routines.map((routine) => {
         const exerciseDescriptions =
           typeof routine.routine_poses === "string" &&
           routine.routine_poses.length > 0
-            ? routine.routine_poses.split(",")
+            ? routine.routine_poses
             : [];
   
         const routineExercises = exerciseDescriptions.map(
@@ -110,18 +99,19 @@ export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExe
           routineId: routine.id,
         };
       });
-  
+
+
+      console.log({flowsWithPosesData})
       setRoutines(routinesWithExercisesData);
-      setExercises(exercisesResponse.data);
+      setExercises(seed.exercises);
       setFlows(flowsWithPosesData);
-      setPoses(posesResponse.data);
+      setPoses(seed.poses);
   } catch (error) {
     console.log(error);
   }
 };
 
 // const allFlows = getUserFlows(userSub);
-// console.log({ allFlows });
 // const matchingFlows = getMatchingFlows(allFlows, flows);
 
 export const getMatchingFlows = (allFlows, flows) => {
