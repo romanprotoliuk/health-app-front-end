@@ -37,8 +37,6 @@ export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExe
       return acc;
     }, {});
 
-    console.log({posesByPoseName})
-
     const flowsWithPosesData = seed.flows.map((flow) => {
       const poseNames = flow.sequence_poses;
       const sequencePoses = poseNames.map((poseName) => {
@@ -101,7 +99,6 @@ export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExe
       });
 
 
-      console.log({flowsWithPosesData})
       setRoutines(routinesWithExercisesData);
       setExercises(seed.exercises);
       setFlows(flowsWithPosesData);

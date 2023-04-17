@@ -51,10 +51,6 @@ const App = () => {
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [chatRooms, setChatRooms] = useState([]);
 
-  console.log({ poses });
-  console.log({ flows });
-  console.log({ exercises });
-  console.log({ routines });
   const handlePoseClick = (flowId, poseId) => {
     setPoseCompletion((prevPoseCompletion) => {
       const updatedPoseCompletion = { ...prevPoseCompletion };
