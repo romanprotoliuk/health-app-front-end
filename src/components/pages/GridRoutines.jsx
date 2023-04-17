@@ -15,7 +15,7 @@ const GridRoutines = (props) => {
       ? props.filteredFlows
       : props.routines
   ).map((flow) => {
-    const target = flow.targets.split(",");
+    const target = flow.targets;
     const renderBenefits = target.map((benefit, index) => {
       return (
         <div

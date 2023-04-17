@@ -135,10 +135,8 @@ const App = () => {
     // Filter flows based on bodyParts filter and difficulty filter
     const filtered = flows.filter(
       (flow) =>
-        (difficultyFilter === "" ||
-          flow.level.split(",").includes(difficultyFilter)) &&
-        (bodyPartsFilter === "" ||
-          flow.targets.split(",").includes(bodyPartsFilter))
+        (difficultyFilter === "" || flow.level.includes(difficultyFilter)) &&
+        (bodyPartsFilter === "" || flow.targets.includes(bodyPartsFilter))
     );
     setFilteredFlows(filtered);
   }, [bodyPartsFilter, difficultyFilter, flows]);

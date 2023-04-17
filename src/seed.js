@@ -1,6 +1,7 @@
 module.exports = {
     flows: [
      {
+      "id": 1,
        "sequence_name": "Beginner Sequence",
        "description": "This series of poses comprises a collection of gentle stretches, twists, backbends, and inversions that will prepare you for more complex positions",
        "sequence_poses": ["Mountain Pose", "High Lunge", "Downward-Facing Dog", "Warrior Pose I", "Intense Side Stretch Pose I", "Tree Pose", "Chair Pose", "Downward-Facing Dog", "Locust Pose", "Boat Pose", "Marichi's Pose", "Bound Angle Pose", "Bound Angle Pose With Forward Bend", "One-Legged King Pigeon Pose Prep", "Bridge Pose", "Double Knee Reclining Twist", "Knees-To-Chest Pose", "Corpse Pose"],
@@ -9,6 +10,7 @@ module.exports = {
        "benefits": ["Stretches hamstrings", "Opens shoulders", "Flexes lower back"]
      },
      {
+      "id": 2,
        "sequence_name": "Sun Salutaion A",
        "description": "The Sun Saluation, Surya Namaskar in Sanskrit, is a series of gracefully linked asanas meant to warm, strengthen, and align the body. Inhale as you stretch, exhale as you fold or contract.",
        "sequence_poses": ["Mountain Pose", "Upward Salute", "Standing Half Forward Bend To Forward Bend", "Straight-Leg Lunge Pose", "Low Lunge", "Plank Pose", "Four-Limbed Staff Pose", "Upward-Facing Dog", "Downward-Facing Dog", "Cow Pose", "Half Camel Pose", "Four-Limbed Staff Pose", "Plank Pose", "Low Lunge", "Straight-Leg Lunge Pose", "Standing Half Forward Bend To Forward Bend", "Upward Salute", "Mountain Pose"],
@@ -17,6 +19,7 @@ module.exports = {
        "benefits": ["Warms the body", "Strengthens the arms", "Streches the lower back"]
      },
      {
+      "id": 3,
        "sequence_name": "Sun Salutaion B",
        "description": "There are a number of Sun Saluation variations, and this one makes an excellent complement to - and can be flowed together with - Sun Saluation A.",
        "sequence_poses": ["Mountain Pose", "Chair Pose", "Standing Half Forward Bend To Forward Bend", "Four-Limbed Staff Pose", "Upward-Facing Dog", "Downward-Facing Dog", "Warrior Pose I", "Four-Limbed Staff Pose", "Upward-Facing Dog", "Downward-Facing Dog", "Warrior Pose I", "Four-Limbed Staff Pose", "Upward-Facing Dog", "Downward-Facing Dog", "Standing Half Forward Bend To Forward Bend", "Chair Pose", "Mountain Pose"],
@@ -25,6 +28,7 @@ module.exports = {
        "benefits": ["Stimulates circulation", "Stretches spine", "Tightens abdominals"]
      },
      {
+       "id": 4,
        "sequence_name": "Simple Pose Flow",
        "description": "This gentle sequence uses backbends and inversions and begins to incorporate the twisting poses, which engage the muscles of the sides and the abdomen.",
        "sequence_poses": ["Cat Pose", "Downward-Facing Dog", "Cobra Pose", "Half Lord Of The Fishes Pose", "Head-To-Knee Forward Bend Prep", "Corpse Pose"],
@@ -33,6 +37,7 @@ module.exports = {
        "benefits": ["Lengthens the spine", "Stretches the hamstrings", "Opens the chest"]
      },
      {
+      "id": 5,
        "sequence_name": "Relaxing Flow",
        "description": "This is an excellent sequence to calm your mind and release tension; allow yourself to remain in Child's Pose at the end for at least 1 to 2 minutes.",
        "sequence_poses": ["Staff Pose", "Bound Angle Pose", "Cow Face Pose", "Revolved Cow Face Pose", "Seated Forward Bend", "Head-To-Knee Forward Bend", "Cat Pose", "Cow Pose", "Bound Angle Pose With Forward Bend", "Wide-Angle Seated Forward Bend", "Child's Pose With Arms Extended", "Child's Pose"],
@@ -41,6 +46,7 @@ module.exports = {
        "benefits": ["Stretches shoulders", "Open hips", "Elongates back"]
      },
      {
+      "id": 6,
        "sequence_name": "Well Rounded Flow",
        "description": "This sequence - incorporating both floor work and standing poses - can be performed with fewer breath holds for increased cardio and circulatory benefits.",
        "sequence_poses": ["Mountain Pose", "Tree Pose", "Upward Salute", "Standing Half Forward Bend To Forward Bend", "Straight-Leg Lunge Pose", "Plank Pose", "Four-Limbed Staff Pose", "Upward-Facing Dog", "Downward-Facing Dog", "Warrior Pose II", "Extended Side Angle Pose", "Downward-Facing Dog", "Intense Side Stretch Pose I", "Bridge Pose", "Wheel Pose", "Knees-To-Chest Pose", "Plow Pose", "Supported Shoulderstand", "Reverse Tabletop Pose", "Reclining Spinal Twist", "Reclining Big Toe Prep", "Reclining Hero Pose", "Reclining Bound Angle Pose", "Corpse Pose"],
@@ -49,6 +55,7 @@ module.exports = {
        "benefits": ["Strengthens arms", "Strengthens hamstrings", "Engages abdominals"]
      },
      {
+       "id": 7,
        "sequence_name": "Moon Saturation",
        "description": "With it's grounding qualities, this evening version of the Sun Salutation can be used to cool down the body can calm an anxious mind.",
        "sequence_poses": ["Volcano Pose", "Palm Tree Side Bend", "Horse Pose", "Horse Pose With Palms Up", "Revolved Triangle Pose", "Straight-Leg Lunge Pose", "Low Lunge", "Garland Pose", "Wide-Angle Seated Forward Bend", "Bound Angle Pose With Forward Bend", "Dolphin Pose", "Prayer Pose"],
@@ -57,6 +64,7 @@ module.exports = {
        "benefits": ["Opens shoulders and chest", "Stretches hips and groin", "Elongates lower back"]
      },
      {
+       "id": 8,
        "sequence_name": "Gentle Flow",
        "description": "This mild sequence combines inversions, forward bends, and backbends to relax the spine and relieve lower-back pain.",
        "sequence_poses": ["Cat Pose", "Downward-Facing Dog", "Crescent Lunge", "Wide-Stance Upward Salute", "Horse Pose Palms Up", "Triangle Pose", "Extended Triangle Pose", "Eagle Pose", "Standing Toe Touch", "Garland Pose", "Swimming Locust Pose", "Half Frog Prep", "Child's Pose With Arms Extended", "Seated Forward Bend Prep", "Head-To-Knee Forward Bend Prep", "Chest-To-Thigh Straddle Split", "Seated Leg Cradle", "Corpse Pose"],
@@ -65,6 +73,7 @@ module.exports = {
        "benefits": ["Stretches back and neck", "Flexes thighs", "Opens chest"]
      },
      {
+       "id": 9,
        "sequence_name": "Energized Flow",
        "description": "This Sequence is sure to get your blood pumping as you switch from planks to upright poses, and even take on a few balance positions.",
        "sequence_poses": ["Extended Puppy Pose", "One-Legged Plank", "Bird Dog Pose", "Crescent Lunge", "Tiptoe Intense Pose II", "Intense Side Stretch Pose II", "Sideways Intense Stretch Pose", "Side Angle Pose", "Side Crane Pose", "Crane Pose", "Side Plank With Tree Legs", "Lifting Up", "Dolphin Plank Pose", "Dolphin Plank With Arm Reach", "Cobra Pose", "Bridge Pose Eye Of The Needle, Forearm Side Plank Pose, Corpse Pose"],
@@ -73,6 +82,7 @@ module.exports = {
        "benefits": ["Stretches back", "Works abdominal and side muscles", "Improves stability"]
      },
      {
+       "id": 10,
        "sequence_name": "Hip-Opening Flow",
        "description": "This active sequence will help stretch your hips, and ease any tightness in your lower back, hamstrings, and glutes as well.",
        "sequence_poses": ["Easy Pose", "Child's Pose", "Cat Pose", "Cow Pose", "Half Frog Pose", "Half Camel Pose", "Extended Hand-To-Toe In Camel Pose", "Side-Leaning Half Straddle Pose", "Side Plank With Tree Legs", "Warrior Pose III", "Volcano Pose", "Downward-Facing Dog", "Side Plank Pose", "Flying Pigeon Pose", "Reclining Hero Prep", "Reclining Hero Prep", "Happy Baby Pose", "Reclining Pigeon Pose"],
@@ -81,6 +91,7 @@ module.exports = {
        "benefits": ["Stretches back, leg, and core muslces", "Prepares you for more advanced routines"]
      },
      {
+       "id": 11,
        "sequence_name": "Hamstrings Flow",
        "description": "Get rid of those tight hammies with this effective series os poses that helps you stretch and extend the upper and lower legs",
        "sequence_poses": ["Bridge Pose Eye Of The Needle", "One-Legged Bridge I", "Reclining Big Toe", "Knees-To-Chest Pose", "Downward-Facing Dog", "Standing Half Forward Bend To Forward Bend", "Crossed-Foot Forward Bend", "Side Bend To Half Forward Bend Circle", "Standing Side Bend", "Lord Shiva Cycle Of Life Dance Pose", "Gate Pose", "Heron Pose Prep", "Heron Pose", "Gate Pose", "Revolved Half Moon Pose", "Triangle Pose", "Warrior Pose III", "Revolved Extended Side Angle Pose", "Tiptoe Intense Pose I", "Wide-Angle Seated Forward Bend", "Side-Leaning Half Straddle Pose", "Half Straddle Pose", "Bound Angle Pose With Forward Bend", "Revolved Head-To-Knee Pose"],
@@ -89,6 +100,7 @@ module.exports = {
        "benefits": ["Eases tense hamstrings", "Stretches entire back", "Tones glutes"]
      },
      {
+       "id": 12,
        "sequence_name": "Twisting Flow",
        "description": "Limber up and gain increased flexibility with this series that focuses on stretching the muscles the sides and abdomen",
        "sequence_poses": ["Hero Pose", "Mermaid Pose", "Revolved Supported Boat Pose", "Big Toe Pose", "Revolved Boat Pose With Prayer Hands", "Child's Pose", "Palm Tree Pose", "Palm Tree Side Bend", "Wide-Stance Upward Salute", "Horse Pose", "Reverse Tabletop Pose", "Upward Plank Pose", "Revolved Extended Side Angle Pose", "One-Legged Side Plank Prep", "Revolved Head-To-Knee Pose", "Camel Pose", "Bharadvaja's Twist II", "Chest-To-Floor Straddle Split Pose"],
@@ -97,6 +109,7 @@ module.exports = {
        "benefits": ["Tightens abdominals", "Opens hips", "Strenthens arms and shoulders"]
      },
      {
+       "id": 13,
        "sequence_name": "Shoulder-Opening Flow",
        "description": "This sequence will open up the shoulders and rib cage, and will increase flexibility in the back, thighs, and hamstrings.",
        "sequence_poses": ["Downward-Facing Dog", "Dolphin Pose", "Cow Face Pose", "One-Legged King Pigeon Pose I", "Big Toe Bow Pose", "Child's Pose With Arms Extended", "Extended Puppy Pose", "Intense Side Stretch Pose I", "Camel Pose", "Half Camel Pose", "Toes-To-Elbow Bow Pose", "Wide-Stance Upward Salute"],
@@ -105,6 +118,7 @@ module.exports = {
        "benefits": ["Opens shoulders and chest", "Elongates back", "Stretches hamstrings"]
      },
      {
+       "id": 14,
        "sequence_name": "Intermediate Sequence",
        "description": "Now it's time to take the building-block poses you have mastered and put them together to create a slightly more demanding sequence.",
        "sequence_poses": ["Mountain Pose", "Twisting Chair Pose", "Garland Pose", "Crow Pose", "Flying Pigeon Pose", "Half Moon Pose", "Triangle Pose", "Revolved Triangle Pose", "Plank Pose", "Side Plank Pose", "Downward-Facing Dog", "Plank Pose", "Wheel Pose", "Knees-To-Chest Pose", "Supported Shoulderstand", "Upward Plank With Lifted Leg", "Fish Pose", "One-Legged King Pigeon Pose Prep", "Plow Pose", "Fire Log Pose", "Half Lord Of Pose The Fishes Pose", "Revolved Head-To-Knee Pose", "King Cobra Pose", "Corpse Pose"],
@@ -113,6 +127,7 @@ module.exports = {
        "benefits": ["Tones abdominals arms", "Strengthens arms", "Stretches hamstrings and calves"]
      },
      {
+       "id": 15,
        "sequence_name": "Advanced Balance Flow",
        "description": "Balance poses can improve your core strenth and general stability, and offer a chance for some extended stretching.",
        "sequence_poses": ["Mountain Pose", "Prayer Pose", "Upward Salute", "Revolved Half Moon Pose", "Warior Pose III", "Extended Standing Split Pose", "Bowing With Respect Pose", "Bowing Bird Of Paradise Prep", "Bowing Bird Of Paradise", "Extended Standing Split Pose", "Mountain Pose", "Upward Salute", "Warior Pose III", "Lord Of The Dance Pose", "Bound Lord Of The Dance Pose", "Hand-To-Foot Lord Of The Dance Pose", "Staff Pose", "Revolved Supported Boat Pose", "Revolved Boat Pose With Prayer Hands", "Boat Pose", "Double Compass Pose", "Reclining Pigeon Pose", "Reclining Hero Prep", "Reclining Hero Pose"],
@@ -121,6 +136,7 @@ module.exports = {
        "benefits": ["Increases sense of balance", "Stretches arms and legs", "Tightens and side muscles"]
      },
      {
+       "id": 16,
        "sequence_name": "Advanced Backbend Flow",
        "description": "Backbends provide an ideal way to loosen tight spine and shoulder muscles while at the same time opening up the hips and rib cage.",
        "sequence_poses": ["Easy Pose", "Bridge Pose", "One Legged Bridge I", "One-Legged Bridge II", "One-Legged King Pigeon Pose III", "One-Legged King Pigeon Pose IV", "King Cobra Pose", "Big Toe Bow Pose", "Toes-To-Elbow Bow Pose", "One-Legged King Pigeon Pose I", "One-Legged King Pigeon Pose II", "Fish Pose"],

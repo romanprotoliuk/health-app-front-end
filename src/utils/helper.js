@@ -71,7 +71,7 @@ export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExe
         const exerciseDescriptions =
           typeof routine.routine_poses === "string" &&
           routine.routine_poses.length > 0
-            ? routine.routine_poses.split(",")
+            ? routine.routine_poses
             : [];
   
         const routineExercises = exerciseDescriptions.map(
