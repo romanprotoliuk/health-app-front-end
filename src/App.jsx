@@ -20,6 +20,7 @@ import GridRoutines from "./components/pages/GridRoutines";
 import Exercises from "./components/pages/Exercises";
 import RoutineDetailsCustom from "./components/pages/RoutineDetailsCustom";
 import RoutineDetails from "./components/pages/RoutineDetails";
+import BmiCalculator from "./components/BMI-Calc/BmiCalculator";
 
 import { fetchData } from "./utils/helper";
 
@@ -138,18 +139,6 @@ const App = () => {
     );
     setFilteredFlows(filtered);
   }, [bodyPartsFilter, difficultyFilter, flows]);
-
-  // useEffect(() => {
-  //   // Filter flows based on bodyParts filter and difficulty filter
-  //   const filtered = flows.filter(
-  //     (flow) =>
-  //       (difficultyFilter === "" ||
-  //         flow.level.split(",").includes(difficultyFilter)) &&
-  //       (bodyPartsFilter === "" ||
-  //         flow.targets.split(",").includes(bodyPartsFilter))
-  //   );
-  //   setFilteredFlows(filtered);
-  // }, [bodyPartsFilter, difficultyFilter, flows]);
 
   useEffect(() => {
     localStorage.setItem("poseCompletion", JSON.stringify(poseCompletion));
@@ -301,14 +290,6 @@ const App = () => {
       console.error(error);
     }
   };
-
-  // CREATE TABLE users_routines_new (
-  //   id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-  //   auth0_id text references users(auth0_id),
-  //   routine_id integer,
-  //   created_at timestamp with time zone default now(),
-  //   updated_at timestamp with time zone default now()
-  // );
 
   const handleDeleteCustomFlow = async (id) => {
     <Navigate replace to="/favorites" />;
@@ -498,6 +479,7 @@ const App = () => {
           }
         />
         <Route path="/login" element={<Login />} />
+        <Route path="/bmi" element={<BmiCalculator />} />
         <Route
           path="/poses"
           element={

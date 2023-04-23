@@ -62,6 +62,20 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                   About
                 </Link>
               </div>
+              <div style={{ marginTop: "10px" }}>
+                <Link
+                  style={{
+                    fontWeight: "600",
+                    textTransform: "uppercase",
+                    fontSize: "12px",
+                    color: "#333333",
+                    textDecoration: "none",
+                  }}
+                  to={"/bmi"}
+                >
+                  BMI Calculator
+                </Link>
+              </div>
               {/* <div>
                 <Link
                   style={{
