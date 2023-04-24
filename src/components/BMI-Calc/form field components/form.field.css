@@ -1,0 +1,17 @@
+.checkmark-img {
+  width: 16px;
+}
+
+.checkmark-img-div {
+  position: absolute;
+  top: 40%;
+  left: 76%;
+  transform: translate(-50%, -50%);
+}
+
+.checkmark-img-div-two {
+  position: absolute;
+  top: 56%;
+  left: 76%;
+  transform: translate(-50%, -50%);
+}
