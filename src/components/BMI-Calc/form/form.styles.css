@@ -1,0 +1,66 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap");
+
+.search-form {
+  margin-top: 40px;
+}
+
+.search-form input {
+  min-width: "200px";
+  /* //   margin: "60px 0 20px 0", */
+  margin-right: "20px";
+  border: "none";
+  background-color: "#fff";
+  border-radius: "5px";
+  padding: "10px 30px 10px 20px";
+  font-size: "14px";
+  font-weight: "500";
+  transition: "all 0.3s ease";
+  box-shadow: "0 6px 22px 0 rgba(0, 0, 0, 0.08)";
+  outline: "none";
+}
+
+.search-form input[type="text"] {
+  padding: 0 0.5rem;
+  width: 60%;
+  color: #555;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 20px;
+
+}
+
+.search-form input[type="submit"] {
+  width: 150px;
+  color: #333333;
+}
+
+.submit-btn {
+  margin-top: 40px;
+}
+
+.next-btn {
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  padding: 15px 40px;
+
+  border: 1px none #000;
+  border-radius: 30px;
+  background-color: #ecf0f3;
+  box-shadow: -14px -14px 30px 0 #fff, 14px 14px 30px 0 #d1d9e6;
+  font-family: Montserrat, sans-serif;
+  color: #646464;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.feet-input {
+  margin-bottom: 20px;
+}
+
+.name-wrapper {
+  position: relative;
+}
