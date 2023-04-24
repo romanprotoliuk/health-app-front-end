@@ -6,6 +6,9 @@ import UnsaveBtn from "../buttons/UnsaveBtn";
 import PoseCard from "../PoseCard";
 import LoadingSpinner from "../LoadingSpinner";
 import "./pageStyles.css";
+import axios from "axios";
+
+import { useEffect, useState } from "react";
 
 const FlowDetails = (props) => {
   const {
@@ -21,51 +24,69 @@ const FlowDetails = (props) => {
   } = props;
   const { id } = useParams();
 
-  const selected = (
-    filteredFlows && filteredFlows.length > 0 ? filteredFlows : flows
-  ).find((flow) => flow.id === parseInt(id));
+  // const selected = (
+  //   filteredFlows && filteredFlows.length > 0 ? filteredFlows : flows
+  // ).find((flow) => flow.id === parseInt(id));
 
-  if (!selected) {
-    return (
-      <>
-        <LoadingSpinner text="Loading..." />
-      </>
-    );
-  }
+  const [flowDetails, setFlowDetails] = useState([]);
 
-  const isSaved = userFlowIds.includes(selected.id);
-  const isCompleted = poseCompletion[selected.id];
+  useEffect(() => {
+    async function fetchFlowDetails() {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/flows/${id}`
+        );
+        setFlowDetails(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchFlowDetails();
+  }, []);
+
+  console.log({ flowDetails });
+
+  // if (!selected) {
+  //   return (
+  //     <>
+  //       <LoadingSpinner text="Loading..." />
+  //     </>
+  //   );
+  // }
+
+  // const isSaved = userFlowIds.includes(selected.id);
+  // const isCompleted = poseCompletion[selected.id];
 
   // Render benefits array
-  const benefitsArray = selected.benefits.split(",");
-  const renderBenefits = benefitsArray.map((benefit, index) => {
-    return (
-      <div
-        key={index}
-        className="flow-description"
-        style={{
-          padding: "1px 6px",
-          border: "1px solid #2870A3",
-          borderRadius: "50px",
-          margin: "2px",
-        }}
-      >
-        <div>
-          <p
-            style={{
-              marginBlockEnd: "0",
-              marginBlockStart: "0",
-            }}
-          >
-            {benefit}
-          </p>
-        </div>
-      </div>
-    );
-  });
+  // const benefitsArray = flowDetails.benefits.split(",");
+  // const renderBenefits = benefitsArray.map((benefit, index) => {
+  //   return (
+  //     <div
+  //       key={index}
+  //       className="flow-description"
+  //       style={{
+  //         padding: "1px 6px",
+  //         border: "1px solid #2870A3",
+  //         borderRadius: "50px",
+  //         margin: "2px",
+  //       }}
+  //     >
+  //       <div>
+  //         <p
+  //           style={{
+  //             marginBlockEnd: "0",
+  //             marginBlockStart: "0",
+  //           }}
+  //         >
+  //           {benefit}
+  //         </p>
+  //       </div>
+  //     </div>
+  //   );
+  // });
 
   // Render levels array
-  const levelsArray = selected.level.split(",");
+  const levelsArray = flowDetails.level.split(",");
   const renderLevels = levelsArray.map((level, index) => {
     let difLevel;
     difLevel =
@@ -112,12 +133,12 @@ const FlowDetails = (props) => {
             color: "#333333",
           }}
         >
-          {selected.sequence_name}
+          {flowDetails.sequence_name}
         </h3>
         <p className="flow-description" style={{ color: "#484848" }}>
-          {selected.description}
+          {flowDetails.description}
         </p>
-        <div
+        {/* <div
           style={{
             width: "100%",
             display: "flex",
@@ -127,7 +148,7 @@ const FlowDetails = (props) => {
           }}
         >
           {renderBenefits}
-        </div>
+        </div> */}
         <div
           style={{
             width: "100%",
@@ -143,7 +164,7 @@ const FlowDetails = (props) => {
 
       {isAuthenticated ? (
         <div>
-          <div
+          {/* <div
             style={{
               marginBottom: "20px",
               display: "flex",
@@ -170,30 +191,33 @@ const FlowDetails = (props) => {
                 id={selected.id}
               />
             )}
-          </div>
+          </div> */}
         </div>
       ) : (
         <div style={{ marginBottom: "20px" }}>
-          {isCompleted && (
+          {/* {isCompleted && (
             <DeleteFlowBtn
               handleDeleteFlow={handleDeleteFlow}
               id={selected.id}
             />
-          )}
+          )} */}
         </div>
       )}
 
       <div className="flow-poses-details">
-        {selected.sequence_poses.map((pose, idx) => {
-          const isCompleted = poseCompletion[selected.id]?.[idx];
+        {flowDetails.sequence_poses.map((pose, idx) => {
+          // const isCompleted = poseCompletion[selected.id]?.[idx];
           return (
             <PoseCard
               key={idx}
               pose={pose}
               poseNum={idx + 1}
-              isCompleted={isCompleted}
-              onClick={() => handlePoseClick(selected.id, idx)}
-              flowId={selected.id} // add flowId prop to pose card
+              // isCompleted={isCompleted}
+              isCompleted={null}
+              onClick={() =>
+                handlePoseClick(flowDetails.sequence_poses.id, idx)
+              }
+              flowId={flowDetails.id} // add flowId prop to pose card
             />
           );
         })}

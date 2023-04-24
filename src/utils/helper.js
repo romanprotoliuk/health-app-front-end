@@ -30,13 +30,11 @@ export const getUserFlows = async (auth0_id) => {
 
 export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExercises) => {
   try {
-    const [posesResponse, flowsResponse, routinesResponse, exercisesResponse] = await Promise.all([
-        axios.get(process.env.REACT_APP_HEALTH_API + '/api/poses/'),
-        axios.get(process.env.REACT_APP_HEALTH_API + '/api/flows/'),
-        axios.get(process.env.REACT_APP_HEALTH_API + '/api/routines/'),
-        axios.get(process.env.REACT_APP_HEALTH_API + '/api/exercises/'),
-        
-    ]);
+    const posesResponse = await axios.get(process.env.REACT_APP_HEALTH_API + '/api/poses/');
+    const flowsResponse = await axios.get(process.env.REACT_APP_HEALTH_API + '/api/flows/');
+    const routinesResponse = await axios.get(process.env.REACT_APP_HEALTH_API + '/api/routines/');
+    const exercisesResponse = await axios.get(process.env.REACT_APP_HEALTH_API + '/api/exercises/');
+    
   
     // Group poses by pose_name for efficient lookup
     const posesByPoseName = posesResponse.data.reduce((acc, pose) => {
@@ -50,28 +48,28 @@ export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExe
     //     return acc;
     //   }, {});
 
-    const flowsWithPosesData = flowsResponse.data.map((flow) => {
-      const poseNames = flow.sequence_poses.split(",");
-      const sequencePoses = poseNames.map((poseName) => {
-        const pose = posesByPoseName[poseName.trim()];
-        return pose
-          ? {
-              id: pose.id, // add id to each pose
-              pose_name: pose.pose_name,
-              image_url: pose.image_url,
-              completed: false,
-              flowId: flow.id, // add flowId to each pose
-            }
-          : null;
-      });
-      return {
-        ...flow,
-        sequence_poses: sequencePoses.filter((pose) => pose !== null),
-        showPoses: false,
-        posesCompleted: 0,
-        flowId: flow.id,
-      };
-    });
+    // const flowsWithPosesData = flowsResponse.data.map((flow) => {
+    //   const poseNames = flow.sequence_poses.split(",");
+    //   const sequencePoses = poseNames.map((poseName) => {
+    //     const pose = posesByPoseName[poseName.trim()];
+    //     return pose
+    //       ? {
+    //           id: pose.id, // add id to each pose
+    //           pose_name: pose.pose_name,
+    //           image_url: pose.image_url,
+    //           completed: false,
+    //           flowId: flow.id, // add flowId to each pose
+    //         }
+    //       : null;
+    //   });
+    //   return {
+    //     ...flow,
+    //     sequence_poses: sequencePoses.filter((pose) => pose !== null),
+    //     showPoses: false,
+    //     posesCompleted: 0,
+    //     flowId: flow.id,
+    //   };
+    // });
 
     const exercisesByName = exercisesResponse.data.reduce((acc, exercise) => {
         acc[exercise.exercise_name] = exercise;
@@ -113,7 +111,7 @@ export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExe
   
       setRoutines(routinesWithExercisesData);
       setExercises(exercisesResponse.data);
-      setFlows(flowsWithPosesData);
+      setFlows(flowsResponse.data);
       setPoses(posesResponse.data);
   } catch (error) {
     console.log(error);

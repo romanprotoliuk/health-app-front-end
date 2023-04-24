@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { supabase } from "./utils/supabase";
 import { redirect } from "react-router-dom";
+import axios from "axios";
 import "./App.css";
 
 // Components
@@ -21,6 +22,7 @@ import Exercises from "./components/pages/Exercises";
 import RoutineDetailsCustom from "./components/pages/RoutineDetailsCustom";
 import RoutineDetails from "./components/pages/RoutineDetails";
 import BmiCalculator from "./components/BMI-Calc/BmiCalculator";
+import Chat from "./components/pages/Chat";
 
 import { fetchData } from "./utils/helper";
 
@@ -66,6 +68,18 @@ const App = () => {
       return updatedPoseCompletion;
     });
   };
+
+  useEffect(() => {
+    async function fetchFlowDetails() {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/flows/5`);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchFlowDetails();
+  }, []);
 
   const handlePoseClickNewFlow = (poseId) => {
     setSelectedPoses((prevSelectedPoses) => {
@@ -360,6 +374,18 @@ const App = () => {
             />
           }
         />
+
+        <Route
+          path="/chat"
+          element={
+            <Chat
+              user={user}
+              isAuthenticated={isAuthenticated}
+              chatRooms={chatRooms}
+            />
+          }
+        />
+
         <Route
           path="/routines"
           element={
