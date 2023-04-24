@@ -21,7 +21,7 @@ const Form = (props) => {
           />
         </div>
         <div>
-          {props.showHeight ? (
+          {props.showHeight && (
             <HeightField
               userDetails={props.userDetails}
               handleChange={props.handleChange}
@@ -29,26 +29,22 @@ const Form = (props) => {
               secondNextBtn={props.secondNextBtn}
               secondCheckMark={props.secondCheckMark}
             />
-          ) : (
-            ""
           )}
         </div>
         <div>
-          {props.showWeight ? (
+          {props.showWeight && (
             <WeightField
               userDetails={props.userDetails}
               handleChange={props.handleChange}
               thirdCheckMark={props.thirdCheckMark}
             />
-          ) : (
-            ""
           )}
         </div>
 
-        {props.hideSubmit ? (
-          <input className="submit-btn" id="submit-btn" type="submit" />
-        ) : (
-          ""
+        {props.hideSubmit && (
+          <button className="custom-btn btn-13" id="submit-btn" type="submit">
+            Next
+          </button>
         )}
       </form>
     </>

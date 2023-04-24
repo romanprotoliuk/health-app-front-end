@@ -5,9 +5,10 @@ import underweight from "./imgs/underweight.svg";
 import normalweight from "./imgs/normal-weight.svg";
 import overweight from "./imgs/overweight.svg";
 import obese from "./imgs/obese.svg";
+import ClearAll from "../buttons/ClearAllBtn";
+import ResultRender from "./ResultRender";
 
 const BmiCalculator = () => {
-  let avatarImg;
   const [userDetails, setUserDetails] = useState({
     name: "",
     feet: 0,
@@ -16,25 +17,18 @@ const BmiCalculator = () => {
     weight: 0,
     bmi: "",
   });
-
   const [bmi, setBmi] = useState(0);
-
   const [avatar, setAvatar] = useState("");
-
   const [userPrompt, setUserPrompt] = useState("");
   const [show, setShow] = useState(false);
-
   const [showHeight, setShowHeight] = useState(false);
   const [showWeight, setShowWeight] = useState(false);
   const [hideSubmit, setHideSubmit] = useState(false);
-
   const [firstNextBtn, setFirstNextBtn] = useState(true);
   const [secondNextBtn, setSecondNextBtn] = useState(true);
-
   const [firstCheckMark, setFirstCheckMark] = useState(false);
   const [secondCheckMark, setSecondCheckMark] = useState(false);
   const [thirdCheckMark, setThirdCheckMark] = useState(false);
-
   const { name, feet, inches, height, weight } = userDetails;
 
   const handleChange = (e) => {
@@ -86,7 +80,6 @@ const BmiCalculator = () => {
     }
   };
 
-  console.log(avatarImg);
   const handleSubmit = (e) => {
     e.preventDefault();
     setThirdCheckMark(true);
@@ -94,68 +87,74 @@ const BmiCalculator = () => {
     setTimeout(() => {
       getBMI(weight, feet, inches);
       setShow(true);
-      document.querySelector("#form-for-bmi").style.display = "none";
     }, 1000);
   };
 
   const handleReset = () => {
     setShow(false);
-    setUserPrompt("");
     setUserDetails({
       name: "",
-      feet: "",
-      inches: "",
+      feet: 0,
+      inches: 0,
       height: "",
-      weight: "",
+      weight: 0,
       bmi: "",
     });
-  };
-
-  const ResultRender = () => {
-    return (
-      <div className="result-wrapper">
-        <h2 style={{ marginBottom: "20px" }}>Hi, {name}</h2>
-        <div>
-          <img className="img-icon" src={avatar} alt={avatar} />
-        </div>
-        <h5 style={{ marginTop: "20px", marginBottom: "10px" }}>
-          your bio metrics:
-        </h5>
-        <h3>
-          height: {feet}'{inches}
-        </h3>
-        <h3>weight: {weight}</h3>
-        <h3>your bmi: {bmi}</h3>
-        <h5 style={{ marginTop: "30px", marginBottom: "10px" }}>
-          by our calculations:
-        </h5>
-        <h3 className="text-display">you are {userPrompt} </h3>
-      </div>
-    );
+    setBmi(0);
+    setAvatar("");
+    setUserPrompt("");
+    setShowHeight(false);
+    setShowWeight(false);
+    setHideSubmit(false);
+    setFirstNextBtn(true);
+    setSecondNextBtn(true);
+    setFirstCheckMark(false);
+    setSecondCheckMark(false);
+    setThirdCheckMark(false);
   };
 
   return (
-    <div className="App">
-      <h3 style={{ marginTop: "20px" }}>BMI CALCULATOR</h3>
-      <Form
-        handleSubmit={handleSubmit}
-        handleChange={handleChange}
-        handleShowHeight={handleShowHeight}
-        handleShowWeight={handleShowWeight}
-        userDetails={userDetails}
-        showHeight={showHeight}
-        showWeight={showWeight}
-        hideSubmit={hideSubmit}
-        firstNextBtn={firstNextBtn}
-        secondNextBtn={secondNextBtn}
-        firstCheckMark={firstCheckMark}
-        secondCheckMark={secondCheckMark}
-        thirdCheckMark={thirdCheckMark}
-      />
-      {/* <button onClick={handleReset}>Reset</button> */}
-      {show ? <ResultRender /> : ""}
+    <div>
+      {show && <ClearAll handleClearAllPoses={handleReset} />}
+      <h3
+        style={{
+          fontWeight: "600",
+          textTransform: "uppercase",
+          color: "#333333",
+        }}
+      >
+        BMI CALCULATOR
+      </h3>
+
+      {!show && (
+        <Form
+          handleSubmit={handleSubmit}
+          handleChange={handleChange}
+          handleShowHeight={handleShowHeight}
+          handleShowWeight={handleShowWeight}
+          userDetails={userDetails}
+          showHeight={showHeight}
+          showWeight={showWeight}
+          hideSubmit={hideSubmit}
+          firstNextBtn={firstNextBtn}
+          secondNextBtn={secondNextBtn}
+          firstCheckMark={firstCheckMark}
+          secondCheckMark={secondCheckMark}
+          thirdCheckMark={thirdCheckMark}
+        />
+      )}
+      {show && (
+        <ResultRender
+          name={name}
+          avatar={avatar}
+          feet={feet}
+          inches={inches}
+          weight={weight}
+          userPrompt={userPrompt}
+          bmi={bmi}
+        />
+      )}
     </div>
   );
 };
-
 export default BmiCalculator;

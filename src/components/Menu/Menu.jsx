@@ -62,7 +62,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                   About
                 </Link>
               </div>
-              <div style={{ marginTop: "10px" }}>
+              <div>
                 <Link
                   style={{
                     fontWeight: "600",
