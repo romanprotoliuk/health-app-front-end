@@ -91,6 +91,33 @@ const FlowDetails = (props) => {
     );
   });
 
+  const benefitsArray = flowDetails.benefits.split(",");
+  const renderBenefits = benefitsArray.map((benefit, index) => {
+    return (
+      <div
+        key={index}
+        className="flow-description"
+        style={{
+          padding: "1px 6px",
+          border: "1px solid #2870A3",
+          borderRadius: "50px",
+          margin: "2px",
+        }}
+      >
+        <div>
+          <p
+            style={{
+              marginBlockEnd: "0",
+              marginBlockStart: "0",
+            }}
+          >
+            {benefit}
+          </p>
+        </div>
+      </div>
+    );
+  });
+
   console.log({ flowDetails });
 
   return (
@@ -122,6 +149,7 @@ const FlowDetails = (props) => {
         </div>
       </div>
 
+      {renderBenefits}
       <div className="flow-poses-details">
         {flowDetails.sequence_poses.map((pose, idx) => {
           // const isCompleted = poseCompletion[selected.id]?.[idx];
