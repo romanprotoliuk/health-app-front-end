@@ -1,12 +1,9 @@
 import { useParams } from "react-router-dom";
 import BackBtn from "../buttons/BackBtn";
-import DeleteFlowBtn from "../buttons/DeleteFlowBtn";
-import SaveBtn from "../buttons/SaveBtn";
-import UnsaveBtn from "../buttons/UnsaveBtn";
 import PoseCard from "../PoseCard";
-import LoadingSpinner from "../LoadingSpinner";
 import "./pageStyles.css";
 import axios from "axios";
+import LoadingSpinner from "../LoadingSpinner";
 
 import { useEffect, useState } from "react";
 
@@ -29,61 +26,33 @@ const FlowDetails = (props) => {
   // ).find((flow) => flow.id === parseInt(id));
 
   const [flowDetails, setFlowDetails] = useState([]);
+  // Add a loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchFlowDetails() {
       try {
+        setLoading(true); // Set loading to true when the fetch starts
         const response = await axios.get(
           `http://localhost:8000/api/flows/${id}`
         );
         setFlowDetails(response.data);
+        setLoading(false); // Set loading to false when the fetch completes
       } catch (error) {
         console.error(error);
+        setLoading(false); // Also set loading to false on error
       }
     }
     fetchFlowDetails();
-  }, []);
+  }, [id]);
 
-  console.log({ flowDetails });
-
-  // if (!selected) {
-  //   return (
-  //     <>
-  //       <LoadingSpinner text="Loading..." />
-  //     </>
-  //   );
-  // }
-
-  // const isSaved = userFlowIds.includes(selected.id);
-  // const isCompleted = poseCompletion[selected.id];
-
-  // Render benefits array
-  // const benefitsArray = flowDetails.benefits.split(",");
-  // const renderBenefits = benefitsArray.map((benefit, index) => {
-  //   return (
-  //     <div
-  //       key={index}
-  //       className="flow-description"
-  //       style={{
-  //         padding: "1px 6px",
-  //         border: "1px solid #2870A3",
-  //         borderRadius: "50px",
-  //         margin: "2px",
-  //       }}
-  //     >
-  //       <div>
-  //         <p
-  //           style={{
-  //             marginBlockEnd: "0",
-  //             marginBlockStart: "0",
-  //           }}
-  //         >
-  //           {benefit}
-  //         </p>
-  //       </div>
-  //     </div>
-  //   );
-  // });
+  if (loading) {
+    return (
+      <>
+        <LoadingSpinner text="Loading..." />
+      </>
+    );
+  }
 
   // Render levels array
   const levelsArray = flowDetails.level.split(",");
@@ -122,6 +91,8 @@ const FlowDetails = (props) => {
     );
   });
 
+  console.log({ flowDetails });
+
   return (
     <>
       <BackBtn />
@@ -138,17 +109,6 @@ const FlowDetails = (props) => {
         <p className="flow-description" style={{ color: "#484848" }}>
           {flowDetails.description}
         </p>
-        {/* <div
-          style={{
-            width: "100%",
-            display: "flex",
-            margin: "0 auto",
-            justifyContent: "center",
-            flexWrap: "wrap",
-          }}
-        >
-          {renderBenefits}
-        </div> */}
         <div
           style={{
             width: "100%",
@@ -161,48 +121,6 @@ const FlowDetails = (props) => {
           {renderLevels}
         </div>
       </div>
-
-      {isAuthenticated ? (
-        <div>
-          {/* <div
-            style={{
-              marginBottom: "20px",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <div style={{ marginBottom: "10px" }}>
-              {isSaved ? (
-                <UnsaveBtn
-                  handleUnlikeFlow={handleUnlikeFlow}
-                  id={selected.id}
-                />
-              ) : (
-                <SaveBtn
-                  handleFavoritedClick={handleFavoritedClick}
-                  id={selected.id}
-                />
-              )}
-            </div>
-
-            {isCompleted && (
-              <DeleteFlowBtn
-                handleDeleteFlow={handleDeleteFlow}
-                id={selected.id}
-              />
-            )}
-          </div> */}
-        </div>
-      ) : (
-        <div style={{ marginBottom: "20px" }}>
-          {/* {isCompleted && (
-            <DeleteFlowBtn
-              handleDeleteFlow={handleDeleteFlow}
-              id={selected.id}
-            />
-          )} */}
-        </div>
-      )}
 
       <div className="flow-poses-details">
         {flowDetails.sequence_poses.map((pose, idx) => {
