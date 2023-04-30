@@ -136,6 +136,18 @@ const FlowDetails = (props) => {
         <p className="flow-description" style={{ color: "#484848" }}>
           {flowDetails.description}
         </p>
+
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            margin: "0 auto",
+            justifyContent: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          {renderBenefits}
+        </div>
         <div
           style={{
             width: "100%",
@@ -148,8 +160,6 @@ const FlowDetails = (props) => {
           {renderLevels}
         </div>
       </div>
-
-      {renderBenefits}
       <div className="flow-poses-details">
         {flowDetails.sequence_poses.map((pose, idx) => {
           // const isCompleted = poseCompletion[selected.id]?.[idx];

@@ -15,7 +15,7 @@ const GridPoses = (props) => {
       ? props.filteredFlows
       : props.flows
   ).map((flow) => {
-    const levels = flow.level.split(",");
+    const levels = flow.level;
 
     // check if each level is included in the array
     const beginner = levels.includes("beginner");
@@ -24,6 +24,7 @@ const GridPoses = (props) => {
 
     // Render benefits array
     const benefitsArray = flow.benefits.split(",");
+    console.log({ benefitsArray });
     const renderBenefits = benefitsArray.map((benefit, index) => {
       return (
         <div

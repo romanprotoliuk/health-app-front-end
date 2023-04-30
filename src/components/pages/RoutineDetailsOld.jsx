@@ -7,11 +7,6 @@ import PoseCard from "../PoseCard";
 import LoadingSpinner from "../LoadingSpinner";
 import "./pageStyles.css";
 
-import { useEffect, useState } from "react";
-import axios from "axios";
-import FlowDetails from "./FlowDetails";
-import ExerciseCard from "../ExerciseCard";
-
 const RoutineDetails = (props) => {
   const {
     routines,
@@ -27,37 +22,9 @@ const RoutineDetails = (props) => {
   } = props;
   const { id } = useParams();
 
-  // const selected = routines.find((flow) => flow.id === parseInt(id));
+  const selected = routines.find((flow) => flow.id === parseInt(id));
 
-  // if (!selected) {
-  //   return (
-  //     <>
-  //       <LoadingSpinner text="Loading..." />
-  //     </>
-  //   );
-  // }
-
-  const [routineDetails, setRoutineDetails] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchFlowDetails() {
-      try {
-        setLoading(true); // Set loading to true when the fetch starts
-        const response = await axios.get(
-          `http://localhost:8000/api/routines/${id}`
-        );
-        setRoutineDetails(response.data);
-        setLoading(false); // Set loading to false when the fetch completes
-      } catch (error) {
-        console.error(error);
-        setLoading(false); // Also set loading to false on error
-      }
-    }
-    fetchFlowDetails();
-  }, [id]);
-
-  if (loading) {
+  if (!selected) {
     return (
       <>
         <LoadingSpinner text="Loading..." />
@@ -65,13 +32,11 @@ const RoutineDetails = (props) => {
     );
   }
 
-  // const isSaved = userRoutineIds.includes(selected.id);
-  // const isCompleted = poseCompletion[selected.id];
-
-  console.log({ routineDetails });
+  const isSaved = userRoutineIds.includes(selected.id);
+  const isCompleted = poseCompletion[selected.id];
 
   // Render benefits array
-  const benefitsArray = routineDetails.targets.split(",");
+  const benefitsArray = selected.targets.split(",");
   const renderBenefits = benefitsArray.map((target, index) => {
     return (
       <div
@@ -109,10 +74,10 @@ const RoutineDetails = (props) => {
             color: "#333333",
           }}
         >
-          {routineDetails.routine_name}
+          {selected.routine_name}
         </h3>
         <p className="flow-description" style={{ color: "#484848" }}>
-          {routineDetails.description}
+          {selected.description}
         </p>
         <div
           style={{
@@ -138,17 +103,59 @@ const RoutineDetails = (props) => {
         </div>
       </div>
 
+      {isAuthenticated ? (
+        <div>
+          <div
+            style={{
+              marginBottom: "20px",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <div style={{ marginBottom: "10px" }}>
+              {isSaved ? (
+                <UnsaveBtn
+                  handleUnlikeFlow={handleUnlikeRoutine}
+                  id={selected.id}
+                />
+              ) : (
+                <SaveBtn
+                  handleFavoritedClick={handleFavoritedRoutineClick}
+                  id={selected.id}
+                />
+              )}
+            </div>
+
+            {isCompleted && (
+              <DeleteFlowBtn
+                handleDeleteFlow={handleDeleteFlow}
+                id={selected.id}
+              />
+            )}
+          </div>
+        </div>
+      ) : (
+        <div style={{ marginBottom: "20px" }}>
+          {isCompleted && (
+            <DeleteFlowBtn
+              handleDeleteFlow={handleDeleteCustomFlow}
+              id={selected.id}
+            />
+          )}
+        </div>
+      )}
+
       <div className="flow-poses-details">
-        {routineDetails.routine_poses.map((exercise, idx) => {
-          // const isCompleted = poseCompletion[selected.id]?.[idx];
+        {selected.routine_poses.map((pose, idx) => {
+          const isCompleted = poseCompletion[selected.id]?.[idx];
           return (
-            <ExerciseCard
+            <PoseCard
               key={idx}
-              exercise={exercise}
+              pose={pose}
               poseNum={idx + 1}
-              isCompleted={null}
-              // onClick={() => handlePoseClick(selected.id, idx)}
-              flowId={exercise.id} // add flowId prop to pose card
+              isCompleted={isCompleted}
+              onClick={() => handlePoseClick(selected.id, idx)}
+              flowId={selected.id} // add flowId prop to pose card
             />
           );
         })}

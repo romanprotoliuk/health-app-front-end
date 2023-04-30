@@ -90,7 +90,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                   Community Chat
                 </Link>
               </div>
-              {/* <div>
+              <div>
                 <Link
                   style={{
                     fontWeight: "600",
@@ -103,7 +103,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                 >
                   Strength Training
                 </Link>
-              </div> */}
+              </div>
               {isAuthenticated && (
                 <div style={{ marginTop: "10px" }}>
                   <Link

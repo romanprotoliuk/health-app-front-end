@@ -25,6 +25,7 @@ import BmiCalculator from "./components/BMI-Calc/BmiCalculator";
 import Chat from "./components/pages/Chat";
 
 import { fetchData } from "./utils/helper";
+import HomeSections from "./components/HomeSections";
 
 const App = () => {
   const { isAuthenticated, isLoading, user } = useAuth0();
@@ -353,13 +354,15 @@ const App = () => {
     );
   }
 
+  console.log({ flows });
+
   return (
     <div className="App">
       <Menu isAuthenticated={isAuthenticated} setUserSub={setUserSub} />
       <Navbar isAuthenticated={isAuthenticated} setUserSub={setUserSub} />
       <Routes>
         <Route
-          path="/"
+          path="/yoga"
           element={
             <GridPoses
               flows={flows}
@@ -375,6 +378,8 @@ const App = () => {
           }
         />
 
+        <Route path="/" element={<HomeSections />} />
+
         <Route
           path="/chat"
           element={
@@ -387,7 +392,7 @@ const App = () => {
         />
 
         <Route
-          path="/routines"
+          path="/strength"
           element={
             <GridRoutines
               routines={routines}
@@ -547,7 +552,6 @@ const App = () => {
           }
         />
 
-        {/* Exercises */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
