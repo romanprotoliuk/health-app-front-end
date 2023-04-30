@@ -5,6 +5,8 @@ import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 const ExerciseCard = (props) => {
   const { exercise, poseNum, isCompleted, onClick, isFromPose } = props;
 
+  // comment
+
   return (
     <div
       className="flow-card-details"
