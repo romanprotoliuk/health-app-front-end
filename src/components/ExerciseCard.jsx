@@ -5,6 +5,8 @@ import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 const ExerciseCard = (props) => {
   const { exercise, poseNum, isCompleted, onClick, isFromPose } = props;
 
+  console.log("completedExercise", isCompleted);
+
   return (
     <div
       className="flow-card-details"
@@ -21,6 +23,7 @@ const ExerciseCard = (props) => {
       />
       <p style={{ fontSize: "10px" }}>{poseNum}</p>
       <h3 className="pose-name">{exercise.exercise_name}</h3>
+      <p style={{ fontSize: "10px" }}>{exercise?.repetitions}</p>
       {isCompleted && <CheckMark isFromPose={isFromPose} />}
       {/* <p>{isCompleted ? " (Completed)" : ""}</p> */}
     </div>

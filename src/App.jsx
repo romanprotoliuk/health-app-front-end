@@ -51,6 +51,9 @@ const App = () => {
   const [poseCompletion, setPoseCompletion] = useState(
     JSON.parse(localStorage.getItem("poseCompletion")) || {}
   );
+  const [exerciseCompletion, setExerciseCompletion] = useState(
+    JSON.parse(localStorage.getItem("exerciseCompletion")) || {}
+  );
   const [selectedPoses, setSelectedPoses] = useState([]);
   const [selectedExercises, setSelectedExercises] = useState([]);
   const [chatRooms, setChatRooms] = useState([]);
@@ -64,6 +67,42 @@ const App = () => {
       updatedPoseCompletion[flowId][poseId] = true;
       localStorage.setItem(
         "poseCompletion",
+        JSON.stringify(updatedPoseCompletion)
+      );
+      return updatedPoseCompletion;
+    });
+  };
+
+  console.log({ userFlowIds });
+  console.log({ exerciseCompletion });
+  console.log({ poseCompletion });
+
+  // refactor this and pass to RoutineDetails
+  // const handleExerciseClick = (routineId, excersiceId) => {
+  //   setExerciseCompletion((prevExerciseCompletion) => {
+  //     const updatedExcerciseCompletion = { ...prevExerciseCompletion };
+  //     if (!updatedExcerciseCompletion[routineId]) {
+  //       updatedExcerciseCompletion[routineId] = {};
+  //     }
+  //     updatedExcerciseCompletion[routineId][excersiceId] = true;
+  //     localStorage.setItem(
+  //       "exerciseCompletion",
+  //       JSON.stringify(updatedExcerciseCompletion)
+  //     );
+  //     return updatedExcerciseCompletion;
+  //   });
+  // };
+
+  const handleExerciseClick = (flowId, poseId) => {
+    console.log("from handleExerciseClick", flowId);
+    setExerciseCompletion((prevPoseCompletion) => {
+      const updatedPoseCompletion = { ...prevPoseCompletion };
+      if (!updatedPoseCompletion[flowId]) {
+        updatedPoseCompletion[flowId] = {};
+      }
+      updatedPoseCompletion[flowId][poseId] = true;
+      localStorage.setItem(
+        "exerciseCompletion",
         JSON.stringify(updatedPoseCompletion)
       );
       return updatedPoseCompletion;
@@ -134,7 +173,7 @@ const App = () => {
 
   useEffect(() => {
     fetchData(setFlows, setPoses, userSub, setRoutines, setExercises);
-  }, [poseCompletion]);
+  }, [poseCompletion, exerciseCompletion]);
 
   const posesByPoseName = useMemo(() => {
     return poses.reduce((acc, pose) => {
@@ -158,6 +197,13 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem("poseCompletion", JSON.stringify(poseCompletion));
   }, [poseCompletion]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "exerciseCompletion",
+      JSON.stringify(exerciseCompletion)
+    );
+  }, [exerciseCompletion]);
 
   useEffect(() => {
     localStorage.setItem("selectedPoses", JSON.stringify(selectedPoses));
@@ -354,8 +400,6 @@ const App = () => {
     );
   }
 
-  console.log({ flows });
-
   return (
     <div className="App">
       <Menu isAuthenticated={isAuthenticated} setUserSub={setUserSub} />
@@ -433,7 +477,7 @@ const App = () => {
             <RoutineDetails
               routines={routines}
               filteredFlows={filteredFlows}
-              handlePoseClick={handlePoseClick}
+              handleExerciseClick={handleExerciseClick}
               poseCompletion={poseCompletion}
               setPoseCompletion={setPoseCompletion}
               handleDeleteFlow={handleDeleteFlow}
@@ -444,6 +488,7 @@ const App = () => {
               setIsSavedCompleted={setIsSavedCompleted}
               isAuthenticated={isAuthenticated}
               userRoutineIds={userRoutineIds}
+              exerciseCompletion={exerciseCompletion}
             />
           }
         />

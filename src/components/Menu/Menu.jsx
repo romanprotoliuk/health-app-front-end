@@ -90,7 +90,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                   Community Chat
                 </Link>
               </div>
-              <div>
+              <div style={{ marginTop: "10px" }}>
                 <Link
                   style={{
                     fontWeight: "600",
@@ -99,7 +99,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                     color: "#333333",
                     textDecoration: "none",
                   }}
-                  to={"/routines"}
+                  to={"/strength"}
                 >
                   Strength Training
                 </Link>

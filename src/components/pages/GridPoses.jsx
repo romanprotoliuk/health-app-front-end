@@ -24,7 +24,6 @@ const GridPoses = (props) => {
 
     // Render benefits array
     const benefitsArray = flow.benefits.split(",");
-    console.log({ benefitsArray });
     const renderBenefits = benefitsArray.map((benefit, index) => {
       return (
         <div

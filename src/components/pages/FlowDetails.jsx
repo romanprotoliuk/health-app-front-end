@@ -4,6 +4,9 @@ import PoseCard from "../PoseCard";
 import "./pageStyles.css";
 import axios from "axios";
 import LoadingSpinner from "../LoadingSpinner";
+import DeleteFlowBtn from "../buttons/DeleteFlowBtn";
+import UnsaveBtn from "../buttons/UnsaveBtn";
+import SaveBtn from "../buttons/SaveBtn";
 
 import { useEffect, useState } from "react";
 
@@ -20,6 +23,8 @@ const FlowDetails = (props) => {
     userFlowIds,
   } = props;
   const { id } = useParams();
+
+  // console.log({ poseCompletion });
 
   // const selected = (
   //   filteredFlows && filteredFlows.length > 0 ? filteredFlows : flows
@@ -53,6 +58,9 @@ const FlowDetails = (props) => {
       </>
     );
   }
+
+  const isSaved = userFlowIds.includes(flowDetails.id);
+  const isCompleted = poseCompletion[flowDetails.id];
 
   // Render levels array
   const levelsArray = flowDetails.level.split(",");
@@ -118,7 +126,8 @@ const FlowDetails = (props) => {
     );
   });
 
-  console.log({ flowDetails });
+  // console.log("xx", flowDetails.id);
+  // console.log(flowDetails.sequence_po);
 
   return (
     <>
@@ -160,19 +169,59 @@ const FlowDetails = (props) => {
           {renderLevels}
         </div>
       </div>
+
+      {isAuthenticated ? (
+        <div>
+          <div
+            style={{
+              marginBottom: "20px",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <div style={{ marginBottom: "10px" }}>
+              {isSaved ? (
+                <UnsaveBtn
+                  handleUnlikeFlow={handleUnlikeFlow}
+                  id={flowDetails.id}
+                />
+              ) : (
+                <SaveBtn
+                  handleFavoritedClick={handleFavoritedClick}
+                  id={flowDetails.id}
+                />
+              )}
+            </div>
+
+            {isCompleted && (
+              <DeleteFlowBtn
+                handleDeleteFlow={handleDeleteFlow}
+                id={flowDetails.id}
+              />
+            )}
+          </div>
+        </div>
+      ) : (
+        <div style={{ marginBottom: "20px" }}>
+          {isCompleted && (
+            <DeleteFlowBtn
+              handleDeleteFlow={handleDeleteFlow}
+              id={flowDetails.id}
+            />
+          )}
+        </div>
+      )}
+
       <div className="flow-poses-details">
         {flowDetails.sequence_poses.map((pose, idx) => {
-          // const isCompleted = poseCompletion[selected.id]?.[idx];
+          const isCompleted = poseCompletion[flowDetails.id]?.[idx];
           return (
             <PoseCard
               key={idx}
               pose={pose}
               poseNum={idx + 1}
-              // isCompleted={isCompleted}
-              isCompleted={null}
-              onClick={() =>
-                handlePoseClick(flowDetails.sequence_poses.id, idx)
-              }
+              isCompleted={isCompleted}
+              onClick={() => handlePoseClick(flowDetails.id, idx)}
               flowId={flowDetails.id} // add flowId prop to pose card
             />
           );

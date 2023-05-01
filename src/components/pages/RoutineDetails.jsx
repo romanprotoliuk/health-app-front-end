@@ -16,7 +16,7 @@ const RoutineDetails = (props) => {
   const {
     routines,
     filteredFlows,
-    handlePoseClick,
+    handleExerciseClick,
     poseCompletion,
     handleDeleteCustomFlow,
     handleDeleteFlow,
@@ -24,6 +24,7 @@ const RoutineDetails = (props) => {
     handleUnlikeRoutine,
     isAuthenticated,
     userRoutineIds,
+    exerciseCompletion,
   } = props;
   const { id } = useParams();
 
@@ -68,8 +69,9 @@ const RoutineDetails = (props) => {
   // const isSaved = userRoutineIds.includes(selected.id);
   // const isCompleted = poseCompletion[selected.id];
 
-  console.log({ routineDetails });
-
+  const isSaved = userRoutineIds.includes(routineDetails.id);
+  console.log({ exerciseCompletion });
+  const isCompleted = exerciseCompletion[routineDetails.id];
   // Render benefits array
   const benefitsArray = routineDetails.targets.split(",");
   const renderBenefits = benefitsArray.map((target, index) => {
@@ -138,17 +140,64 @@ const RoutineDetails = (props) => {
         </div>
       </div>
 
+      {isAuthenticated ? (
+        <div>
+          <div
+            style={{
+              marginBottom: "20px",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <div style={{ marginBottom: "10px" }}>
+              {isSaved ? (
+                // <UnsaveBtn
+                //   handleUnlikeFlow={handleUnlikeFlow}
+                //   id={flowDetails.id}
+                // />
+                <></>
+              ) : (
+                // <SaveBtn
+                //   handleFavoritedClick={handleFavoritedClick}
+                //   id={routineDetails.id}
+                // />
+                <></>
+              )}
+            </div>
+
+            {isCompleted && (
+              <DeleteFlowBtn
+                handleDeleteFlow={handleDeleteFlow}
+                id={routineDetails.id}
+              />
+            )}
+          </div>
+        </div>
+      ) : (
+        <div style={{ marginBottom: "20px" }}>
+          {isCompleted && (
+            <DeleteFlowBtn
+              handleDeleteFlow={handleDeleteFlow}
+              id={routineDetails.id}
+            />
+          )}
+        </div>
+      )}
+
       <div className="flow-poses-details">
         {routineDetails.routine_poses.map((exercise, idx) => {
-          // const isCompleted = poseCompletion[selected.id]?.[idx];
+          console.log("thsisssss", poseCompletion);
+          const isCompleted = poseCompletion[routineDetails.id]?.[idx];
+          console.log(routineDetails.id);
+          console.log({ exercise });
           return (
             <ExerciseCard
               key={idx}
               exercise={exercise}
               poseNum={idx + 1}
-              isCompleted={null}
-              // onClick={() => handlePoseClick(selected.id, idx)}
-              flowId={exercise.id} // add flowId prop to pose card
+              isCompleted={isCompleted}
+              onClick={() => handleExerciseClick(routineDetails.id, idx)}
+              exerciseId={exercise.id} // add flowId prop to pose card
             />
           );
         })}
