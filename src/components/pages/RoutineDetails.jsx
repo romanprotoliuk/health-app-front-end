@@ -12,14 +12,15 @@ import axios from "axios";
 import FlowDetails from "./FlowDetails";
 import ExerciseCard from "../ExerciseCard";
 
+import DeleteRoutineBtn from "../buttons/DeleteRoutineBtn";
+
 const RoutineDetails = (props) => {
   const {
     routines,
     filteredFlows,
     handleExerciseClick,
-    poseCompletion,
-    handleDeleteCustomFlow,
     handleDeleteFlow,
+    handleDeleteRoutine,
     handleFavoritedRoutineClick,
     handleUnlikeRoutine,
     isAuthenticated,
@@ -27,16 +28,6 @@ const RoutineDetails = (props) => {
     exerciseCompletion,
   } = props;
   const { id } = useParams();
-
-  // const selected = routines.find((flow) => flow.id === parseInt(id));
-
-  // if (!selected) {
-  //   return (
-  //     <>
-  //       <LoadingSpinner text="Loading..." />
-  //     </>
-  //   );
-  // }
 
   const [routineDetails, setRoutineDetails] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -66,11 +57,7 @@ const RoutineDetails = (props) => {
     );
   }
 
-  // const isSaved = userRoutineIds.includes(selected.id);
-  // const isCompleted = poseCompletion[selected.id];
-
   const isSaved = userRoutineIds.includes(routineDetails.id);
-  console.log({ exerciseCompletion });
   const isCompleted = exerciseCompletion[routineDetails.id];
   // Render benefits array
   const benefitsArray = routineDetails.targets.split(",");
@@ -166,8 +153,8 @@ const RoutineDetails = (props) => {
             </div>
 
             {isCompleted && (
-              <DeleteFlowBtn
-                handleDeleteFlow={handleDeleteFlow}
+              <DeleteRoutineBtn
+                handleDeleteRoutine={handleDeleteRoutine}
                 id={routineDetails.id}
               />
             )}
@@ -176,8 +163,8 @@ const RoutineDetails = (props) => {
       ) : (
         <div style={{ marginBottom: "20px" }}>
           {isCompleted && (
-            <DeleteFlowBtn
-              handleDeleteFlow={handleDeleteFlow}
+            <DeleteRoutineBtn
+              handleDeleteRoutine={handleDeleteRoutine}
               id={routineDetails.id}
             />
           )}
@@ -186,10 +173,7 @@ const RoutineDetails = (props) => {
 
       <div className="flow-poses-details">
         {routineDetails.routine_poses.map((exercise, idx) => {
-          console.log("thsisssss", poseCompletion);
-          const isCompleted = poseCompletion[routineDetails.id]?.[idx];
-          console.log(routineDetails.id);
-          console.log({ exercise });
+          const isCompleted = exerciseCompletion[routineDetails.id]?.[idx];
           return (
             <ExerciseCard
               key={idx}
@@ -197,7 +181,8 @@ const RoutineDetails = (props) => {
               poseNum={idx + 1}
               isCompleted={isCompleted}
               onClick={() => handleExerciseClick(routineDetails.id, idx)}
-              exerciseId={exercise.id} // add flowId prop to pose card
+              // onClick={() => console.log(routineDetails.id, idx)}
+              exerciseId={exercise.id}
             />
           );
         })}

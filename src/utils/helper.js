@@ -118,9 +118,6 @@ export const fetchData = async (setFlows, setPoses, userSub, setRoutines, setExe
   }
 };
 
-// const allFlows = getUserFlows(userSub);
-// const matchingFlows = getMatchingFlows(allFlows, flows);
-
 export const getMatchingFlows = (allFlows, flows) => {
   return flows.filter((flow) => allFlows.includes(flow.id));
 };

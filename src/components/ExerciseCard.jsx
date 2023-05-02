@@ -3,9 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 const ExerciseCard = (props) => {
-  const { exercise, poseNum, isCompleted, onClick, isFromPose } = props;
-
-  console.log("completedExercise", isCompleted);
+  const { exercise, poseNum, isCompleted, onClick, isFromPose, exerciseId } =
+    props;
 
   return (
     <div

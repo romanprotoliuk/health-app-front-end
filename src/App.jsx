@@ -73,28 +73,8 @@ const App = () => {
     });
   };
 
-  console.log({ userFlowIds });
-  console.log({ exerciseCompletion });
-  console.log({ poseCompletion });
-
-  // refactor this and pass to RoutineDetails
-  // const handleExerciseClick = (routineId, excersiceId) => {
-  //   setExerciseCompletion((prevExerciseCompletion) => {
-  //     const updatedExcerciseCompletion = { ...prevExerciseCompletion };
-  //     if (!updatedExcerciseCompletion[routineId]) {
-  //       updatedExcerciseCompletion[routineId] = {};
-  //     }
-  //     updatedExcerciseCompletion[routineId][excersiceId] = true;
-  //     localStorage.setItem(
-  //       "exerciseCompletion",
-  //       JSON.stringify(updatedExcerciseCompletion)
-  //     );
-  //     return updatedExcerciseCompletion;
-  //   });
-  // };
-
   const handleExerciseClick = (flowId, poseId) => {
-    console.log("from handleExerciseClick", flowId);
+    // console.log("from handleExerciseClick", flowId);
     setExerciseCompletion((prevPoseCompletion) => {
       const updatedPoseCompletion = { ...prevPoseCompletion };
       if (!updatedPoseCompletion[flowId]) {
@@ -168,6 +148,18 @@ const App = () => {
         JSON.stringify(updatedPoseCompletion)
       );
       return updatedPoseCompletion;
+    });
+  };
+
+  const handleDeleteRoutine = (routineId) => {
+    setExerciseCompletion((prevExerciseCompletion) => {
+      const updatedExerciseCompletion = { ...prevExerciseCompletion };
+      delete updatedExerciseCompletion[routineId];
+      localStorage.setItem(
+        "exerciseCompletion",
+        JSON.stringify(updatedExerciseCompletion)
+      );
+      return updatedExerciseCompletion;
     });
   };
 
@@ -480,7 +472,8 @@ const App = () => {
               handleExerciseClick={handleExerciseClick}
               poseCompletion={poseCompletion}
               setPoseCompletion={setPoseCompletion}
-              handleDeleteFlow={handleDeleteFlow}
+              // handleDeleteFlow={handleDeleteFlow}
+              handleDeleteRoutine={handleDeleteRoutine}
               handleFavoritedRoutineClick={handleFavoritedRoutineClick}
               handleUnlikeRoutine={handleUnlikeRoutine}
               favoritedFlows={favoritedFlows}

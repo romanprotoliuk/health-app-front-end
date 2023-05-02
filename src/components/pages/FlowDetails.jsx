@@ -24,12 +24,6 @@ const FlowDetails = (props) => {
   } = props;
   const { id } = useParams();
 
-  // console.log({ poseCompletion });
-
-  // const selected = (
-  //   filteredFlows && filteredFlows.length > 0 ? filteredFlows : flows
-  // ).find((flow) => flow.id === parseInt(id));
-
   const [flowDetails, setFlowDetails] = useState([]);
   // Add a loading state
   const [loading, setLoading] = useState(true);
