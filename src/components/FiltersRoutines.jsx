@@ -51,23 +51,20 @@ const FiltersContainer = styled.div`
 `;
 
 const FiltersRoutines = (props) => {
-  const bodyParts = [
+  const targets = [
+    "Chest",
     "Lower body",
-    "Spine",
-    "Arms",
-    "Lower torso",
-    "Legs",
-    "Core",
-    "Abdominals",
-    "Obliques",
-    "Hamstrings",
-    "Lower back",
-    "Hips",
-    "Upper Body",
-    "Upper Legs",
+    "Deltoids",
     "Back",
-    "Shoulders",
+    "Rectus abdominis",
+    "Arms",
+    "Thighs",
+    "Whole body",
+    "Posture",
+    "Obliques",
+    "Glutes",
   ];
+  const routine_types = ["Sports Routine", "Everyone Routine", "Body Routine"];
 
   const isMobile = useMediaQuery("(max-width: 600px)");
   return (
@@ -81,12 +78,12 @@ const FiltersRoutines = (props) => {
           color: "#333333",
         }}
       >
-        Difficulty:
+        Targets:
       </label>
       <select
         id="difficulty"
-        value={props.difficultyFilter}
-        onChange={props.handleSelectDifficulty}
+        value={props.targetsFilter}
+        onChange={props.handleSelectTargets}
         style={{
           marginRight: isMobile ? 0 : "30px",
           cursor: "pointer",
@@ -94,9 +91,11 @@ const FiltersRoutines = (props) => {
         }}
       >
         <option value="">All</option>
-        <option value="beginner">Beginner</option>
-        <option value="intermediate">Intermediate</option>
-        <option value="advanced">Advanced</option>
+        {targets.map((parts) => (
+          <option value={parts} key={parts}>
+            {parts}
+          </option>
+        ))}
       </select>
 
       <label
@@ -108,16 +107,16 @@ const FiltersRoutines = (props) => {
           color: "#333333",
         }}
       >
-        Body parts:
+        Routine Types:
       </label>
       <select
         id="bodyParts"
-        value={props.bodyPartsFilter}
-        onChange={props.handleSelectBodyParts}
+        value={props.routineTypesFilter}
+        onChange={props.handleSelectRoutineTypes}
         style={{ cursor: "pointer" }}
       >
         <option value="">All</option>
-        {bodyParts.map((parts) => (
+        {routine_types.map((parts) => (
           <option value={parts} key={parts}>
             {parts}
           </option>

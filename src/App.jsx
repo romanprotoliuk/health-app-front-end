@@ -1,10 +1,8 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
+import "./App.css";
+import { useEffect, useState, useCallback } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { supabase } from "./utils/supabase";
-import { redirect } from "react-router-dom";
-import axios from "axios";
-import "./App.css";
 
 // Components
 import GridPoses from "./components/pages/GridPoses";
@@ -23,9 +21,9 @@ import RoutineDetailsCustom from "./components/pages/RoutineDetailsCustom";
 import RoutineDetails from "./components/pages/RoutineDetails";
 import BmiCalculator from "./components/BMI-Calc/BmiCalculator";
 import Chat from "./components/pages/Chat";
+import HomeSections from "./components/HomeSections";
 
 import { fetchData } from "./utils/helper";
-import HomeSections from "./components/HomeSections";
 
 const App = () => {
   const { isAuthenticated, isLoading, user } = useAuth0();
@@ -34,8 +32,11 @@ const App = () => {
   const [routines, setRoutines] = useState([]);
   const [exercises, setExercises] = useState([]);
   const [filteredFlows, setFilteredFlows] = useState([]);
+  const [filteredRoutines, setFilteredRoutines] = useState([]);
   const [difficultyFilter, setDifficultyFilter] = useState("");
   const [bodyPartsFilter, setBodyPartsFilter] = useState("");
+  const [targetsFilter, setTargetsFilter] = useState("");
+  const [routineTypesFilter, setRoutineTypesFilter] = useState("");
   const [isSavedCompleted, setIsSavedCompleted] = useState(false);
   const [allCustomFlows, setAllCustomFlows] = useState([]);
   const [allCustomRoutines, setAllCustomRoutines] = useState([]);
@@ -74,7 +75,6 @@ const App = () => {
   };
 
   const handleExerciseClick = (flowId, poseId) => {
-    // console.log("from handleExerciseClick", flowId);
     setExerciseCompletion((prevPoseCompletion) => {
       const updatedPoseCompletion = { ...prevPoseCompletion };
       if (!updatedPoseCompletion[flowId]) {
@@ -88,18 +88,6 @@ const App = () => {
       return updatedPoseCompletion;
     });
   };
-
-  useEffect(() => {
-    async function fetchFlowDetails() {
-      try {
-        const response = await axios.get(`http://localhost:8000/api/flows/5`);
-        console.log(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchFlowDetails();
-  }, []);
 
   const handlePoseClickNewFlow = (poseId) => {
     setSelectedPoses((prevSelectedPoses) => {
@@ -167,15 +155,14 @@ const App = () => {
     fetchData(setFlows, setPoses, userSub, setRoutines, setExercises);
   }, [poseCompletion, exerciseCompletion]);
 
-  const posesByPoseName = useMemo(() => {
-    return poses.reduce((acc, pose) => {
-      acc[pose.pose_name] = pose;
-      return acc;
-    }, {});
-  }, [poses]);
+  // const posesByPoseName = useMemo(() => {
+  //   return poses.reduce((acc, pose) => {
+  //     acc[pose.pose_name] = pose;
+  //     return acc;
+  //   }, {});
+  // }, [poses]);
 
   useEffect(() => {
-    // Filter flows based on bodyParts filter and difficulty filter
     const filtered = flows.filter(
       (flow) =>
         (difficultyFilter === "" ||
@@ -185,6 +172,16 @@ const App = () => {
     );
     setFilteredFlows(filtered);
   }, [bodyPartsFilter, difficultyFilter, flows]);
+
+  useEffect(() => {
+    const filtered = routines.filter(
+      (routine) =>
+        (routineTypesFilter === "" ||
+          routine.routine_type.includes(routineTypesFilter)) &&
+        (targetsFilter === "" || routine.targets.includes(targetsFilter))
+    );
+    setFilteredRoutines(filtered);
+  }, [routineTypesFilter, targetsFilter, routines]);
 
   useEffect(() => {
     localStorage.setItem("poseCompletion", JSON.stringify(poseCompletion));
@@ -384,6 +381,14 @@ const App = () => {
     setBodyPartsFilter(event.target.value);
   };
 
+  const handleSelectTargets = (event) => {
+    setTargetsFilter(event.target.value);
+  };
+
+  const handleSelectRoutineTypes = (event) => {
+    setRoutineTypesFilter(event.target.value);
+  };
+
   if (isLoading) {
     return (
       <>
@@ -432,11 +437,11 @@ const App = () => {
           element={
             <GridRoutines
               routines={routines}
-              // filteredFlows={filteredFlows}
-              // difficultyFilter={difficultyFilter}
-              // bodyPartsFilter={bodyPartsFilter}
-              handleSelectDifficulty={handleSelectDifficulty}
-              handleSelectBodyParts={handleSelectBodyParts}
+              filteredRoutines={filteredRoutines}
+              targetsFilter={targetsFilter}
+              routineTypesFilter={routineTypesFilter}
+              handleSelectTargets={handleSelectTargets}
+              handleSelectRoutineTypes={handleSelectRoutineTypes}
               user={user}
               isAuthenticated={isAuthenticated}
             />
@@ -472,7 +477,6 @@ const App = () => {
               handleExerciseClick={handleExerciseClick}
               poseCompletion={poseCompletion}
               setPoseCompletion={setPoseCompletion}
-              // handleDeleteFlow={handleDeleteFlow}
               handleDeleteRoutine={handleDeleteRoutine}
               handleFavoritedRoutineClick={handleFavoritedRoutineClick}
               handleUnlikeRoutine={handleUnlikeRoutine}

@@ -11,11 +11,11 @@ const GridRoutines = (props) => {
     );
   }
   const renderCards = (
-    props.filteredFlows && props.filteredFlows.length > 0
-      ? props.filteredFlows
+    props.filteredRoutines && props.filteredRoutines.length > 0
+      ? props.filteredRoutines
       : props.routines
-  ).map((flow) => {
-    const target = flow.targets.split(",");
+  ).map((routine) => {
+    const target = routine.targets.split(",");
     const renderBenefits = target.map((benefit, index) => {
       return (
         <div
@@ -44,8 +44,8 @@ const GridRoutines = (props) => {
 
     return (
       <Link
-        to={`/routine/${flow.id}`}
-        key={flow.id}
+        to={`/routine/${routine.id}`}
+        key={routine.id}
         className="flow-card"
         style={{
           textDecoration: "none",
@@ -63,10 +63,10 @@ const GridRoutines = (props) => {
               color: "#333333",
             }}
           >
-            {flow.routine_name}
+            {routine.routine_name}
           </h3>
           <p className="flow-description" style={{ color: "#484848" }}>
-            {flow.description}
+            {routine.description}
           </p>
         </div>
         <div
@@ -95,12 +95,12 @@ const GridRoutines = (props) => {
       {props.isAuthenticated && (
         <p style={{ marginBottom: "40px" }}>Hi, {props.user.nickname}</p>
       )}
-      {/* <FiltersRoutines
-        difficultyFilter={props.difficultyFilter}
-        handleSelectDifficulty={props.handleSelectDifficulty}
-        bodyPartsFilter={props.bodyPartsFilter}
-        handleSelectBodyParts={props.handleSelectBodyParts}
-      /> */}
+      <FiltersRoutines
+        targetsFilter={props.targetsFilter}
+        routineTypesFilter={props.routineTypesFilter}
+        handleSelectTargets={props.handleSelectTargets}
+        handleSelectRoutineTypes={props.handleSelectRoutineTypes}
+      />
       <div className="flow-container-grid">{renderCards}</div>
     </>
   );

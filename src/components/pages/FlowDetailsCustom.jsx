@@ -82,7 +82,7 @@ const FlowDetailsCustom = (props) => {
               poseNum={idx + 1}
               isCompleted={isCompleted}
               onClick={() => handlePoseClick(selected.id, idx)}
-              flowId={selected.id} // add flowId prop to pose card
+              flowId={selected.id}
             />
           );
         })}

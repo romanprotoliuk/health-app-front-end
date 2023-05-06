@@ -5,8 +5,6 @@ import DeleteCustomFlowBtb from "../buttons/DeleteCustomFlowBtn";
 import PoseCard from "../PoseCard";
 import LoadingSpinner from "../LoadingSpinner";
 
-// import { useEffect } from "react";
-
 const RoutineDetailsCustom = (props) => {
   const {
     handlePoseClick,
@@ -82,7 +80,7 @@ const RoutineDetailsCustom = (props) => {
               poseNum={idx + 1}
               isCompleted={isCompleted}
               onClick={() => handlePoseClick(selected.id, idx)}
-              flowId={selected.id} // add flowId prop to pose card
+              flowId={selected.id}
             />
           );
         })}

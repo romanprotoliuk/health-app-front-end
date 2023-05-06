@@ -1,11 +1,10 @@
 import { useParams } from "react-router-dom";
 import BackBtn from "../buttons/BackBtn";
-import DeleteFlowBtn from "../buttons/DeleteFlowBtn";
 import SaveBtn from "../buttons/SaveBtn";
 import UnsaveBtn from "../buttons/UnsaveBtn";
-import PoseCard from "../PoseCard";
 import LoadingSpinner from "../LoadingSpinner";
 import "./pageStyles.css";
+import FilterRoutines from "../FiltersRoutines";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -181,7 +180,6 @@ const RoutineDetails = (props) => {
               poseNum={idx + 1}
               isCompleted={isCompleted}
               onClick={() => handleExerciseClick(routineDetails.id, idx)}
-              // onClick={() => console.log(routineDetails.id, idx)}
               exerciseId={exercise.id}
             />
           );

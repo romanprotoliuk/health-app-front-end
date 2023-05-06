@@ -24,7 +24,6 @@ const PoseCard = (props) => {
       <h3 className="pose-name">{pose?.exercise_name}</h3>
       <p style={{ fontSize: "10px" }}>{pose?.repetitions}</p>
       {isCompleted && <CheckMark isFromPose={isFromPose} />}
-      {/* <p>{isCompleted ? " (Completed)" : ""}</p> */}
     </div>
   );
 };

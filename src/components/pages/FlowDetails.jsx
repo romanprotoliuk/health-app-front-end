@@ -23,9 +23,7 @@ const FlowDetails = (props) => {
     userFlowIds,
   } = props;
   const { id } = useParams();
-
   const [flowDetails, setFlowDetails] = useState([]);
-  // Add a loading state
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -119,9 +117,6 @@ const FlowDetails = (props) => {
       </div>
     );
   });
-
-  // console.log("xx", flowDetails.id);
-  // console.log(flowDetails.sequence_po);
 
   return (
     <>

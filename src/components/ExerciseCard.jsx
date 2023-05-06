@@ -3,8 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 const ExerciseCard = (props) => {
-  const { exercise, poseNum, isCompleted, onClick, isFromPose, exerciseId } =
-    props;
+  const { exercise, poseNum, isCompleted, onClick, isFromPose } = props;
 
   return (
     <div
@@ -24,7 +23,6 @@ const ExerciseCard = (props) => {
       <h3 className="pose-name">{exercise.exercise_name}</h3>
       <p style={{ fontSize: "10px" }}>{exercise?.repetitions}</p>
       {isCompleted && <CheckMark isFromPose={isFromPose} />}
-      {/* <p>{isCompleted ? " (Completed)" : ""}</p> */}
     </div>
   );
 };
