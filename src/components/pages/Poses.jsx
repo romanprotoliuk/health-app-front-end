@@ -221,10 +221,25 @@ const Poses = (props) => {
           </div>
           <div>
             {limitReached && (
-              <p style={{ color: "darkred" }}>
+              <p
+                style={{
+                  color: "white",
+                  position: "fixed",
+                  bottom: "0",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  zIndex: "10",
+                  padding: "10px 20px",
+                  borderRadius: "20px",
+                  cursor: "default",
+                  backgroundImage:
+                    "linear-gradient(315deg, rgb(248, 54, 0), rgb(254, 109, 16))",
+                }}
+              >
                 You have reached the limit of 20 poses
               </p>
             )}
+
             <input
               className="searchInput"
               placeholder="Search for poses"

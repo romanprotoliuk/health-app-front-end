@@ -1,12 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { supabase } from "../../utils/supabase";
 import { getMatchingFlows } from "../../utils/helper";
 
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+
 import BackBtn from "../buttons/BackBtn";
 
-const Favorites = (props) => {
+const Profile = (props) => {
   const {
     poses,
     routines,
@@ -24,6 +30,12 @@ const Favorites = (props) => {
     setCustomUserRoutines,
     customUserRoutines,
   } = props;
+
+  const [expanded, setExpanded] = useState(false);
+
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
   const updateFavoritedFlows = useCallback(
     (matchingFlows) => {
@@ -379,62 +391,163 @@ const Favorites = (props) => {
   return (
     <>
       <BackBtn />
-      <p
-        style={{
-          fontWeight: "600",
-          textTransform: "uppercase",
-          fontSize: "12px",
-          color: "#00000080",
-        }}
-      >
-        My favorited flows
-      </p>
-      {favoritedFlows < 1 && <p>you have no fave flows</p>}
-      <div className="flow-container-grid">{renderCards}</div>
-      <p
-        style={{
-          fontWeight: "600",
-          textTransform: "uppercase",
-          fontSize: "12px",
-          color: "#00000080",
-        }}
-      >
-        My favorited Routines
-      </p>
-      {favoritedRoutines < 1 && <p>you have no fave routines</p>}
-      <div className="flow-container-grid">{renderRoutineCards}</div>
-      <p
-        style={{
-          fontWeight: "600",
-          textTransform: "uppercase",
-          fontSize: "12px",
-          color: "#00000080",
-          marginTop: "40px",
-        }}
-      >
-        My own flows
-      </p>
-      {customUserFlows < 1 && <p>you have no custom flows</p>}
-      <div className="flow-container-grid">{renderCustomFlows}</div>
 
-      <p
+      <Accordion
+        expanded={expanded === "panel1"}
+        onChange={handleChange("panel1")}
         style={{
-          fontWeight: "600",
-          textTransform: "uppercase",
-          fontSize: "12px",
-          color: "#00000080",
-          marginTop: "40px",
+          border: "1px solid #03c8a8",
+          borderRadius: "20px",
+          marginBottom: "16px",
+          position: "static",
+          boxShadow: "none",
         }}
       >
-        My own workout routines
-      </p>
-      {customUserRoutines < 1 && <p>you have no fave routines</p>}
-      <div className="flow-container-grid">{renderCustomRoutines}</div>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
+        >
+          <p
+            style={{
+              fontWeight: "600",
+              textTransform: "uppercase",
+              fontSize: "12px",
+              color: "#00000080",
+              position: "absolute",
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              margin: "0",
+            }}
+          >
+            My favorited flows
+          </p>
+        </AccordionSummary>
+        <AccordionDetails>
+          {favoritedFlows < 1 && <p>you have no fave flows</p>}
+          <div className="flow-container-grid">{renderCards}</div>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion
+        expanded={expanded === "panel2"}
+        onChange={handleChange("panel2")}
+        style={{
+          border: "1px solid #03c8a8",
+          borderRadius: "20px",
+          marginBottom: "16px",
+          position: "static",
+          boxShadow: "none",
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
+        >
+          <p
+            style={{
+              fontWeight: "600",
+              textTransform: "uppercase",
+              fontSize: "12px",
+              color: "#00000080",
+              position: "absolute",
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              margin: "0",
+            }}
+          >
+            My favorited Routines
+          </p>
+        </AccordionSummary>
+        <AccordionDetails>
+          {favoritedRoutines < 1 && <p>you have no fave routines</p>}
+          <div className="flow-container-grid">{renderRoutineCards}</div>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion
+        expanded={expanded === "panel3"}
+        onChange={handleChange("panel3")}
+        style={{
+          border: "1px solid #03c8a8",
+          borderRadius: "20px",
+          marginBottom: "16px",
+          position: "static",
+          boxShadow: "none",
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
+        >
+          <p
+            style={{
+              fontWeight: "600",
+              textTransform: "uppercase",
+              fontSize: "12px",
+              color: "#00000080",
+              position: "absolute",
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              margin: "0",
+            }}
+          >
+            My own flows
+          </p>
+        </AccordionSummary>
+        <AccordionDetails>
+          {customUserFlows < 1 && <p>you have no custom flows</p>}
+          <div className="flow-container-grid">{renderCustomFlows}</div>
+        </AccordionDetails>
+      </Accordion>
+
+      <Accordion
+        expanded={expanded === "panel4"}
+        onChange={handleChange("panel4")}
+        style={{
+          border: "1px solid #03c8a8",
+          borderRadius: "20px",
+          marginBottom: "16px",
+          position: "static",
+          boxShadow: "none",
+        }}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1bh-content"
+          id="panel1bh-header"
+        >
+          <p
+            style={{
+              fontWeight: "600",
+              textTransform: "uppercase",
+              fontSize: "12px",
+              color: "#00000080",
+              position: "absolute",
+              left: "50%",
+              top: "50%",
+              transform: "translate(-50%, -50%)",
+              margin: "0",
+            }}
+          >
+            My own workout routines
+          </p>
+        </AccordionSummary>
+        <AccordionDetails>
+          {customUserRoutines < 1 && <p>you have no fav routines</p>}
+          <div className="flow-container-grid">{renderCustomRoutines}</div>
+        </AccordionDetails>
+      </Accordion>
     </>
   );
 };
 
-export default Favorites;
+export default Profile;
 
 const LevelDot = ({ backgroundImage, right = "15px" }) => {
   return (

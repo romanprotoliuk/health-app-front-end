@@ -48,7 +48,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
             <div className="div-block-26"></div>
 
             <div style={{ display: "flex", flexDirection: "column" }}>
-              <div style={{ padding: "10px 0px" }}>
+              <div style={{ marginTop: "10px" }}>
                 <Link
                   style={{
                     fontWeight: "600",
@@ -60,20 +60,6 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                   to={"/about"}
                 >
                   About
-                </Link>
-              </div>
-              <div>
-                <Link
-                  style={{
-                    fontWeight: "600",
-                    textTransform: "uppercase",
-                    fontSize: "12px",
-                    color: "#333333",
-                    textDecoration: "none",
-                  }}
-                  to={"/bmi"}
-                >
-                  BMI Calculator
                 </Link>
               </div>
               <div style={{ marginTop: "10px" }}>
@@ -88,6 +74,20 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                   to={"/chat"}
                 >
                   Community Chat
+                </Link>
+              </div>
+              <div style={{ marginTop: "10px" }}>
+                <Link
+                  style={{
+                    fontWeight: "600",
+                    textTransform: "uppercase",
+                    fontSize: "12px",
+                    color: "#333333",
+                    textDecoration: "none",
+                  }}
+                  to={"/bmi"}
+                >
+                  BMI Calculator
                 </Link>
               </div>
               <div style={{ marginTop: "10px" }}>
@@ -114,7 +114,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                       color: "#333333",
                       textDecoration: "none",
                     }}
-                    to="/favorites"
+                    to="/profile"
                   >
                     My Profile
                   </Link>
@@ -137,7 +137,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                 </div>
               )}
 
-              {/* {isAuthenticated && (
+              {isAuthenticated && (
                 <div style={{ marginTop: "10px" }}>
                   <Link
                     style={{
@@ -152,7 +152,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                     Exercises
                   </Link>
                 </div>
-              )} */}
+              )}
 
               {!isAuthenticated && (
                 <div style={{ marginTop: "10px" }}>

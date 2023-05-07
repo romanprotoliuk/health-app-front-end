@@ -7,7 +7,7 @@ import { supabase } from "./utils/supabase";
 // Components
 import GridPoses from "./components/pages/GridPoses";
 import FlowDetails from "./components/pages/FlowDetails";
-import Favorites from "./components/pages/Favorites";
+import Favorites from "./components/pages/Profile";
 import Poses from "./components/pages/Poses";
 import Navbar from "./components/Navbar";
 import Login from "./components/pages/Login";
@@ -21,7 +21,7 @@ import RoutineDetailsCustom from "./components/pages/RoutineDetailsCustom";
 import RoutineDetails from "./components/pages/RoutineDetails";
 import BmiCalculator from "./components/BMI-Calc/BmiCalculator";
 import Chat from "./components/pages/Chat";
-import HomeSections from "./components/HomeSections";
+import HomeSections from "./components/pages/HomeSections";
 
 import { fetchData } from "./utils/helper";
 
@@ -524,7 +524,7 @@ const App = () => {
           }
         />
         <Route
-          path="/favorites"
+          path="/profile"
           element={
             isAuthenticated ? (
               <Favorites

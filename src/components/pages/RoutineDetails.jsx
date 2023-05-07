@@ -137,17 +137,15 @@ const RoutineDetails = (props) => {
           >
             <div style={{ marginBottom: "10px" }}>
               {isSaved ? (
-                // <UnsaveBtn
-                //   handleUnlikeFlow={handleUnlikeFlow}
-                //   id={flowDetails.id}
-                // />
-                <></>
+                <UnsaveBtn
+                  handleUnlikeFlow={handleUnlikeRoutine}
+                  id={routineDetails.id}
+                />
               ) : (
-                // <SaveBtn
-                //   handleFavoritedClick={handleFavoritedClick}
-                //   id={routineDetails.id}
-                // />
-                <></>
+                <SaveBtn
+                  handleFavoritedClick={handleFavoritedRoutineClick}
+                  id={routineDetails.id}
+                />
               )}
             </div>
 

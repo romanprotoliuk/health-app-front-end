@@ -101,7 +101,9 @@ const GridRoutines = (props) => {
         handleSelectTargets={props.handleSelectTargets}
         handleSelectRoutineTypes={props.handleSelectRoutineTypes}
       />
-      <div className="flow-container-grid">{renderCards}</div>
+      <div className="flow-container-grid" style={{ marginTop: "40px" }}>
+        {renderCards}
+      </div>
     </>
   );
 };

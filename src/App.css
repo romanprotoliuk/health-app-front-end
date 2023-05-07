@@ -41,9 +41,14 @@ a:visited {
 }
 
 .flow-container-grid {
+  margin: 10px 0px 10px 0px;
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
+}
+
+.home-cards:hover {
+  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9));
 }
 
 /* For screens with a minimum width of 480px, display a 2-column grid */
