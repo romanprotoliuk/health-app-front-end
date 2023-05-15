@@ -36,7 +36,7 @@ const RoutineDetails = (props) => {
       try {
         setLoading(true); // Set loading to true when the fetch starts
         const response = await axios.get(
-          `http://localhost:8000/api/routines/${id}`
+          `https://health-app-wfed.onrender.com/api/routines/${id}`
         );
         setRoutineDetails(response.data);
         setLoading(false); // Set loading to false when the fetch completes

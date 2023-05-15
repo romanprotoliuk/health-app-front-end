@@ -31,7 +31,7 @@ const FlowDetails = (props) => {
       try {
         setLoading(true); // Set loading to true when the fetch starts
         const response = await axios.get(
-          `http://localhost:8000/api/flows/${id}`
+          `https://health-app-wfed.onrender.com//api/flows/${id}`
         );
         setFlowDetails(response.data);
         setLoading(false); // Set loading to false when the fetch completes
