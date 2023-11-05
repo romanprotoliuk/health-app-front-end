@@ -1,0 +1,30 @@
+name: Netlify Deploy
+
+on:
+  push:
+    branches: [v1.1-api]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+      - name: Install Dependencies
+        run: npm install
+      - name: Run Tests
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Deploy to Netlify
+        if: github.ref == 'refs/heads/v1.1-api' && github.event_name == 'push'
+        uses: netlify/actions/cli@master
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        with:
+          args: deploy --dir=build --prod
