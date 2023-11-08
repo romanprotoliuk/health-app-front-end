@@ -22,16 +22,6 @@ jobs:
       - name: Lint
         run: npx eslint . --ext .js,.jsx,.ts,.tsx
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        with:
-          args: >
-            -Dsonar.projectKey=romanprotoliuk_health-app-front-end
-            -Dsonar.organization=romanprotoliuk
-        env:
-          GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
       - name: Run Tests
         run: npm test
 
