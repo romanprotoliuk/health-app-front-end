@@ -26,7 +26,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@master
         with:
           args: >
-            -Dsonar.projectKey=health-app-front-end
+            -Dsonar.projectKey=romanprotoliuk_health-app-front-end
             -Dsonar.organization=romanprotoliuk
         env:
           GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
