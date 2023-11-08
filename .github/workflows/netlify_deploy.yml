@@ -1,4 +1,4 @@
-name: Build, Lint, Test, and Deploy to Netlify
+name: Build, Lint, Test, SonarCloud Analysis, and Deploy to Netlify
 
 on:
   push:
@@ -21,6 +21,12 @@ jobs:
 
       - name: Lint
         run: npx eslint . --ext .js,.jsx,.ts,.tsx
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Run Tests
         run: npm test
