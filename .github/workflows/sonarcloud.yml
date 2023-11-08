@@ -1,8 +1,7 @@
 name: SonarCloud Scan
 on:
   push:
-    branches:
-      - main
+    branches: [v1.1-api]
   pull_request:
     types: [opened, synchronize, reopened]
 jobs:
