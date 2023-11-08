@@ -1,4 +1,4 @@
-name: Build, Lint, Test, SonarCloud Analysis, and Deploy to Netlify
+name: Build, Lint, Test and Deploy to Netlify
 
 on:
   push:
