@@ -1,3 +1,5 @@
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=romanprotoliuk_health-app-front-end)](https://sonarcloud.io/summary/new_code?id=romanprotoliuk_health-app-front-end)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
