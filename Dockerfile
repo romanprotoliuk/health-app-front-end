@@ -1,7 +1,5 @@
 # Use the official lightweight Node.js 16 image.
 FROM node:16-alpine
-
-# Set the working directory in the container
 WORKDIR /app
 
 # Install build dependencies for native modules
