@@ -16,6 +16,8 @@ jobs:
           node-version: "16"
       - name: Install Dependencies
         run: npm install
+      - name: Lint
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx
       - name: Run Tests
         run: npm test
       - name: Build
