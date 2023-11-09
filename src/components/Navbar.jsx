@@ -34,7 +34,7 @@ const Navbar = ({ isAuthenticated, setUserSub }) => (
         />
       </div>
     </Link>
-    {!isAuthenticated && (
+    {/* {!isAuthenticated && (
       <div style={{ margin: "30px 0px" }}>
         <p
           style={{
@@ -48,7 +48,7 @@ const Navbar = ({ isAuthenticated, setUserSub }) => (
         </p>
         <LoginButton style={{ cursor: "pointer" }} />
       </div>
-    )}
+    )} */}
   </NavbarContainer>
 );
 

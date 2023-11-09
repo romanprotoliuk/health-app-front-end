@@ -62,7 +62,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                   About
                 </Link>
               </div>
-              <div style={{ marginTop: "10px" }}>
+              {/* <div style={{ marginTop: "10px" }}>
                 <Link
                   style={{
                     fontWeight: "600",
@@ -75,7 +75,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                 >
                   Community Chat
                 </Link>
-              </div>
+              </div> */}
               <div style={{ marginTop: "10px" }}>
                 <Link
                   style={{
@@ -154,7 +154,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                 </div>
               )}
 
-              {!isAuthenticated && (
+              {/* {!isAuthenticated && (
                 <div style={{ marginTop: "10px" }}>
                   <Link
                     style={{
@@ -169,7 +169,7 @@ const Menu = ({ isAuthenticated, setUserSub }) => {
                     Login or Register
                   </Link>
                 </div>
-              )}
+              )} */}
 
               {isAuthenticated && (
                 <div style={{ marginTop: "30px" }}>
