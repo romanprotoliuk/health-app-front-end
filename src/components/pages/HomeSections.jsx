@@ -76,8 +76,8 @@ const HomeSections = () => {
               zIndex: "10",
               fontWeight: "600",
               textTransform: "uppercase",
-              // change this color (red)
-              color: "red",
+              // change this color (black)
+              color: "black",
               padding: "10px 20px",
               backgroundColor: "#FAFAFC",
               borderRadius: "20px",
@@ -147,8 +147,8 @@ const HomeSections = () => {
               zIndex: "10",
               fontWeight: "600",
               textTransform: "uppercase",
-              // change this color (red)
-              color: "red",
+              // change this color (black)
+              color: "black",
               padding: "10px 20px",
               backgroundColor: "#FAFAFC",
               borderRadius: "20px",
