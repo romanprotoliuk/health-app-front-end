@@ -3,7 +3,6 @@ name: Build, Lint, Test, SonarCloud Analysis, and Deploy to Netlify
 on:
   push:
     branches: [v1.1-api]
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
