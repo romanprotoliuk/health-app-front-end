@@ -16,6 +16,14 @@ jobs:
         with:
           node-version: "16"
 
+      - name: Cache Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install Dependencies
         run: npm install
 
@@ -25,9 +33,7 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
-          args: >
-            -Dsonar.projectKey=romanprotoliuk_health-app-front-end
-            -Dsonar.organization=romanprotoliuk
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
