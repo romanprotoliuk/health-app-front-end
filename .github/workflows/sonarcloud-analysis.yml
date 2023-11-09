@@ -1,9 +1,13 @@
 name: SonarCloud Scan
 on:
-  push:
+  workflow_run:
+    workflows: ["Run Tests"]
     branches: [v1.1-api]
+    types:
+      - completed
   pull_request:
     types: [opened, synchronize, reopened]
+    branches: [v1.1-api]
 jobs:
   sonarcloud:
     name: SonarCloud
@@ -15,5 +19,5 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GHCR_PAT }} # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
