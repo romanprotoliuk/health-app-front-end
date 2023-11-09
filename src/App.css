@@ -136,12 +136,6 @@ a:visited {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
   text-align: center;
 }
-/* 
-.pose-image {
-  width: 100%;
-  object-fit: contain;
-  border-radius: 5px;
-} */
 
 .image-div-chat {
   /* float: inline-start; */
