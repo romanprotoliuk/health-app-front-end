@@ -4,8 +4,7 @@ on:
   workflow_run:
     workflows: ["Build and Lint"]
     branches: [v1.1-api]
-    types:
-      - completed
+    types: [completed]
 
 jobs:
   test:
