@@ -1,19 +1,54 @@
-name: Deploy to Netlify
+name: Build, Lint, Test, SonarCloud Analysis, and Deploy to Netlify
 
 on:
-  workflow_run:
-    workflows: ["Docker Build and Push"]
+  push:
     branches: [v1.1-api]
-    types:
-      - completed
 
 jobs:
-  deploy-to-netlify:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
     steps:
       - uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Lint
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          args: >
+            -Dsonar.projectKey=romanprotoliuk_health-app-front-end
+            -Dsonar.organization=romanprotoliuk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GHCR_PAT }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Run Tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Build Docker Image
+        run: docker build -t ghcr.io/romanprotoliuk/yoga-app-front-end:$GITHUB_SHA .
+
+      - name: Login to GitHub Container Registry
+        run: echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push Docker Image to GitHub Packages
+        run: docker push ghcr.io/romanprotoliuk/yoga-app-front-end:$GITHUB_SHA
+
       - name: Deploy to Netlify
+        if: github.ref == 'refs/heads/v1.1-api' && github.event_name == 'push'
         uses: netlify/actions/cli@master
         env:
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
