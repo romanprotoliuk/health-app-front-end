@@ -146,7 +146,6 @@ a:visited {
 .image-div-chat {
   /* float: inline-start; */
   position: relative;
-  z-index: 12;
   width: 55px;
   height: 55px;
   background-color: white;
