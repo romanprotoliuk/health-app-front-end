@@ -65,21 +65,25 @@ const ResultRender = (props) => {
           fontSize: "12px",
           color: "#00000080",
           marginTop: "30px",
-          marginBottom: "30px",
+          marginBottom: "20px",
         }}
       >
         by our calculations:
       </p>
-      <p
-        style={{
-          fontWeight: "600",
-          textTransform: "uppercase",
-          fontSize: ".8rem",
-        }}
-        className="text-display"
-      >
-        you are {props.userPrompt}{" "}
-      </p>
+      <div style={{ display: "flex", width: "100%", justifyContent: "center" }}>
+        <p
+          style={{
+            fontWeight: "600",
+            textTransform: "uppercase",
+            fontSize: ".8rem",
+            maxWidth: "400px",
+            display: "auto 0",
+          }}
+          className="text-display"
+        >
+          you are {props.userPrompt}{" "}
+        </p>
+      </div>
     </div>
   );
 };

@@ -66,16 +66,22 @@ const BmiCalculator = () => {
 
   const determineBMImessage = (bmi) => {
     if (bmi <= 18.5) {
-      setUserPrompt("underweight, please put on some muscles");
+      setUserPrompt(
+        "more capable than you realize, and I believe that a stronger physique could unlock your true potential."
+      );
       setAvatar(underweight);
     } else if (bmi <= 24.9) {
       setUserPrompt("at a normal weight");
       setAvatar(normalweight);
     } else if (bmi <= 29.9) {
-      setUserPrompt("overweight! Start working out");
+      setUserPrompt(
+        "radiating with health and beauty, and I'm sure regular exercise would only add to your vibrant energy and vitality. Why not explore some enjoyable physical activities that align with your interests and fitness goals?"
+      );
       setAvatar(overweight);
     } else if (bmi >= 30) {
-      setUserPrompt("obese! You should consider changing your life style");
+      setUserPrompt(
+        "capable of more than you realize, and I believe that making positive lifestyle changes could unlock your true potential."
+      );
       setAvatar(obese);
     }
   };
