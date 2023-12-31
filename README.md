@@ -1,5 +1,6 @@
 protoloq - aims to build a unique digital health community platform that is dedicated to developing technology solutions and gathering essential resources to help individuals extend their lifespan and live more enjoyable lives. Our mission is to empower people with the tools and knowledge necessary to take control of their health and wellness, making it possible to live longer, healthier, and more fulfilling lives. By leveraging the latest advances in science and technology, we provide a comprehensive suite of resources designed to promote physical and mental well-being, including personalized health assessments, advanced diagnostics, and evidence-based recommendations for diet, exercise, and lifestyle modifications. With a focus on innovation, collaboration, and community, Protoloq aims to redefine the concept of health and wellness, helping people to achieve their full potential and live life to the fullest.
 
+branch: v1.1-api
 
 <img width="1721" alt="Screenshot 2023-12-30 at 11 57 18 PM" src="https://github.com/romanprotoliuk/health-app-front-end/assets/45060965/087d5403-2042-4cc9-a8a6-a6d89607582f">
 <img width="1716" alt="Screenshot 2023-12-30 at 11 56 56 PM" src="https://github.com/romanprotoliuk/health-app-front-end/assets/45060965/f3cc5848-43a7-4efc-a07a-f4e504587fc2">
